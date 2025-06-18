@@ -1,0 +1,145 @@
+/* page */
+.page-container{
+    max-width: 1600px;
+    margin: 30px auto;
+    display: flex;
+    gap: 30px;
+    flex: 1;
+    padding: 0 20px;
+    min-height: 75vh;
+}
+
+/* side-bar */
+.side-bar{
+    width: 260px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    flex-shrink: 0;
+}
+
+.menu-section{
+    padding: 20px 0;
+}
+
+.menu-title{
+    padding: 0 20px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu-item {
+    padding: 12px 20px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menu-item i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.menu-item:hover {
+    background-color: var(--ts-light-primary);
+    color: var(--ts-primary);
+}
+
+.menu-item.active {
+    background-color: var(--ts-light-primary);
+    color: var(--ts-primary);
+    border-left: 3px solid var(--ts-primary);
+    font-weight: bold;
+}
+
+/* article */
+.main-content {
+    flex: 1;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    min-height: 450px;
+}
+
+.main-container{
+    max-width: 1600px;
+    margin: 30px auto;
+    gap: 30px;
+    padding: 0 20px;
+    min-height: 75vh;
+}
+
+.category{
+    padding-left : 30px;
+    padding-right: 30px;
+    display: flex;
+    justify-content: end;
+}
+
+.list{
+    flex: 1;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 30px;
+    max-width: 1600px;
+    min-width: 1600px;
+}
+
+.image-container{
+    display: flex;
+    gap: 70px;
+    padding: 15px 30px;
+}
+
+.blank{
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-card{
+    display: flex;
+    flex-direction: column;
+}
+
+.loading-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    flex-direction: column;
+    color: #888;
+}
+
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--ts-light-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        flex-direction: column;
+    }
+
+    .side-bar {
+        width: 100%;
+    }
+}

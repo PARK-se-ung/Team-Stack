@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+    <Appenders>
+        <Console name="console">
+            <PatternLayout pattern="%-5p [%d{yyyy-MM-dd HH:mm:ss}] : [%l] - %m %n"/>
+        </Console>
+        <Console name="sqlLogger">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="jdbc.sqlonly" additivity="false" level="INFO">
+            <AppenderRef ref="sqlLogger"/>
+        </Logger>
+        <Logger name="jdbc.resultsettable" additivity="false" level="INFO">
+            <AppenderRef ref="sqlLogger"/>
+        </Logger>
+        <Logger name="com.bs.spring" level="debug">
+            <AppenderRef ref="rollingFile"/>
+        </Logger>
+        <Logger name="org.springframework.context" level="INFO"/>
+        <Logger name="org.springframework.core" level="INFO"/>
+        <Logger name="org.springframework.web" level="INFO"/>
+        <Logger name="org.springframework.beans" level="INFO"/>
+        <Root level="WARN">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
