@@ -33,8 +33,8 @@
         <!-- nav -->
         <div class="col-lg-2 top-nav">
             <div class="d-flex align-items-center">
-                <a class="me-3" href="">
-                    로그아웃
+                <a class="me-3" href="${pageContext.request.contextPath}/user/login.do">
+                    로그인
                 </a>
                 <a class="me-3" href="">
                     관리자페이지
