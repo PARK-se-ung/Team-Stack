@@ -310,19 +310,19 @@
 
         <div class="social-login">
             <a href="#" class="social-btn kakao">
-                <img src="${pageContext.request.contextPath}/resources/imgaes/kakao_icon.jpeg" alt="카카오" onerror="this.style.display='none'">
+                <img src="${pageContext.request.contextPath}/resources/images/kakao_icon.jpeg" alt="카카오" onerror="this.style.display='none'">
                 카카오
             </a>
             <a href="#" class="social-btn google">
-                <img src="${pageContext.request.contextPath}/resources/imgaes/google_icon.jpeg" alt="구글" onerror="this.style.display='none'">
+                <img src="${pageContext.request.contextPath}/resources/images/google_icon.jpeg" alt="구글" onerror="this.style.display='none'">
                 구글
             </a>
             <a href="#" class="social-btn github">
-                <img src="${pageContext.request.contextPath}/resources/imgaes/github_icon.jpeg" alt="깃허브" onerror="this.style.display='none'">
+                <img src="${pageContext.request.contextPath}/resources/images/github_icon.jpeg" alt="깃허브" onerror="this.style.display='none'">
                 깃허브
             </a>
             <a href="#" class="social-btn apple">
-                <img src="${pageContext.request.contextPath}/resources/imgaes/apple_icon.jpeg" alt="애플" onerror="this.style.display='none'">
+                <img src="${pageContext.request.contextPath}/resources/images/apple_icon.jpeg" alt="애플" onerror="this.style.display='none'">
                 애플
             </a>
         </div>
