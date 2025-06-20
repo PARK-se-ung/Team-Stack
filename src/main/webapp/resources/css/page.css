@@ -55,6 +55,33 @@
     font-weight: bold;
 }
 
+/* navs */
+.navs{
+    display: flex;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+    overflow-x: auto;
+}
+
+.navs>.nav-item{
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.navs>.nav-item:hover{
+    background-color: var(--ts-light-primary);
+    color: var(--ts-primary);
+}
+
+.nav-item.active {
+    background-color: var(--ts-light-primary);
+    color: var(--ts-primary);
+    border-left: 3px solid var(--ts-primary);
+    font-weight: bold;
+}
+
 /* article */
 .main-content {
     flex: 1;
