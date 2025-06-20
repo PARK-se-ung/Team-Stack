@@ -290,9 +290,11 @@
 
         <form class="login-form" action="${pageContext.request.contextPath}/logincheck.do" method="post">
             <div class="form-group">
+                <label for="userId">아이디</label>
                 <input type="text" name="userId" placeholder="아이디를 입력하세요" required>
             </div>
             <div class="form-group">
+                <label for="userPwd">비밀번호</label>
                 <input type="password" name="userPwd" placeholder="비밀번호를 입력하세요" required>
             </div>
             <button type="submit" class="login-btn">로그인</button>
