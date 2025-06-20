@@ -288,7 +288,7 @@
             <p>오프라인으로 만나는 생생한 강의</p>
         </div>
 
-        <form class="login-form" action="${pageContext.request.contextPath}/login.do" method="post">
+        <form class="login-form" action="${pageContext.request.contextPath}/logincheck.do" method="post">
             <div class="form-group">
                 <input type="text" name="userId" placeholder="아이디를 입력하세요" required>
             </div>
