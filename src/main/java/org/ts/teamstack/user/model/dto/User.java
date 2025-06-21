@@ -17,6 +17,7 @@ public class User {
     private String userPwd;
     private String userName;
     private String userEmail;
+    private String userAddress;
     private Date userCreateTime;
     private String userType;
     private String userPhone;

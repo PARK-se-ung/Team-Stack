@@ -12,4 +12,8 @@ public class UserController {
         return "user/loginpage";
     }
 
+    @RequestMapping("/enrolluser.do")
+    public String enrolluser(){
+        return "user/enrolluserpage";
+    }
 }
