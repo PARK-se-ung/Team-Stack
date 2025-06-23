@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: USER
-  Date: 2025-06-23
-  Time: 오후 3:10
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -15,7 +8,7 @@
     <div class="nav-item active" data-nav="approval">강의 개설 자격 승인</div>
 
 </div>
-<!-- 아래 div 안에서 필요한 html 코드 작성 -->
+<!-- 아래 div안에서 필요한 html 코드 작성 -->
 <div class="current-container">
 
 
