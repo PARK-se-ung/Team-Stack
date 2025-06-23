@@ -31,5 +31,22 @@ public class MypageController {
         return "mypage/ajax/reserve";
     }
 
+    @RequestMapping("/manage")
+    public String myopen(Model model) {
+        return "mypage/ajax/open";
+    }
 
+    @RequestMapping("/courseapply")
+    public String myapply(Model model) {
+        return "mypage/ajax/courseapply";
+    }
+
+    @RequestMapping("/studentapply")
+    public String mystudent(Model model) { return "mypage/ajax/studentapply"; }
+
+    @RequestMapping("/coursetake")
+    public String mycoursetake(Model model) { return "mypage/ajax/coursetake"; }
+
+    @RequestMapping("/coursecomplete")
+    public String mycoursecomplete(Model model) { return "mypage/ajax/coursecomplete"; }
 }
