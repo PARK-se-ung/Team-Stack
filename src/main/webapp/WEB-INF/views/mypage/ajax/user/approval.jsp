@@ -15,7 +15,7 @@
     <div class="nav-item active" data-nav="approval">강의 개설 자격 승인</div>
 
 </div>
-<!-- 아래 div안에서 필요한 html 코드 작성 -->
+<!-- 아래 div 안에서 필요한 html 코드 작성 -->
 <div class="current-container">
 
 
