@@ -13,6 +13,7 @@
         tabLoad(tabId);
       });
 
+
       IMP.init("imp02858447");
 
       const onClickPay = () => {
@@ -27,31 +28,44 @@
                   buyer_email: "cheonjaepo@gmail.com",
                   buyer_name: "김천재",
                   buyer_tel: "010-4242-4242",
-                  buyer_postcode: "01181",
                 },
-                async function (response) {
+                function (rsp) {
     // 결제 종료 시 호출되는 콜백 함수
     // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
     // 결제 결과를 처리하는 로직을 작성합니다.
-                  if(response.error_code != null){
-                    return alert(`결제에 실패하였습니다. ${response.error_msg}`);
-                    //고객사 서버에서 payment/complete엔드포인트 구현
+                  if (rsp.success) {
 
+
+                    $.ajax({
+                      type: "POST",
+                      url: '${pageContext.request.contextPath}/payment/insertPayment',
+                      data: {
+                        merchant_uid: rsp.merchant_uid,
+                        userId:rsp.buyer_name,
+                        paymentPrice:rsp.amount,
+                        portonId: rsp.imp_uid,
+                        paymentDate:rsp.paid_at,
+                        courseNo:999
+                      },
+                      success:function (result){
+                        if(result==="success"){
+                          var msg = '결제가 완료되었습니다.';
+                          console.log("결제성공 ");
+                        }else{
+                          var msg = '결제에 실패하였습니다.';
+                          console.log("결제실패 ");
+
+                        }
+                      }
+                    });
+                  } else {
+                    var msg = '결제에 실패하였습니다.';
+                    msg += '에러내용 : ' + rsp.error_msg;
                   }
-                  const notified = await fetch(`${pageContext.request.contextPath}/payment/complete`,{
-                    method:"POST",
-                    headers:{"Content-Type":"application/json"},
-                    body:JSON.stringify({
-                      imp_uid:response.imp_uid,
-                      merchant_uid:response.merchant_uid
-                    })
-                  })
+                  alert(msg);
                 }
         );
       }
-
-
-      // if(payment.price===amount)
 </script>
 
 <div class="navs">

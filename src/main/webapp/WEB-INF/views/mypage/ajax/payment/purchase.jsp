@@ -31,33 +31,25 @@
     <table class="payment-table">
         <thead>
         <tr>
-            <th style="width: 120px;">결제일</th>
-            <th style="width: 200px;">강의명</th>
-            <th style="width: 120px;">강사명</th>
-            <th style="width: 100px;">금액</th>
-            <th style="width: 100px;">상태</th>
-            <th style="width: 90px;">관리</th>
+            <th>결제번호</th>
+            <th>강의명</th>
+            <th>강사명</th>
+            <th>결제일</th>
+            <th>금액</th>
+            <th>결제ID</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <td>2025-05-12</td>
-            <td>웹 프로그래밍</td>
-            <td>홍길동</td>
-            <td>50,000원</td>
-            <td>결제 완료</td>
-            <td>
-                <button class="btn-manage">환불신청</button>
-            </td>
-        </tr>
-        <tr>
-            <td>2025-05-24</td>
-            <td>파이썬 마스터하기</td>
-            <td>홍길동</td>
-            <td>50,000원</td>
-            <td>결제 완료</td>
-            <td></td>
-        </tr>
+        <c:forEach var="pay" items="${paymentList}">
+            <tr>
+                <td>${pay.paymentNo}</td>
+                <td>${pay.courseTitle}</td>
+                <td>${pay.instructorName}</td>
+                <td>${pay.paymentDate}</td>
+                <td>${pay.paymentPrice}</td>
+                <td>${pay.portoneId}</td>
+            </tr>
+        </c:forEach>
+
         <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
         </tbody>
     </table>
@@ -133,3 +125,4 @@
         tabLoad(tabId);
     });
 </script>
+

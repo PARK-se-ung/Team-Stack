@@ -1,12 +1,23 @@
 package org.ts.teamstack.mypage.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.ts.teamstack.payment.model.dto.Payment;
+import org.ts.teamstack.payment.model.service.PaymentService;
+import org.ts.teamstack.user.model.dto.Users;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/mypage")
 public class MypageController {
+
+    private final PaymentService service;
+
     /* 마이페이지 메인화면 이동*/
     @RequestMapping("")
     public String mypage(){
@@ -48,8 +59,21 @@ public class MypageController {
     public String mycomplete(Model model) { return "mypage/ajax/user/complete"; }
 
     /* 강의 구매 내역 이동 */
-    @RequestMapping("/purchase")
-    public String mypurchase(Model model) { return "mypage/ajax/payment/purchase"; }
+    @PostMapping("/purchase")
+    public String mypurchase(Model model) {
+
+            /*임시 로그인 멤버생성*/
+            Users tempUser = Users.builder()
+                    .userId("user_0005")
+                    .userName("유저0005")
+                    .userType("G")
+                    .userEmail("user0005@user0005.com")
+                    .userPhone("010-1111-0003")
+                    .build();
+
+            List<Payment> payments = service.searchAllPayment(tempUser.getUserId());
+            model.addAttribute("paymentList", payments);
+        return "mypage/ajax/payment/purchase"; }
 
     /* 환불 신청 조회 이동 */
     @RequestMapping("/refund")
