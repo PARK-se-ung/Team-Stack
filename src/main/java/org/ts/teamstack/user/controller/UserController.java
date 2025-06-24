@@ -16,4 +16,9 @@ public class UserController {
     public String enrolluser(){
         return "user/enrolluserpage";
     }
+
+    @RequestMapping("/enrolluserend.do")
+    public String enrolluserend(){
+        return "redirect:/";
+    }
 }

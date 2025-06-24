@@ -206,7 +206,7 @@
         <p>새로운 계정을 만들어보세요</p>
     </div>
 
-    <form id="signupForm">
+    <form id="signupForm" method="post" action="${pageContext.request.contextPath}/user/enrolluserend.do">
         <div class="form-group">
             <label for="userId">아이디</label>
             <input type="text" id="userId" name="userId" minlength="6" placeholder="6글자이상 사용할 아이디를 입력해주세요" required>
@@ -239,7 +239,7 @@
 
         <div class="form-group email-auth-group">
             <label for="emailCode">인증번호 입력</label>
-            <div class="form-row">
+            <div class="form-row" id="mail check input box false">
                 <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력">
                 <button type="button" class="btn-auth" onclick="verifyAuthCode()">인증 확인</button>
             </div>
