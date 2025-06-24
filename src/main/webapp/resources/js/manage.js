@@ -14,5 +14,23 @@ function manageLoad(tabId) {
 
 
 function insertNotice() {
+    const alarm = $("#alarm").val();
+    const title = $("#title").val();
+    const content = $("#content").val();
+    $('.main-content').html(loading());
 
+    $.ajax({
+        url: getContextPath() + "/manage/insertnotice",
+        type: 'POST',
+        data:{
+            "alarm": alarm,
+            "title": title,
+            "content": content
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+            manageLoad('notice');
+        },
+        error: errorContent('notice')
+    })
 }

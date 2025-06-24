@@ -9,4 +9,5 @@ import java.util.List;
 public interface ManagerService {
     List<Notice> searchNotice(PageInfo pageInfo);
     int searchNoticeCount();
+    int insertNotice(Notice notice, String alarm);
 }

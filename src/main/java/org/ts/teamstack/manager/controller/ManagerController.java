@@ -20,6 +20,8 @@ public class ManagerController {
 
     private final ManagerService service;
     private final PageInfo pageInfo;
+    private final Notice notice;
+
     @RequestMapping("")
     public String manage(){
         return "manage/manage";
@@ -31,6 +33,7 @@ public class ManagerController {
         pageInfo.setCurPage(cPage);
         pageInfo.setTotalData(service.searchNoticeCount());
         List<Notice> notices = service.searchNotice(pageInfo);
+        System.out.println(notices);
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "loadNotice");
         model.addAttribute("notices", notices);
         model.addAttribute("pageBar", pageBar);
@@ -43,7 +46,14 @@ public class ManagerController {
     }
 
     @RequestMapping("/insertnotice")
-    public String insertNotice(){
+    public String insertNotice(@RequestParam String title,
+                               @RequestParam String content,
+                               @RequestParam String alarm,
+                               Model model){
+        notice.setNoticeTitle(title);
+        notice.setNoticeContent(content);
+        model.addAttribute("result", service.insertNotice(notice, alarm));
+
         return "manage/ajax/notice";
     }
 }

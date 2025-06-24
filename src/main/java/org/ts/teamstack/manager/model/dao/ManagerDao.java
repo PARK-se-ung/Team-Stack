@@ -9,4 +9,5 @@ import java.util.List;
 public interface ManagerDao {
     List<Notice> searchNotice(SqlSession session, PageInfo pageInfo);
     int searchNoticeCount(SqlSession session);
+    int insertNotice(SqlSession session, Notice notice);
 }
