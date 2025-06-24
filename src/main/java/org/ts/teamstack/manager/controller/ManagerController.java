@@ -33,6 +33,17 @@ public class ManagerController {
         List<Notice> notices = service.searchNotice(pageInfo);
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "loadNotice");
         model.addAttribute("notices", notices);
-        return "manage/notice";
+        model.addAttribute("pageBar", pageBar);
+        return "manage/ajax/notice";
+    }
+
+    @RequestMapping("/writenotice")
+    public String writeNotice(){
+        return "manage/ajax/writenotice";
+    }
+
+    @RequestMapping("/insertnotice")
+    public String insertNotice(){
+        return "manage/ajax/notice";
     }
 }
