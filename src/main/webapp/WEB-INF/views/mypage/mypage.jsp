@@ -35,7 +35,7 @@
             <div class="menu-title">결제</div>
             <ul>
                 <li class="menu-item" data-tab="purchase">결제내역조회</li>
-                <li class="menu-item" data-tab="refund">환불신청조회</li>
+                <li class="menu-item" data-tab="sales">환불신청조회</li>
             </ul>
         </div>
     </div>

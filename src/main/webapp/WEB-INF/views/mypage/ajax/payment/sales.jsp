@@ -2,11 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
-
+<!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
-    <div class="nav-item active" data-nav="purchase">강의 구매 내역</div>
-</div>
+    <div class="nav-item active" data-nav="sales">강의 판매 내역</div>
+    <div class="nav-item" data-nav="refund">환불 신청 조회</div>
 
+</div>
 <!-- 결제 관리 탭 -->
 <div class="current-container">
     <!-- 검색/필터 영역 -->
@@ -20,7 +21,7 @@
                 <option value="환불신청중">환불신청중</option>
                 <option value="환불완료">환불완료</option>
                 <option value="OR">OR</option>
-                <option value="강사명">강사명</option>
+                <option value="구매자명">구매자명</option>
                 <option value="강의명">강의명</option>
             </select>
             <input type="text" name="lectureTitle" placeholder="강의명" value="">
@@ -33,10 +34,9 @@
         <tr>
             <th style="width: 120px;">결제일</th>
             <th style="width: 200px;">강의명</th>
-            <th style="width: 120px;">강사명</th>
+            <th style="width: 120px;">구매자명</th>
             <th style="width: 100px;">금액</th>
             <th style="width: 100px;">상태</th>
-            <th style="width: 90px;">관리</th>
         </tr>
         </thead>
         <tbody>
@@ -46,17 +46,20 @@
             <td>홍길동</td>
             <td>50,000원</td>
             <td>결제 완료</td>
-            <td>
-                <button class="btn-manage">환불신청</button>
-            </td>
         </tr>
         <tr>
             <td>2025-05-24</td>
             <td>파이썬 마스터하기</td>
             <td>홍길동</td>
             <td>50,000원</td>
-            <td>결제 완료</td>
-            <td></td>
+            <td>환불 신청중</td>
+        </tr>
+        <tr>
+            <td>2025-05-24</td>
+            <td>나는 낭만고양이</td>
+            <td>홍길동</td>
+            <td>50,000원</td>
+            <td>환불 완료</td>
         </tr>
         <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
         </tbody>

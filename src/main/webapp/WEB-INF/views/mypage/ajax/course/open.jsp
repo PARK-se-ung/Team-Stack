@@ -49,6 +49,36 @@
     display: none;
   }
 
+  .ex-upload {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed #aaa;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ex-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+
+  .ex-upload span {
+    color: #555;
+    font-size: 14px;
+  }
+
+  .ex-upload input[type="file"] {
+    display: none;
+  }
+
 
   .flex {
     display: flex;
@@ -67,10 +97,12 @@
     box-sizing: border-box;
   }
 
-  input
-
-  .section1 input[type="file i"] {
+  .fileText {
     color: white;
+  }
+
+  .fileText input[type="file"] {
+    display: none;
   }
 
   label {
@@ -111,7 +143,7 @@
   <div class="container1">
     <div class="image-upload" onclick="document.getElementById('imageInput').click();">
       <img id="preview" alt="미리보기">
-      <span id="placeholder">이미지</span>
+      <span id="placeholder">강의 썸네일</span>
       <input type="file" name="image" id="imageInput" accept="image/*" onchange="previewImage(event)">
     </div>
     <!-- 강좌 정보 -->
@@ -124,13 +156,17 @@
         <input type="text" name="teacher" placeholder="강사명을 입력해주세요.">
 
         <label>설명</label>
-        <textarea name="description" rows="3" placeholder="강의에 대한 설명을 입력해주세요."></textarea>
+        <div class="ex-upload" onclick="document.getElementById('ex-imageInput').click();">
+          <img id="preview" alt="미리보기">
+          <span id="placeholder">상세 이미지</span>
+          <input type="file" name="image" id="ex-imageInput" accept="image/*" onchange="previewImage(event)">
+        </div>
 
         <label>가격</label>
         <input type="number" name="price" placeholder="가격을 입력해주세요.">
 
-        <label>카테고리</label>
-        <input type="text" name="category" placeholder="#카테고리">
+        <label>교과목</label>
+        <input type="text" name="category" placeholder="#교과목">
       </div>
     </div>
   </div>
@@ -139,18 +175,21 @@
   <div class="section1">
     <label>일정</label>
     <input type="text" name="date" placeholder="시작일 (총주차)">
+    <%-- 강의 시간 몇시간 할건지 추가 분단위  --%>
 
     <label>장소</label>
+
     <input type="text" name="location" placeholder="서울시 금천구 00빌딩">
+    <%--  시,도 select로 결정하게 해두고 그 이후는 텍스트로 받기  --%>
   </div>
 
   <!-- 첨부파일 -->
   <div class="file-box">
-    <span>첨부파일</span>
-    <input class="" type="file" name="file" accept=".pdf">
+    <span>강의 계획서</span>
+    <input class="fileText" type="file" name="file" accept=".pdf">
   </div>
 
-  <button onclick="submitModal();" class="submit-btn btn btn-outline-orange">강좌 개설 신청</button>
+  <button type="submit" class="submit-btn btn btn-outline-orange">강좌 개설 신청</button>
 </form>
 
 
@@ -172,6 +211,7 @@
     const placeholder = document.getElementById('placeholder');
 
     if (input.files && input.files[0]) {
+
       const reader = new FileReader();
       reader.onload = function(e) {
         preview.src = e.target.result;
@@ -182,7 +222,8 @@
     }
   }
 
-  const submitModal=()=>{
 
-  }
+
+
+
 </script>
