@@ -14,6 +14,18 @@ function tabLoad(tabId) {
         type: 'POST',
         success: function(data) {
             $(".main-content").html(data);
+            if(tabId === 'open'){
+                flatpickr("#datePicker", {
+                    mode: "range",
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    defaultDate: [new Date(), new Date()],
+                    locale: "ko",
+                    altInput: true,
+                    altFormat: "Y년 m월 d일",
+                    enableTime: true
+                });
+            }
         },
         error: errorContent(tabId)
     })

@@ -1,15 +1,59 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 25. 6. 20.
-  Time: 오후 2:28
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
+<script>
+    <!-- nav 전환 로직 -->
+      $(".nav-item").on('click', function() {
+        let $current = $(this);
+        let tabId = $current.data('nav');
+        $(".nav-item").removeClass("active");
+        $current.addClass("active");
+        tabLoad(tabId);
+      });
+
+      IMP.init("imp02858447");
+
+      const onClickPay = () => {
+        IMP.request_pay(
+                {
+                  channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
+                  pg:"uplus",
+                  pay_method: "card",
+                  merchant_uid: new Date().getTime(),// 주문 고유 번호
+                  name: "웹 프로그래밍 입문",
+                  amount: 100,
+                  buyer_email: "cheonjaepo@gmail.com",
+                  buyer_name: "김천재",
+                  buyer_tel: "010-4242-4242",
+                  buyer_postcode: "01181",
+                },
+                async function (response) {
+    // 결제 종료 시 호출되는 콜백 함수
+    // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
+    // 결제 결과를 처리하는 로직을 작성합니다.
+                  if(response.error_code != null){
+                    return alert(`결제에 실패하였습니다. ${response.error_msg}`);
+                    //고객사 서버에서 payment/complete엔드포인트 구현
+
+                  }
+                  const notified = await fetch(`${pageContext.request.contextPath}/payment/complete`,{
+                    method:"POST",
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify({
+                      imp_uid:response.imp_uid,
+                      merchant_uid:response.merchant_uid
+                    })
+                  })
+                }
+        );
+      }
+
+
+      // if(payment.price===amount)
+</script>
+
 <div class="navs">
   <div class="nav-item active" data-nav="bookmark">북마크한 강의</div>
   <div class="nav-item" data-nav="reserve">예약한 강의</div>
@@ -55,7 +99,7 @@
           <td>서초1동 자치회관</td>
           <td>2025-07-01 ~ 2025-09-30</td>
           <td>2025-06-23 ~ 2025-06-27</td>
-          <td><button class="btn-manage">결제</button>
+          <td><button class="btn-manage" onclick="onClickPay();">결제</button>
           </td>
         </tr>
         <tr>
@@ -143,14 +187,4 @@
     }
   </style>
 
-<!-- nav 전환 로직 -->
-<script>
-    $(".nav-item").on('click', function() {
-      let $current = $(this);
-      let tabId = $current.data('nav');
-      $(".nav-item").removeClass("active");
-      $current.addClass("active");
-      tabLoad(tabId);
-    });
 
-</script>
