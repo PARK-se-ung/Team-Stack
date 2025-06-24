@@ -9,14 +9,25 @@
 
 </div>
 <!-- 아래 div안에서 필요한 html 코드 작성 -->
-<div class="current-container">
 
+    <div class="approval-container">
+        <p>제출 서류를 첨부하십시오</p>
+        <div class="file-upload-row">
+            <input type="file" id="fileInput" accept="" style="display:none" />
+            <button id="fileBtn">파일첨부</button>
+            <span id="fileName">선택된 파일 없음</span>
+        </div>
+        <button id="submitBtn" disabled>승인 요청</button>
+        <div id="statusMsg" class="status-msg"></div>
+    </div>
 
-    <h1>top nav test</h1>
-
-
-</div>
-
+<style>
+    .approval-container { background: #f8f8f8; padding: 30px; border-radius: 12px; width: 900px; }
+    .file-upload-row { margin: 16px 0; }
+    #fileName { margin-left: 10px; color: #666; }
+    #submitBtn { margin-top: 12px; }
+    .status-msg { margin-top: 16px; color: #007bff; }
+</style>
 <!-- nav 전환 로직 -->
 <script>
     $(".nav-item").on('click', function() {

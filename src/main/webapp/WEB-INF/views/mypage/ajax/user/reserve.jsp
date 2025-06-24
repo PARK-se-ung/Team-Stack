@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
-
+<!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
   <div class="nav-item" data-nav="bookmark">북마크한 강의</div>
   <div class="nav-item active" data-nav="reserve">예약한 강의</div>
@@ -17,12 +17,131 @@
   <div class="nav-item" data-nav="take">수강중인 강의</div>
   <div class="nav-item" data-nav="complete">수강완료한 강의</div>
 </div>
+<!-- 아래 div안에서 필요한 html 코드 작성 -->
 
 <div class="current-container">
 
-  <h2> reserve test</h2>
+  <div class="search-bar">
+    <form method="get" action="" class="search-form">
+      <select name="status">
+        <option value="">전체</option>
+        <option value="강사명">강사명</option>
+        <option value="강의명">강의명</option>
+      </select>
+      <input type="text" name="lectureTitle" placeholder="" value="">
+      <button type="submit">검색</button>
+    </form>
+  </div>
 
+  <div class="view-toggle">
+    <strong><a>이미지형</a></strong> | <a>리스트형</a>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>정원</th>
+      <th>강의명</th>
+      <th>강사명</th>
+      <th>교육기간</th>
+      <th>접수기간</th>
+      <th>신청</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>0/30</td>
+      <td><a href="">[서초1동] 헬스 오후 - 2025.3분기</a></td>
+      <td>홍길동</td>
+      <td>2025-07-01 ~ 2025-09-30</td>
+      <td>2025-06-23 ~ 2025-06-27</td>
+      <td><button class="btn-manage">환불</button>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><a href="">[서초1동] 헬스 오전 - 2025.3분기</a></td>
+      <td>홍길동</td>
+      <td>2025-07-01 ~ 2025-09-30</td>
+      <td>2025-06-23 ~ 2025-06-27</td>
+      <td><button class="btn-manage">환불</button>
+      </td>
+    </tr>
+    <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
+    </tbody>
+  </table>
 </div>
+
+<style>
+
+  .current-container {
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead {
+    background: #f5f5f5;
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+  }
+
+  tr:hover {
+    background-color: #fafafa;
+  }
+  .view-toggle {
+    margin-top: 10px;
+  }
+  .btn-manage {
+    padding: 4px 10px;
+    font-size: 13px;
+    background: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 70px;
+    max-width: 90px;
+    white-space: nowrap;
+  }
+  .search-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+  .search-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .search-form input[type="date"],
+  .search-form select,
+  .search-form input[type="text"] {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+  .search-form button {
+    padding: 4px 14px;
+    font-size: 13px;
+    background: #455ba8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
 
 <!-- nav 전환 로직 -->
 <script>

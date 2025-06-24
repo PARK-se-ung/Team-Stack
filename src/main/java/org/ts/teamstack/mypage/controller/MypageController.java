@@ -47,6 +47,18 @@ public class MypageController {
     @RequestMapping("/complete")
     public String mycomplete(Model model) { return "mypage/ajax/user/complete"; }
 
+    /* 강의 구매 내역 이동 */
+    @RequestMapping("/purchase")
+    public String mypurchase(Model model) { return "mypage/ajax/payment/purchase"; }
+
+    /* 환불 신청 조회 이동 */
+    @RequestMapping("/refund")
+    public String myrefund(Model model) { return "mypage/ajax/payment/refund"; }
+
+    /* 강의 판매 내역 이동 */
+    @RequestMapping("/sales")
+    public String mysales(Model model) { return "mypage/ajax/payment/sales"; }
+
 
     @RequestMapping("/open")
     public String myopen(Model model) {
