@@ -110,9 +110,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
+        <tr onclick="location.href='${pageContext.request.contextPath}/'" style="cursor: pointer;">
           <td>1050</td>
-          <td><a href="">[서초1동] 헬스 오후 - 2025.3분기</a></td>
+          <td>[서초1동] 헬스 오후 - 2025.3분기</td>
           <td>서초1동 자치회관</td>
           <td>2025-07-01 ~ 2025-09-30</td>
           <td>2025-06-23 ~ 2025-06-27</td>
@@ -120,7 +120,7 @@
         </tr>
         <tr>
           <td>1049</td>
-          <td><a href="">[서초1동] 헬스 오전 - 2025.3분기</a></td>
+          <td>[서초1동] 헬스 오전 - 2025.3분기</td>
           <td>서초1동 자치회관</td>
           <td>2025-07-01 ~ 2025-09-30</td>
           <td>2025-06-23 ~ 2025-06-27</td>
