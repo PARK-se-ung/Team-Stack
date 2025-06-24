@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -33,5 +34,6 @@ public class Course {
     private Timestamp courseDate;
     private int courseStartTime;
     private int courseTime;
-    private int personner;
+    private int personnel;
+    private List<CourseAttach> files;
 }

@@ -1,17 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 25. 6. 20.
-  Time: 오후 2:28
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
-<!-- 상단 탭이 존재하는 경우 -->
+
 <div class="navs">
   <div class="nav-item active" data-nav="open">강의 개설</div>
   <div class="nav-item" data-nav="courseapply">강의 개설 승인</div>
@@ -19,11 +10,11 @@
   <div class="nav-item" data-nav="coursetake">진행중인 강의</div>
   <div class="nav-item" data-nav="coursecomplete">만료한 강의</div>
 </div>
-<!-- 아래 div안에서 필요한 html 코드 작성 -->
+
 <style>
   .image-upload {
     width: 100%;
-    height: 120px;
+    height: 300px;
     border: 2px dashed #aaa;
     border-radius: 8px;
     background: #fff;
@@ -36,15 +27,15 @@
   }
 
   .image-upload img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 이미지가 안 잘리도록 수정 */
     display: none;
   }
 
   .image-upload span {
     color: #555;
-    font-size: 14px;
+    font-size: 24px;
   }
 
   .image-upload input[type="file"] {
@@ -55,9 +46,9 @@
     gap: 6px;
   }
 
-  .ex-upload ,.addButton {
-    width: 100px;
-    height: 100px;
+  .ex-upload, .addButton {
+    width: 200px;
+    height: 200px;
     border: 2px dashed #aaa;
     border-radius: 8px;
     background: #fff;
@@ -84,7 +75,6 @@
   .ex-upload input[type="file"] {
     display: none;
   }
-
 
   .flex {
     display: flex;
@@ -128,7 +118,7 @@
   }
 
   .file-box span {
-    color : white;
+    color: white;
   }
 
   .submit-btn {
@@ -155,20 +145,36 @@
   }
 
   .placeholder {
-    background-color: rgb(85 85 85 / 0%);
+    background-color: transparent;
   }
 
+  .custom-file-button {
+    background-color: #fff;
+    color: #ff7d4d;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #ff7d4d;
+    margin-left: auto;
+    transition: background 0.3s ease;
+    margin-bottom: 12px;
+  }
+
+  .custom-file-button:hover {
+    background-color: #ff7d4d;
+    color: #fff;
+  }
 </style>
 
-
-<form action="/submit" method="post" enctype="multipart/form-data">
+<form action="/submit" method="post" enctype="multipart/form-data" id="courseForm">
   <div class="container1">
     <div class="image-upload" onclick="document.getElementById('imageInput').click();">
       <img id="preview" alt="미리보기">
       <span id="placeholder">강의 썸네일</span>
       <input type="file" name="image" id="imageInput" accept="image/*" required onchange="previewImage(event)">
     </div>
-    <!-- 강좌 정보 -->
+
     <div class="section1 flex">
       <div style="flex: 1">
         <label>강의명</label>
@@ -179,15 +185,13 @@
 
         <label>설명</label>
         <div class="detailImage" id="detailImageContainer" style="display: flex">
-          <!-- 초기 상세 이미지 업로드 박스 -->
           <div class="ex-upload">
             <img class="preview" alt="미리보기">
             <span class="placeholder">상세 이미지</span>
             <input type="file" name="image2" accept="image/*" required onchange="previewImage2(event)">
           </div>
-          <button class="addButton">+</button>
+          <button type="button" class="addButton">+</button>
         </div>
-
 
         <label>가격</label>
         <input type="number" name="price" placeholder="가격을 입력해주세요." required>
@@ -198,11 +202,9 @@
     </div>
   </div>
 
-  <!-- 상세 설명 -->
   <div class="section1">
     <label>일정</label>
     <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="date">
-    <%-- 강의 시간 몇시간 할건지 추가 분단위  --%>
 
     <label>장소</label>
     <div class="location">
@@ -230,25 +232,34 @@
     </div>
   </div>
 
-
-
-
-    <%--  시,도 select로 결정하게 해두고 그 이후는 텍스트로 받기  --%>
-
-
-  <!-- 첨부파일 -->
   <div class="file-box">
     <span>강의 계획서</span>
-    <input class="fileText" type="file" name="file" accept=".pdf">
+    <label for="planFile" class="custom-file-button">파일 선택</label>
+    <input type="file" name="file" id="planFile" accept=".pdf" style="display: none;">
+    <span id="fileName" style="color:white; margin-left: 10px;"></span>
   </div>
 
-  <button type="submit" class="submit-btn btn btn-outline-orange">강좌 개설 신청</button>
-
+  <button type="button" class="submit-btn btn btn-outline-orange" data-bs-toggle="modal" data-bs-target="#confirmModal">강의 개설 신청</button>
 </form>
 
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">강의 개설 확인</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+      </div>
+      <div class="modal-body">
+        입력하신 정보로 강좌를 개설하시겠습니까?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary" id="modalConfirmBtn">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-
-<!-- nav 전환 로직 -->
 <script>
   $(".nav-item").on('click', function() {
     let $current = $(this);
@@ -275,7 +286,6 @@
     }
   }
 
-  // 상세 이미지 미리보기
   function previewImage2(event) {
     const input = event.target;
     const container = input.closest('.ex-upload');
@@ -293,11 +303,16 @@
     }
   }
 
-  // + 버튼 클릭 시 상세 이미지 업로드 박스 추가
   document.querySelector('.addButton').addEventListener('click', function (e) {
     e.preventDefault();
 
     const container = document.getElementById('detailImageContainer');
+    const currentBoxes = container.querySelectorAll('.ex-upload').length;
+
+    if (currentBoxes >= 3) {
+      alert("상세 이미지는 최대 3개까지만 업로드할 수 있습니다.");
+      return;
+    }
 
     const newBox = document.createElement('div');
     newBox.className = 'ex-upload';
@@ -311,6 +326,20 @@
     container.insertBefore(newBox, this);
   });
 
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.ex-upload')) {
+      const uploadBox = e.target.closest('.ex-upload');
+      const fileInput = uploadBox.querySelector('input[type="file"]');
+      fileInput.click();
+    }
+  });
 
+  document.getElementById('planFile').addEventListener('change', function () {
+    const fileName = this.files[0] ? this.files[0].name : '';
+    document.getElementById('fileName').textContent = fileName;
+  });
 
+  document.getElementById('modalConfirmBtn').addEventListener('click', function () {
+    document.querySelector('form').submit();  // 실제 form 전송
+  });
 </script>
