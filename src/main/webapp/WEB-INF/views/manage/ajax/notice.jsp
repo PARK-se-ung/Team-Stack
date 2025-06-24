@@ -25,13 +25,15 @@
         <c:if test="${empty notices}">
             <td colspan="5" class="text-center"> 조회된 결과가 없습니다.</td>
         </c:if>
-        <c:if test="${noticeFlag}">
+        <c:if test="${!noticeFlag}">
             <c:forEach var="notice" items="${notices}">
-                <td>notice.noticeNo</td>
-                <td>notice.noticeTitle</td>
-                <td>notice.noticeDate</td>
-                <td><button>수정</button></td>
-                <td><button>삭제</button></td>
+                <tr>
+                    <td>${notice.noticeNo}</td>
+                    <td>${notice.noticeTitle}</td>
+                    <td>${notice.noticeDate}</td>
+                    <td><button>수정</button></td>
+                    <td><button>삭제</button></td>
+                </tr>
             </c:forEach>
         </c:if>
         </tbody>
