@@ -3,7 +3,6 @@ package org.ts.teamstack.course.model.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.course.model.dto.Course;
-import org.ts.teamstack.user.model.dto.User;
 
 @Repository
 public class CouresDaoImpl implements CousreDao{
