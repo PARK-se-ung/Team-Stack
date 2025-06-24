@@ -1,4 +1,4 @@
-package org.ts.teamstack.manager.model.dto;
+package org.ts.teamstack.mypage.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +13,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Component
-public class Inquire {
-    private int inquireNo;
+public class Payment {
+    private int paymentNo;
     private String userId;
-    private String inquireContent;
-    private Timestamp inquireDate;
-    private String inquireStatus;
+    private Timestamp paymentDate;
+    private int courseNo;
+    private int paymentPrice;
+    private String portonId;
 }
