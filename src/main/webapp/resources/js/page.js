@@ -52,6 +52,7 @@ function errorContent(tabId) {
     const $button = $("<button>").addClass("btn btn-outline-orange")
         .attr('onclick', `tabLoad(${tabId})`)
         .text("다시 시도");
+    return $form.append($i).append($msg).append($button);
 }
 
 
@@ -59,3 +60,5 @@ function errorContent(tabId) {
 function getContextPath() {
     return "/" + window.location.pathname.split("/")[1];
 }
+
+

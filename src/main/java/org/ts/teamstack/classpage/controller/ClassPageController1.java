@@ -2,9 +2,15 @@ package org.ts.teamstack.classpage.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.ts.teamstack.classpage.model.service.ClassPageService1;
+import org.ts.teamstack.user.model.dto.Users;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor

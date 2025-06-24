@@ -12,13 +12,20 @@ import java.util.List;
 public class ManagerDaoImpl implements ManagerDao{
     @Override
     public List<Notice> searchNotice(SqlSession session, PageInfo pageInfo){
+        System.out.println((pageInfo.getCurPage() - 1) * pageInfo.getNumPerpage() + 1);
+        System.out.println(pageInfo.getNumPerpage());
         RowBounds rb = new RowBounds((pageInfo.getCurPage() - 1) * pageInfo.getNumPerpage() + 1,
-                                    pageInfo.getPageBarSize());
+                                    pageInfo.getNumPerpage());
         return session.selectList("manager.searchNotice", null, rb);
     }
 
     @Override
     public int searchNoticeCount(SqlSession session){
         return session.selectOne("manager.searchNoticeCount");
+    }
+
+    @Override
+    public int insertNotice(SqlSession session, Notice notice) {
+        return session.insert("manager.insertNotice", notice);
     }
 }

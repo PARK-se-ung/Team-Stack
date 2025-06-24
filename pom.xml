@@ -11,6 +11,12 @@
     <org.springframework-version>5.3.31</org.springframework-version>
     <org.springsecurity-version>5.8.4</org.springsecurity-version>
   </properties>
+  <repositories>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -171,7 +177,11 @@
       <artifactId>spring-context-support</artifactId>
       <version>${org.springframework-version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.github.iamport</groupId>
+      <artifactId>iamport-rest-client-java</artifactId>
+      <version>0.2.23</version>
+    </dependency>
 
   </dependencies>
   <build>

@@ -55,6 +55,8 @@
 
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
 <script>
 $(document).ready(function() {
     tabLoad('info');
