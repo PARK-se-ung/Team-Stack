@@ -233,15 +233,15 @@
             <label for="userEmail">이메일</label>
             <div class="form-row">
                 <input type="email" id="userEmail" name="userEmail" placeholder="example@email.com" required>
-                <button type="button" class="btn-auth" onclick="sendAuthEmail()">인증번호 전송</button>
+                <button type="button" class="btn-auth" id="sendMailCheckNumber">인증번호 전송</button>
             </div>
         </div>
 
         <div class="form-group email-auth-group">
             <label for="emailCode">인증번호 입력</label>
             <div class="form-row" id="mail check input box false">
-                <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력">
-                <button type="button" class="btn-auth" onclick="verifyAuthCode()">인증 확인</button>
+                <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력" required>
+                <button type="button" class="btn-auth" id="verifyAuthCode">인증 확인</button>
             </div>
         </div>
 
@@ -272,7 +272,7 @@
     const emailInput = document.getElementById('userEmail');
     const msg = document.getElementById('msg');
 
-    let authCode = ""; //
+
 
     // 아이디 길이 검증 (포커스를 벗어나면 나타나는 blur)
     userIdInput.addEventListener('blur', () => {
@@ -306,40 +306,49 @@
         }
     });
 
-    // 이메일 인증 전송 버튼 클릭 시
-    function sendAuthEmail() {
-        const email = emailInput.value;
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            alert("유효한 이메일을 입력해주세요.");
-            return;
-        }
 
-        // Ajax로 서버에 이메일 전송 요청
-        fetch("/sendEmail", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert("인증번호가 이메일로 발송되었습니다.");
-                    authCode = data.code; // 서버에서 받은 인증번호 저장
-                } else {
-                    alert("이메일 전송에 실패했습니다.");
-                }
-            });
-    }
+    // 이메일 인증 전송 버튼 클릭 시
+   $('#sendMailCheckNumber').click(function(){
+       const email = $("#userEmail").val();
+       console.log('이메일 : ' + email);
+       $.ajax({
+           url : '${pageContext.request.contextPath}/sendEmail',
+           type:'post',
+           contentType : 'application/json; charset=utf-8',
+           data : JSON.stringify({email:email}),
+           success: function(response) {
+               if(response.sendmailresult){
+                   alert('인증번호 발송되었습니다.');
+               } else {
+                   alert('이메일 전송에 실패했습니다.');
+               }
+           },
+           error: function(){
+               alert('서버오류발생');
+       }
+       });
+   })
 
     // 인증번호 확인
-    function verifyAuthCode() {
+    $('#verifyAuthCode').click(function(){
         const inputCode = document.getElementById('emailCode').value;
-        if (inputCode === authCode) {
-            alert("✅ 이메일 인증 완료");
-        } else {
-            alert("❌ 인증번호가 일치하지 않습니다.");
+        console.log(inputCode);
+        $.ajax({
+            url: '${pageContext.request.contextPath}/verifyAuthCode',
+            type : 'post',
+            contentType : 'application/json; charset=utf-8',
+            data : JSON.stringify({inputCode:inputCode}),
+            success: function (response){
+                if (response.checkAuthCode) {
+                    alert("✅ 이메일 인증 완료");
+                } else {
+                    alert("❌ 인증번호가 일치하지 않습니다.");
+                }
+            }
         }
-    }
+        )
+    })
+
 </script>
 
 

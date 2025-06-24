@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.8.xsd">
+
+    <!--Http 요청에 Security 적용하기-->
+    <security:http>
+        <security:form-login
+            username-parameter="userId"
+            password-parameter="userPwd"
+            login-page="/user/login.do"
+            login-processing-url="/loginend.do"
+            authentication-success-forward-url="/loginsuccess"
+            authentication-failure-forward-url="/failure"
+        />
+        <security:intercept-url pattern="/**" access="permitAll" />
+    </security:http>
+    <!--인증하는 객체 등록하기 -->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="loginService">
+
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <bean id="userDao" class="org.ts.teamstack.user.model.dao.UserDao"/>
+    <bean id="loginService" class="org.ts.teamstack.user.service.UserService">
+        <constructor-arg index="0" ref="userDao"/>
+        <constructor-arg index="1" ref="sqlSessionTemplate"/>
+    </bean>
+    <import resource="root-context.xml"/>
+</beans>
