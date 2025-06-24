@@ -1,0 +1,39 @@
+package org.ts.teamstack.course.model.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+
+public class Course {
+    private int courseNo;
+    private String userId;
+    private String courseTitle;
+    private int coursePrice;
+    private String courseAddress;
+    private String courseContent;
+    private Date courseStartDate;
+    private int totalWeek;
+    private Date recruitDate;
+    private String thumbnail;
+    private String gradeType;
+    private String subject;
+    private String region;
+    private String originalPlanName;
+    private String renamePlanName;
+    private String courseStatus;
+    private Timestamp courseDate;
+    private int courseStartTime;
+    private int courseTime;
+    private int personnel;
+    private List<CourseAttach> files;
+}

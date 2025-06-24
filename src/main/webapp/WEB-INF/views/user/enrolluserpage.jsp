@@ -9,7 +9,7 @@
     <style>
         #main{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff8c42);
+            background: antiquewhite;
             min-height: 100vh;
             display: flex;
             align-items: center;

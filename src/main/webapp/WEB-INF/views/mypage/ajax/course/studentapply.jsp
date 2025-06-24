@@ -10,18 +10,35 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
+
+<style>
+
+  .lecture-box {
+    width: 100%;
+    height: 240px;
+    background-color: #dcdcdc;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+</style>
+
 <div class="navs">
-  <div class="nav-item" data-nav="manage">강의 개설</div>
+  <div class="nav-item" data-nav="open">강의 개설</div>
   <div class="nav-item" data-nav="courseapply">강의 개설 승인</div>
   <div class="nav-item active" data-nav="studentapply">신청 학생 승인</div>
   <div class="nav-item" data-nav="coursetake">진행중인 강의</div>
   <div class="nav-item" data-nav="coursecomplete">만료한 강의</div>
 </div>
 <!-- 아래 div안에서 필요한 html 코드 작성 -->
-<div class="current-container">
-
-
-  <h1>top nav test</h1>
+<div class="current-container" >
+  <div class="lecture-box">
+    <img src="/resources/images/logo.png">
+  </div>
+  <div class="lecture-box">진행중인 강의</div>
 
 
 </div>

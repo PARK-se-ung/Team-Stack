@@ -1,0 +1,59 @@
+package org.ts.teamstack.manager.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.ts.teamstack.common.controller.PageBarFactory;
+import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.manager.model.dto.Notice;
+import org.ts.teamstack.manager.service.ManagerService;
+
+import java.util.List;
+import java.util.Map;
+
+@Controller
+@RequestMapping("/manage")
+@RequiredArgsConstructor
+public class ManagerController {
+
+    private final ManagerService service;
+    private final PageInfo pageInfo;
+    private final Notice notice;
+
+    @RequestMapping("")
+    public String manage(){
+        return "manage/manage";
+    }
+
+    @RequestMapping("/notice")
+    public String searchNotice(Model model,
+                               @RequestParam(defaultValue = "1") int cPage){
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(service.searchNoticeCount());
+        List<Notice> notices = service.searchNotice(pageInfo);
+        System.out.println(notices);
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "loadNotice");
+        model.addAttribute("notices", notices);
+        model.addAttribute("pageBar", pageBar);
+        return "manage/ajax/notice";
+    }
+
+    @RequestMapping("/writenotice")
+    public String writeNotice(){
+        return "manage/ajax/writenotice";
+    }
+
+    @RequestMapping("/insertnotice")
+    public String insertNotice(@RequestParam String title,
+                               @RequestParam String content,
+                               @RequestParam String alarm,
+                               Model model){
+        notice.setNoticeTitle(title);
+        notice.setNoticeContent(content);
+        model.addAttribute("result", service.insertNotice(notice, alarm));
+
+        return "manage/ajax/notice";
+    }
+}
