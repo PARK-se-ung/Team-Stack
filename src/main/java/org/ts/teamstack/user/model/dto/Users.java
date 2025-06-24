@@ -12,7 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 
-public class User {
+public class Users {
     private String userId;
     private String userPwd;
     private String userName;
