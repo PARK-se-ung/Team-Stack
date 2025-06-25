@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>사이드바 페이지</title>
     <link rel="stylesheet" href="${path}/resources/css/classes.css">
+    <script src="${path}/resources/js/jquery-3.7.1.min.js"></script>
     <style>
         .sidebar-submenu .sort-tab {
             font-size: 16px;
@@ -80,14 +81,15 @@
                 <span class="handle">☰</span> 캘린더
             </div>
         </div>
-        <a href="${path}/mypage">
+        <a href="${path}/mypage" class="class-to-mypage">
             <img style="width: 50px;" src="${path}/resources/images/doorarrow.png" alt="마이페이지로" >
         </a>
     </div>
 
 
 </div>
-
+<!-- SortableJS 사용 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 <!-- 본문 영역: 메뉴 없음! 내용만 출력 -->
 <div class="class-main-content">
     <div id="tab-content">
@@ -98,12 +100,26 @@
 <!-- 알림 영역 -->
 <div class="class-side-content" id="dashcontent">알림</div>
 
-<!-- SortableJS 사용 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-<script>
-    // 드래그 가능
-    const contextPath = '${path}';
 
+
+<script src="${path}/resources/js/pdf/build/pdf.mjs" type="module"></script>
+<script type="module">
+    export const coursePlan=async (e)=>{
+        pdfjsLib.GlobalWorkerOptions.workerSrc="${path}/resources/js/pdf/build/pdf.worker.mjs";
+       const loadingTask=pdfjsLib.getDocument('${path}/resources/pdf/example.pdf');
+       loadingTask.promise.then(data=>{
+           console.log(data);
+       })
+    }
+    document.querySelector("div[data-side='plan']").addEventListener("click",coursePlan);
+</script>
+
+
+<script>
+
+
+    const contextPath="${path}";
+    // 드래그 가능
     new Sortable(document.getElementById('sortable-tabs'), {
         handle: '.handle',
         animation: 150
@@ -152,7 +168,10 @@
     window.addEventListener('DOMContentLoaded', () => {
         loadTab('home');
     });
+
 </script>
+
+
 
 </body>
 </html>
