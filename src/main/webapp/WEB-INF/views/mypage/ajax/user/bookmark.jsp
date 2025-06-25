@@ -14,7 +14,7 @@
         tabLoad(tabId);
       });
 
-    <!-- 결제 기능 -->
+    <%--<!-- 결제 기능 -->--%>
       IMP.init("imp02858447");
 
       const onClickPay = () => {
@@ -26,9 +26,9 @@
                   merchant_uid: new Date().getTime(),// 주문 고유 번호
                   name: "웹 프로그래밍 입문",
                   amount: 100,
-                  buyer_email: "cheonjaepo@gmail.com",
-                  buyer_name: "김천재",
-                  buyer_tel: "010-4242-4242",
+                  buyer_email: ${loginUser.email},
+                  buyer_name: ${loginUser.name},
+                  buyer_tel: "${loginUser.phone}",
                 },
                 function (rsp) {
     // 결제 종료 시 호출되는 콜백 함수
@@ -67,8 +67,10 @@
                 }
         );
       }
+
     <!-- 북마크 취소 기능 -->
-    $('.btn-bookmark-remove').on('click',function(e){
+    $(document).on('click', '.btn-bookmark-remove', function(e){
+    // $('.btn-bookmark-remove').on('click',function(e){
       const bookmarkNo = $(e.target).data('bookmark-no');
       if(!confirm("북마크를 취소하시겠씁니까?")) return;
       //취소면 return

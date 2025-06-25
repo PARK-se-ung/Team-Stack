@@ -31,6 +31,7 @@ function tabLoad(tabId) {
     })
 }
 
+/* 북마크 페이징 처리 */
 function bookmarkPaging(cPage){
     $.ajax({
         url: getContextPath() + "/mypage/bookmark",
@@ -42,6 +43,21 @@ function bookmarkPaging(cPage){
             $(".main-content").html(data);
         },
         error: errorContent("bookmark")
+    })
+}
+
+/* 결제 내역 페이징 처리 */
+function purchasePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/purchase",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("purchase")
     })
 }
 

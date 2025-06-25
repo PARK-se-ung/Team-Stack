@@ -48,7 +48,7 @@
                 <% if (loginUser != null && (loginUser.getUserType().equals(G) ||
                         loginUser.getUserType().equals(I))){ %>
                 <p><strong><%= loginUser.getUsername() %></strong> 님 환영합니다!</p>
-                <a class="me-3" href="">마이페이지</a>
+                <a class="me-3" href="${pageContext.request.contextPath}/mypage">마이페이지</a>
                 <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
                 <% } %>
                 <% if (loginUser != null && loginUser.getUserType().equals(A)){%>
