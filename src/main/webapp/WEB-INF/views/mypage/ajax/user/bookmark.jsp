@@ -14,7 +14,7 @@
         tabLoad(tabId);
       });
 
-
+    <!-- 결제 기능 -->
       IMP.init("imp02858447");
 
       const onClickPay = () => {
@@ -67,8 +67,27 @@
                 }
         );
       }
+    <!-- 북마크 취소 기능 -->
+    $('.btn-bookmark-remove').on('click',function(e){
+      const bookmarkNo = $(e.target).data('bookmark-no');
+      if(!confirm("북마크를 취소하시겠씁니까?")) return;
+      //취소면 return
+      $.ajax({
+        url:getContextPath()+"/course/bookmark/delete?bookmarkNo="+String(bookmarkNo),
+        type:"DELETE",
+        success:function (result){
+
+        tabLoad('bookmark');//새로고침
+
+        },
+        error:function (){
+          alert("북마크 취소가 안됩니당 :(");
+        }
+      })
 
 
+
+    })
 
 </script>
 
@@ -146,10 +165,15 @@
 
 
         <c:if test="${empty bookmarks}">
+          <tr>
           북마크한게 없네용!ㅋㅋ
+          </tr>
         </c:if>
         </tbody>
       </table>
+        <div id="pageBar">
+          ${pageBar}
+        </div>
     </div>
 
   <style>

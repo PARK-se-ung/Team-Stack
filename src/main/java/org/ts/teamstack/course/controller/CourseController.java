@@ -30,4 +30,15 @@ public class CourseController {
         res.put("success", result > 0);
         return res;
     }
+    @DeleteMapping("/bookmark/delete")
+    @ResponseBody
+    public String deleteBookmark(@RequestParam int bookmarkNo) {
+        int res =  courseService.deleteBookmark(bookmarkNo);
+        String result = "";
+        if(res>0) result="success";
+        else result="fail";
+        return result;
+    }
+
 }
+
