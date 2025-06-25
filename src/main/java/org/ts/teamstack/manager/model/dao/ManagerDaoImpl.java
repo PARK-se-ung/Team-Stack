@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.user.model.dto.Users;
 
@@ -15,9 +16,7 @@ import java.util.Map;
 public class ManagerDaoImpl implements ManagerDao{
     @Override
     public List<Notice> searchNotice(SqlSession session, PageInfo pageInfo){
-        RowBounds rb = new RowBounds((pageInfo.getCurPage() - 1) * pageInfo.getNumPerpage(),
-                                    pageInfo.getNumPerpage());
-        return session.selectList("manager.searchNotice", null, rb);
+        return session.selectList("manager.searchNotice", null, pageInfo.getRowBounds());
     }
 
     @Override
@@ -38,5 +37,15 @@ public class ManagerDaoImpl implements ManagerDao{
     @Override
     public List<Users> searchUsersByType(SqlSession session, String type) {
         return session.selectList("users.searchUsersByType", type);
+    }
+
+    @Override
+    public int insertInquire(SqlSession session, Inquire inquire) {
+        return session.insert("manager.insertInquire", inquire);
+    }
+
+    @Override
+    public List<Inquire>  searchInquire(SqlSession session, PageInfo pageInfo) {
+        return session.selectList("manager.searchInquire", pageInfo.getRowBounds());
     }
 }

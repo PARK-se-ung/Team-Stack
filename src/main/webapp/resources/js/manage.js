@@ -110,3 +110,29 @@ function getCurrentTimestamp(date) {
 
     return `${year}-${month}-${day} ${hours}:${minutes}`;
 }
+
+/* 문의 */
+function insertInquire() {
+    const userId = $("#userId").val();
+    const title = $("#title").val();
+    const content = $("#content").val();
+
+    $.ajax({
+        url: getContextPath() + "/manage/insertinquire",
+        type: 'POST',
+        data:{
+            "userId": userId,
+            "title": title,
+            "content": content
+        },
+        success: function(data) {
+            if(data == 0){
+                alert('문의에 실패하였습니다. 다시 시도해주세요.');
+            } else {
+                alert('문의를 전송하였습니다.')
+            }
+            location.assign(getContextPath());
+        },
+        error: errorContent('alarm')
+    })
+}

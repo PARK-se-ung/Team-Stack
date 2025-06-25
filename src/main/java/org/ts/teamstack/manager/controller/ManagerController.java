@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.manager.service.ManagerService;
 
@@ -30,7 +31,6 @@ public class ManagerController {
     public String manage(){
         return "manage/manage";
     }
-
 
     /* 공지 */
     @RequestMapping("/notice")
@@ -111,5 +111,34 @@ public class ManagerController {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @RequestMapping("/inquirepage")
+    public String insertInquire(){
+        return "manage/insertinquire";
+    }
+
+    @RequestMapping("/insertinquire")
+    @ResponseBody
+    public int insertInquire(@RequestParam String userId,
+                                @RequestParam String title,
+                                @RequestParam String content){
+        Inquire inquire = Inquire.builder()
+                                .userId(userId)
+                                .inquireTitle(title)
+                                .inquireContent(content)
+                                .build();
+        return service.insertInquire(inquire);
+    }
+
+    @RequestMapping("/inquire")
+    public String inquire(Model model, @RequestParam(defaultValue = "1") int cPage) {
+        pageInfo.initialize();
+        pageInfo.setCurPage(cPage);
+        List<Inquire> inquires = service.searchInquire(pageInfo);
+        model.addAttribute("pageBar",
+                PageBarFactory.ajaxPageBuilder(pageInfo, "loadInquire"));
+        model.addAttribute("inquires", inquires);
+        return  "manage/ajax/inquire";
     }
 }

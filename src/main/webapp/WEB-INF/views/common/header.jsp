@@ -53,7 +53,7 @@
                 <% } %>
                 <% if (loginUser != null && loginUser.getUserType().equals(A)){%>
                 <p><strong><%= loginUser.getUsername() %></strong> 님 환영합니다!</p>
-                <a class="me-3" href="">관리자페이지</a>
+                <a class="me-3" href="${pageContext.request.contextPath}/manage">관리자페이지</a>
                 <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
                 <%}%>
 

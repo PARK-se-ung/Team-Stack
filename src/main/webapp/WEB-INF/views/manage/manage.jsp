@@ -20,7 +20,7 @@
         <div class="menu-section">
             <div class="menu-title">고객센터</div>
             <ul>
-                <li class="menu-item" data-tab="report">문의사항</li>
+                <li class="menu-item" data-tab="inquire">문의사항</li>
                 <li class="menu-item" data-tab="notice">공지사항</li>
                 <li class="menu-item" data-tab="alarm">알람</li>
             </ul>
@@ -38,7 +38,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/manage.js"></script>
 <script>
     $(document).ready(function() {
-        manageLoad('notice');
+        manageLoad('createAppr');
 
         $(".menu-item").on('click', function() {
             let $current = $(this);

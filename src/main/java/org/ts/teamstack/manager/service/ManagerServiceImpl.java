@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.manager.model.dao.ManagerDao;
 import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.user.model.dto.Users;
 
@@ -69,5 +70,15 @@ public class ManagerServiceImpl implements ManagerService{
             }
         }
         return result;
+    }
+
+    @Override
+    public int insertInquire(Inquire inquire) {
+        return dao.insertInquire(session, inquire);
+    }
+
+    @Override
+    public List<Inquire> searchInquire(PageInfo pageInfo) {
+        return dao.searchInquire(session, pageInfo);
     }
 }

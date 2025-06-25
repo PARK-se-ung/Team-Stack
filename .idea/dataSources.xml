@@ -14,7 +14,7 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="teamstack" uuid="d83f801b-8add-4a48-a16e-39887a55cfe2">
+    <data-source source="LOCAL" name="teamstack" uuid="0224e8f9-018c-417e-89b1-dabd7e01fbd5">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
