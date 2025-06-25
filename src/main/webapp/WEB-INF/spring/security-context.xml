@@ -5,6 +5,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.8.xsd">
 
+    <!--스프링 시큐리티 모듈이 제공하는 비밀번호 암호화클래스 bean으로 등록-->
+
     <!--Http 요청에 Security 적용하기-->
     <security:http>
         <security:form-login
