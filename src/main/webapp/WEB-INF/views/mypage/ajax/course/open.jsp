@@ -167,7 +167,7 @@
   }
 </style>
 
-<form action="/submit" method="post" enctype="multipart/form-data" id="courseForm">
+<form action="${pageContext.request.contextPath}/course/insert" method="post" enctype="multipart/form-data" id="courseForm">
   <div class="container1">
     <div class="image-upload" onclick="document.getElementById('imageInput').click();">
       <img id="preview" alt="미리보기">
@@ -178,10 +178,10 @@
     <div class="section1 flex">
       <div style="flex: 1">
         <label>강의명</label>
-        <input type="text" name="title" placeholder="강의명을 입력해주세요." required>
+        <input type="text" name="title" id="title" placeholder="강의명을 입력해주세요." required>
 
         <label>강사명</label>
-        <input type="text" name="teacher" placeholder="강사명을 입력해주세요." required>
+        <input type="text" name="teacher" placeholder="강사명을 입력해주세요." required value="${loginUser.userName}">
 
         <label>설명</label>
         <div class="detailImage" id="detailImageContainer" style="display: flex">
@@ -194,10 +194,10 @@
         </div>
 
         <label>가격</label>
-        <input type="number" name="price" placeholder="가격을 입력해주세요." required>
+        <input type="number" name="price" id="price" placeholder="가격을 입력해주세요." required>
 
         <label>교과목</label>
-        <input type="text" name="category" placeholder="#교과목" required>
+        <input type="text" name="category" placeholder="#교과목" id="catagory" required>
       </div>
     </div>
   </div>
@@ -228,7 +228,7 @@
         <option value="경상남도">경상남도</option>
         <option value="제주특별자치도">제주특별자치도</option>
       </select>
-      <input type="text" name="locationDetail" placeholder="상세주소를 입력해주세요.">
+      <input type="text" name="locationDetail" id="locationDetail" placeholder="상세주소를 입력해주세요.">
     </div>
   </div>
 
@@ -250,11 +250,11 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
       </div>
       <div class="modal-body">
-        입력하신 정보로 강좌를 개설하시겠습니까?
+        입력하신 내용으로 강의 개설을 신청하시겠습니까?
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" id="modalConfirmBtn">확인</button>
+        <button type="submit" class="btn btn-primary" formmethod="post" id="modalConfirmBtn">확인</button>
       </div>
     </div>
   </div>
@@ -340,6 +340,17 @@
   });
 
   document.getElementById('modalConfirmBtn').addEventListener('click', function () {
-    document.querySelector('form').submit();  // 실제 form 전송
+    const form = document.getElementById('courseForm');
+
+    if (form.reportValidity()) {
+      form.submit(); // 유효하면 전송
+      alert("신청 완료")
+    } else {
+      const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+      if (modal) {
+        modal.hide();
+      }
+    }
   });
+
 </script>

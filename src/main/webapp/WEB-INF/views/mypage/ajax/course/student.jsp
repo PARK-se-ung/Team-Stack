@@ -13,49 +13,16 @@
 
 <style>
 
-  .lecture-card {
-    display: flex;
-    align-items: center;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: box-shadow 0.2s ease;
-    border : 1px solid #ffc4ae;
-  }
-
-  .lecture-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-
-  .lecture-thumbnail {
-    width: 300px;
-    height: 150px;
-    background-color: #fff;
+  .lecture-box {
+    width: 100%;
+    height: 500px;
+    border : 1px solid #4E4E4E;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-    margin-right: 24px;
-    border-radius: 8px;
-    border : 1px solid #6b7280;
-  }
-
-  .lecture-info {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 16px;
-  }
-
-  .lecture-title {
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  .lecture-detail {
-    color: #333;
+    font-size: 18px;
+    margin-bottom: 20px;
   }
 </style>
 
@@ -71,14 +38,9 @@
 
 </c:if>
 <div class="current-container" >
-  <div class="lecture-card" onclick="location.href='/course/detail?courseId=123'">
-  <div class="lecture-thumbnail">모집중인 강의</div>
-  <div class="lecture-info">
-    <div class="lecture-title">강의 제목</div>
-    <div class="lecture-detail"></div>
-    <div class="lecture-detail">2025.07.01 ~ 2025.08.15</div>
+  <div class="lecture-box" onclick="location.href='${pageContext.request.contextPath}/course/detail?userId=${userId}'" style="cursor:pointer;">
+
   </div>
-</div>
 
 
 </div>

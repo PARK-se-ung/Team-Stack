@@ -40,5 +40,4 @@
         <constructor-arg index="1" ref="sqlSessionTemplate"/>
     </bean>
     <import resource="root-context.xml"/>
-    <!--sqlSessionTemplate 가져오기 위해서 import해주기-->
 </beans>
