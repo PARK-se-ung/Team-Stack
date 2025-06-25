@@ -36,4 +36,7 @@ public class Course {
     private int courseTime;
     private int personnel;
     private List<CourseAttach> files;
+
+    private String instructorName;
+    private int bookmarkNo;
 }
