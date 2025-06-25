@@ -17,7 +17,7 @@ function tabLoad(tabId) {
             if(tabId === 'open'){
                 flatpickr("#datePicker", {
                     mode: "range",
-                    dateFormat: "Y-m-d",
+                    dateFormat: "Y-m-d H:i",
                     minDate: "today",
                     defaultDate: [new Date(), new Date()],
                     locale: "ko",

@@ -14,10 +14,13 @@
     <div class="logo"><img id="class-logo" alt="로고" src="${path}/resources/images/logo.png">
     </div>
     <a class="dash1" href="">대시보드</a>
+    <a href="${path}/mypage" class="class-to-mypage">
+        <img style="width: 50px;" src="${path}/resources/images/doorarrow.png" alt="마이페이지로" >
+    </a>
 </div>
 
 <!-- 본문 영역 -->
-<div class="class-main-content">
+<div class="dash-class-main-content">
 
         <title>클래스</title>
         <style>
@@ -61,7 +64,6 @@
             }
 
         </style>
-    </head>
 
     <div class="dash-menu" id="tabMenu">
         <div class="dash-select active" data-board="ongoing">수강중</div>
@@ -72,84 +74,40 @@
 
     <div class="dash-content">
         <div class="dash-board" id="dboard-active" style="display: flex">
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명강의명강의명강의명강의명강의명강의명강의명
+            <c:forEach var="on" items="${ongoing}">
+                <div class="card" style="width: 18rem;">
+                    <a href="${path}/class/dashmain?courseTitle=${on.courseTitle}">
+                        <img src="${path}/resources/upload/${on.thumbnail}" class="card-img-top" alt="썸네일">
+                        <div class="card-body">
+                            ${on.courseTitle}
+                        </div>
+                    </a>
                 </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명강의명강의명강의명강의명강의명강의명강의명강의명강의명강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-            <div class="card" style="width: 18rem;">
-                <img src="${path}/resources/images/apple_icon.jpeg" class="card-img-top" alt="썸네일">
-                <div class="card-body">
-                    강의명
-                </div>
-            </div>
-
-<%--            <c:forEach var="c" items="${ongoing}">--%>
-<%--                <div>--%>
-<%--                    <--%>
-<%--                </div>--%>
-<%--            </c:forEach>--%>
+            </c:forEach>
         </div>
         <div class="dash-board" id="dboard-completed" style="display:none">
-            b
+            <c:forEach var="com" items="${complete}">
+                <div class="card" style="width: 18rem;">
+                    <a href="${path}/class/dashmain?courseTitle=${com.courseTitle}">
+                        <img src="${path}/resources/upload/${com.thumbnail}" class="card-img-top" alt="썸네일">
+                        <div class="card-body">
+                                ${com.courseTitle}
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
         </div>
         <div class="dash-board" id="dboard-all" style="display:none">
-            c
+            <c:forEach var="all" items="${allcourse}">
+                <div class="card" style="width: 18rem;">
+                    <a href="${path}/class/dashmain?courseTitle=${all.courseTitle}">
+                        <img src="${path}/resources/upload/${all.thumbnail}" class="card-img-top" alt="썸네일">
+                        <div class="card-body">
+                                ${all.courseTitle}
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
         </div>
     </div>
 

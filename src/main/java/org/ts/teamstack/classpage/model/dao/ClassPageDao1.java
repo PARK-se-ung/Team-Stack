@@ -1,7 +1,7 @@
 package org.ts.teamstack.classpage.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
-import org.ts.teamstack.classpage.model.dto.Course;
+import org.ts.teamstack.course.model.dto.Course;
 
 import java.util.List;
 

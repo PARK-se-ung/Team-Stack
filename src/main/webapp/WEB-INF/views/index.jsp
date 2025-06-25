@@ -24,38 +24,38 @@
             <h3>초등학교</h3>
             <div class="image-container">
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div><div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
                 <div class="image-card">
-                    <img src="/resources/images/logo.png" width="100px" height="120px" alt="python">
+                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
                     <span>category | title</span>
                 </div>
             </div>

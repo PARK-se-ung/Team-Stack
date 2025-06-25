@@ -5,28 +5,39 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.8.xsd">
 
-<!--    &lt;!&ndash;Http 요청에 Security 적용하기&ndash;&gt;-->
-<!--    <security:http>-->
-<!--        <security:form-login-->
-<!--            username-parameter="userId"-->
-<!--            password-parameter="userPwd"-->
-<!--            login-page="/user/login.do"-->
-<!--            login-processing-url="/loginend.do"-->
-<!--            authentication-success-forward-url="/loginsuccess"-->
-<!--            authentication-failure-forward-url="/failure"-->
-<!--        />-->
-<!--        <security:intercept-url pattern="/**" access="permitAll" />-->
-<!--    </security:http>-->
-<!--    &lt;!&ndash;인증하는 객체 등록하기 &ndash;&gt;-->
-<!--    <security:authentication-manager>-->
-<!--        <security:authentication-provider user-service-ref="loginService">-->
+    <!--스프링 시큐리티 모듈이 제공하는 비밀번호 암호화클래스 bean으로 등록-->
+    <bean id="passwordEncoder"
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
-<!--        </security:authentication-provider>-->
-<!--    </security:authentication-manager>-->
-<!--    <bean id="userDao" class="org.ts.teamstack.user.model.dao.UserDao"/>-->
-<!--    <bean id="loginService" class="org.ts.teamstack.user.service.UserService">-->
-<!--        <constructor-arg index="0" ref="userDao"/>-->
-<!--        <constructor-arg index="1" ref="sqlSessionTemplate"/>-->
-<!--    </bean>-->
-<!--    <import resource="root-context.xml"/>-->
+    <!--Http 요청에 Security 적용하기-->
+    <security:http>
+        <security:form-login
+            username-parameter="userId"
+            password-parameter="userPwd"
+            login-page="/user/login.do"
+            login-processing-url="/loginend.do"
+            authentication-success-forward-url="/user/loginsuccess"
+            authentication-failure-forward-url="/user/loginfailure"
+        />
+        <!--로그아웃을 요청하는 url-->
+        <security:logout logout-url="/logout.do" logout-success-url="/"/>
+
+        <!--CSRF 인증을 해제-->
+        <!--session id와 csrf 값을 모두 확인해서 인증을 한다.-->
+        <security:csrf disabled="true"/>
+        <security:intercept-url pattern="/**" access="permitAll()" />
+    </security:http>
+    <!--인증하는 객체 등록하기 -->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="loginService">
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
+
+    </security:authentication-manager>
+    <bean id="userDao" class="org.ts.teamstack.user.model.dao.UserDaoImpl"/>
+    <bean id="loginService" class="org.ts.teamstack.user.service.LoginUserService">
+        <constructor-arg index="0" ref="userDao"/>
+        <constructor-arg index="1" ref="sqlSessionTemplate"/>
+    </bean>
+    <import resource="root-context.xml"/>
 </beans>

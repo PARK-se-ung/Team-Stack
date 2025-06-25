@@ -21,10 +21,10 @@ public class ClassPageController1 {
 
     @RequestMapping("/dashboard")
     private String dashboard(/*@SessionAttribute("loginUser") User loginUser,*/ Model model) {
-//        String userId = loginUser.getUserId();
-//        model.addAttribute("ongoing", service.getOngoingCourses(userId));
-//        model.addAttribute("complete", service.getCompletedCourses(userId));
-//        model.addAttribute("allcourse", service.getAllCourses(userId));
+        String userId = "user_0005";
+        model.addAttribute("ongoing", service.getOngoingCourses(userId));
+        model.addAttribute("complete", service.getCompletedCourses(userId));
+        model.addAttribute("allcourse", service.getAllCourses(userId));
         return "classes/dashboard";
     }
 

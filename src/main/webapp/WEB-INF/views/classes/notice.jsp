@@ -1,16 +1,48 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: RoastedBear
-  Date: 2025-06-23
-  Time: 오전 10:04
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>asd
-sadasdasdadas
-</body>
-</html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<div class="class-notice-box">
+    <div class="class-box-title">
+        <i class="bi bi-megaphone-fill"></i>
+        공지
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+    <div class="class-main-item">
+        <span class="home-title">공지 제목</span><span class="home-date">2025년 12월 31일</span>
+    </div>
+
+
+</div>

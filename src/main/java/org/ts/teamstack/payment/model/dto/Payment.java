@@ -20,6 +20,7 @@ public class Payment {
     private int courseNo;
     private int paymentPrice;
     private String portoneId;
+
     private String courseTitle;      // 강의명
     private String instructorName;   // 강사명
 }
