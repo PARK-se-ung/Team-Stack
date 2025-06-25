@@ -17,4 +17,9 @@ public class CourseServiceImpl implements CourseService {
     public int insertCourse(Course course) {
         return courseDao.insertCourse(sqlSession, course);
     }
+
+    @Override
+    public int deleteBookmark(int bookmarkNo) {
+        return courseDao.deleteBookmark(sqlSession,bookmarkNo);
+    }
 }

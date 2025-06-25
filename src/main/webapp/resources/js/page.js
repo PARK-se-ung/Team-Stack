@@ -31,6 +31,20 @@ function tabLoad(tabId) {
     })
 }
 
+function bookmarkPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/bookmark",
+        type: 'POST',
+        data:{
+          "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("bookmark")
+    })
+}
+
 /* 로딩 스피너 생성 함수 */
 function loading() {
     const $form = $("<div>").addClass("loading-content");
