@@ -3,6 +3,7 @@ package org.ts.teamstack.user.service;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.user.model.dao.UserDaoImpl;
 import org.ts.teamstack.user.model.dto.Users;
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService {
     private UserDaoImpl dao;
     @Autowired
     private SqlSession session;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public Users searchById(String id,String password) {
         Users u = dao.searchById(id, session);
@@ -24,7 +28,9 @@ public class UserServiceImpl implements UserService {
         return null;
     }
     @Override
-    public int insertUser(Users user, SqlSession session) {
+    public int insertUser(Users user) {
+        String pwd = passwordEncoder.encode(user.getPassword());
+        user.setUserPwd(pwd);
         return dao.insertUser(user,session);
     }
 }
