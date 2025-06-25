@@ -3,6 +3,7 @@ package org.ts.teamstack.mypage.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.mypage.model.dao.MypageDao;
@@ -18,8 +19,13 @@ public class MypageServiceImpl implements MypageService {
 
 
     @Override
-    public List<Course> selectBookmarkAll(String userId) {
+    public List<Course> selectBookmarkAll(String userId, PageInfo pageInfo) {
 
-        return  mypageDao.selectBookmarkAll(session,userId);
+        return  mypageDao.selectBookmarkAll(session,userId,pageInfo);
+    }
+
+    @Override
+    public int searchBookmarkCount(String userId) {
+        return mypageDao.selectBookmarkCount(session,userId);
     }
 }
