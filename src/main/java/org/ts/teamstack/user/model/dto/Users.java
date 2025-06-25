@@ -11,7 +11,6 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class Users {
     private String userId;
     private String userPwd;

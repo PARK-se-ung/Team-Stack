@@ -17,4 +17,10 @@ public class PageInfo {
     private int numPerpage=5;
     private int totalData;
     private int pageBarSize = 5;
+    public void initialize(){
+        this.curPage = 1;
+        this.numPerpage = 5;
+        this.pageBarSize = 5;
+    }
 }
+
