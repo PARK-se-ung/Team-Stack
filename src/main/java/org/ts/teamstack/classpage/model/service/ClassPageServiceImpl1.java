@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.classpage.model.dao.ClassPageDao1;
-import org.ts.teamstack.classpage.model.dto.Course;
+import org.ts.teamstack.course.model.dto.Course;
 
 import java.util.List;
 
