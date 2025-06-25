@@ -8,12 +8,12 @@
     <!--Http 요청에 Security 적용하기-->
     <security:http>
         <security:form-login
-            username-parameter="userId"
-            password-parameter="userPwd"
-            login-page="/user/login.do"
-            login-processing-url="/loginend.do"
-            authentication-success-forward-url="/loginsuccess"
-            authentication-failure-forward-url="/failure"
+                username-parameter="userId"
+                password-parameter="userPwd"
+                login-page="/user/login.do"
+                login-processing-url="/loginend.do"
+                authentication-success-forward-url="/loginsuccess"
+                authentication-failure-forward-url="/failure"
         />
         <security:intercept-url pattern="/**" access="permitAll" />
     </security:http>
