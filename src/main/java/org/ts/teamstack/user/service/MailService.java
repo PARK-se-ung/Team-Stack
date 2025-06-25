@@ -46,6 +46,7 @@ public class MailService {
            helper.setSubject(title);
            helper.setText(content, true);
            mailSender.send(message);
+
        } catch (MessagingException | UnsupportedEncodingException e) {
            e.printStackTrace();
        }

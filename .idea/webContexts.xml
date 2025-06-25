@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/classes/dashboard.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/classes" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage/ajax/writenotice.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/manage/ajax" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/mypage/ajax/course/open.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/mypage/ajax/course" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/mypage/ajax/user/approval.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/mypage/ajax/user" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/mypage/ajax/user/bookmark.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/mypage/ajax/user" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/enrolluserpage.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user/loginpage.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/user" />
+      </map>
+    </option>
+  </component>
+</project>

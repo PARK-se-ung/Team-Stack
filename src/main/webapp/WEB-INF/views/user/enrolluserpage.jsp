@@ -252,7 +252,7 @@
 
         <div class="form-group">
             <label for="phone">전화번호</label>
-            <input type="tel" id="phone" name="phone" placeholder="010-1234-5678" required>
+            <input type="tel" id="userPhone" name="userPhone" placeholder="010-1234-5678" required>
         </div>
 
         <button type="submit" class="btn-signup">가입하기</button>

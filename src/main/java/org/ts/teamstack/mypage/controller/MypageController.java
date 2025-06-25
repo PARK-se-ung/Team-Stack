@@ -17,6 +17,9 @@ import org.ts.teamstack.user.model.dto.Users;
 
 import java.util.List;
 
+import static org.ts.teamstack.user.model.dto.UserType.G;
+import static org.ts.teamstack.user.model.dto.UserType.I;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/mypage")
@@ -46,7 +49,7 @@ public class MypageController {
         Users tempUser = Users.builder()
                 .userId("user_0004")
                 .userName("유저0004")
-                .userType("I")
+                .userType(I)
                 .userEmail("user0005@user0006.com")
                 .userPhone("010-1111-0003")
                 .build();
@@ -93,7 +96,7 @@ public class MypageController {
             Users tempUser = Users.builder()
                     .userId("user_0005")
                     .userName("유저0005")
-                    .userType("G")
+                    .userType(G)
                     .userEmail("user0005@user0005.com")
                     .userPhone("010-1111-0003")
                     .build();
