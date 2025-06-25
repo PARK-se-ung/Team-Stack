@@ -104,14 +104,66 @@
 
 <script src="${path}/resources/js/pdf/build/pdf.mjs" type="module"></script>
 <script type="module">
-    export const coursePlan=async (e)=>{
-        pdfjsLib.GlobalWorkerOptions.workerSrc="${path}/resources/js/pdf/build/pdf.worker.mjs";
-       const loadingTask=pdfjsLib.getDocument('${path}/resources/pdf/example.pdf');
-       loadingTask.promise.then(data=>{
-           console.log(data);
-       })
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPage = 0;
+    let renderInProgress = false; // ★ 렌더 중 여부 확인
+
+    export const coursePlan = async (e) => {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "${path}/resources/js/pdf/build/pdf.worker.mjs";
+
+        const loadingTask = pdfjsLib.getDocument('${path}/resources/pdf/example.pdf');
+
+        loadingTask.promise.then(data => {
+            pdfDoc = data;
+            totalPage = pdfDoc.numPages;
+            currentPage = 1;
+
+            renderPage(currentPage);
+
+            // ★ 버튼 이벤트 등록: 서브 JSP 가 들어온 후에 등록!
+            document.getElementById("prevpage").addEventListener('click', () => {
+                if (pdfDoc === null || currentPage <= 1 || renderInProgress) return;
+                currentPage--;
+                renderPage(currentPage);
+            });
+
+            document.getElementById("nextpage").addEventListener('click', () => {
+                if (pdfDoc === null || currentPage >= totalPage || renderInProgress) return;
+                currentPage++;
+                renderPage(currentPage);
+            });
+        });
+    };
+
+    function renderPage(pageNum) {
+        renderInProgress = true; // ★ 렌더 시작
+        pdfDoc.getPage(pageNum).then(page => {
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.getElementById('pdf-render');
+            const context = canvas.getContext('2d');//canvas 2d로 설정
+            canvas.height = viewport.height;//pdf높이 canvas높이로 설정
+            canvas.width = viewport.width;//pdf넓이 canvas넓이로 설정
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+
+            const renderTask = page.render(renderContext);
+
+            renderTask.promise.then(() => {
+                renderInProgress = false;
+                const pageInfo = document.getElementById('pageInfo');
+                if (pageInfo) {
+                    pageInfo.innerText = currentPage + ` / ` +totalPage;
+                }
+            });
+        });
     }
-    document.querySelector("div[data-side='plan']").addEventListener("click",coursePlan);
+
+    document.querySelector("div[data-side='plan']").addEventListener("click", coursePlan);
+
+
 </script>
 
 
@@ -133,6 +185,7 @@
         element.classList.add('active');
     }
 
+    const courseNo = ${course}
 
     function loadTab(tabName) {
         const urlMap = {
@@ -142,7 +195,13 @@
             week: contextPath+'/class/week',
         };
 
-        fetch(urlMap[tabName])
+        <%--urlMap +="?courseNo=${}--%>
+
+        fetch(urlMap[tabName], {
+            method:'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ courseNo: courseNo })
+        })
             .then(response => {
                 if (!response.ok) throw new Error('네트워크 오류');
                 return response.text(); // JSP 결과(html)를 텍스트로 받음
