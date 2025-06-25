@@ -15,4 +15,5 @@ public class Bookmark {
     private int bookmarkNo;
     private String userId;
     private int courseNo;
+
 }

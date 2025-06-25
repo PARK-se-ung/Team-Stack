@@ -17,7 +17,7 @@ function tabLoad(tabId) {
             if(tabId === 'open'){
                 flatpickr("#datePicker", {
                     mode: "range",
-                    dateFormat: "Y-m-d",
+                    dateFormat: "Y-m-d H:i",
                     minDate: "today",
                     defaultDate: [new Date(), new Date()],
                     locale: "ko",
@@ -28,6 +28,20 @@ function tabLoad(tabId) {
             }
         },
         error: errorContent(tabId)
+    })
+}
+
+function bookmarkPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/bookmark",
+        type: 'POST',
+        data:{
+          "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("bookmark")
     })
 }
 

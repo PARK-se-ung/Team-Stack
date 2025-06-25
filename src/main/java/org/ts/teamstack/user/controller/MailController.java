@@ -51,6 +51,7 @@ public class MailController {
 
       if(authCode!=null && authCode.equals(inputCode)) {
            verifyResult.put("checkAuthCode", true);
+           session.removeAttribute("authCode");
        } else {
             verifyResult.put("checkAuthCode", false);
         }

@@ -5,10 +5,15 @@ import org.springframework.stereotype.Repository;
 import org.ts.teamstack.course.model.dto.Course;
 
 @Repository
-public class CouresDaoImpl implements CousreDao{
+public class CourseDaoImpl implements CourseDao {
     @Override
     public int insertCourse(SqlSession session, Course course) {
         return session.insert("course.insertCourse", course);
+    }
+
+    @Override
+    public int deleteBookmark(SqlSession session, int bookmarkNo) {
+        return session.delete("course.deleteBookmark", bookmarkNo);
     }
 }
 

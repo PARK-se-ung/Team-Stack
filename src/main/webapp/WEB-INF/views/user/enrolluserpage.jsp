@@ -105,6 +105,27 @@
         .btn-signup:active {
             transform: translateY(0);
         }
+        .btn-signup:disabled {
+            background: #ccc !important;
+            color: #666 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        .btn-auth:disabled {
+            background-color: #ccc !important;  /* 회색 배경 */
+            color: #666 !important;             /* 흐린 글자 */
+            cursor: not-allowed !important;     /* 금지 마우스 커서 */
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        button.btn-auth:disabled {
+            background: #ccc !important;
+            color: #666 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
 
         .form-row {
             display: flex;
@@ -191,7 +212,11 @@
         .email-auth-group {
             margin-bottom: 20px;
         }
-
+        button.btn-disabled:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
         .form-group:nth-child(1) { animation-delay: 0.1s; }
         .form-group:nth-child(2) { animation-delay: 0.2s; }
         .form-group:nth-child(3) { animation-delay: 0.3s; }
@@ -252,10 +277,10 @@
 
         <div class="form-group">
             <label for="phone">전화번호</label>
-            <input type="tel" id="phone" name="phone" placeholder="010-1234-5678" required>
+            <input type="tel" id="userPhone" name="userPhone" placeholder="010-1234-5678" max="11" required>
         </div>
 
-        <button type="submit" class="btn-signup">가입하기</button>
+        <button type="submit" class="btn-signup" id="saveInfo" disabled >가입하기</button>
     </form>
 
     <div class="success-message" id="successMessage">
@@ -291,7 +316,7 @@
 
     userPwdInput.addEventListener('blur', () => {
         if (!passwordPattern(userPwdInput.value)) {
-            alert("비밀번호는 특수문자, 대문자, 숫자를 포함한 8자 이상이어야 합니다.");
+            alert("비밀번호는 특수문자, 대문자, 숫자를 포함한 9자 이상이어야 합니다.");
         }
     });
 
@@ -341,6 +366,15 @@
             success: function (response){
                 if (response.checkAuthCode) {
                     alert("✅ 이메일 인증 완료");
+                    // document.getElementById('saveInfo').removeAttribute("disabled");
+                    document.getElementById('saveInfo').disabled = false;
+                    document.getElementById('userEmail').readOnly = true;
+                    /*setAttribute가 아니라 .readOnly 속성을 true로 바꿔줌*/
+                    document.getElementById('emailCode').disabled= true;
+                    /*이메일 전송, 인증번호 확인 인증 버튼 비활성화*/
+                    document.getElementById('sendMailCheckNumber').disabled=true;
+                    document.getElementById('verifyAuthCode').disabled=true;
+
                 } else {
                     alert("❌ 인증번호가 일치하지 않습니다.");
                 }
@@ -348,6 +382,16 @@
         }
         )
     })
+    document.getElementById('userPhone').addEventListener('input', function (e) {
+        let number = e.target.value.replace(/\D/g, '');
+        if (number.length < 4) {
+            e.target.value = number;
+        } else if (number.length < 8) {
+            e.target.value = number.replace(/(\d{3})(\d{1,4})/, '$1-$2');
+        } else {
+            e.target.value = number.replace(/(\d{3})(\d{4})(\d{1,4})/, '$1-$2-$3');
+        }
+    });
 
 </script>
 

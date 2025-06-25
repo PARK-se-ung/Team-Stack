@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
@@ -13,7 +14,7 @@
         tabLoad(tabId);
       });
 
-
+    <!-- 결제 기능 -->
       IMP.init("imp02858447");
 
       const onClickPay = () => {
@@ -66,6 +67,28 @@
                 }
         );
       }
+    <!-- 북마크 취소 기능 -->
+    $('.btn-bookmark-remove').on('click',function(e){
+      const bookmarkNo = $(e.target).data('bookmark-no');
+      if(!confirm("북마크를 취소하시겠씁니까?")) return;
+      //취소면 return
+      $.ajax({
+        url:getContextPath()+"/course/bookmark/delete?bookmarkNo="+String(bookmarkNo),
+        type:"DELETE",
+        success:function (result){
+
+        tabLoad('bookmark');//새로고침
+
+        },
+        error:function (){
+          alert("북마크 취소가 안됩니당 :(");
+        }
+      })
+
+
+
+    })
+
 </script>
 
 <div class="navs">
@@ -101,33 +124,56 @@
           <th>북마크</th>
           <th>강의명</th>
           <th>강사명</th>
-          <th>교육기간</th>
-          <th>접수기간</th>
+          <th>학년</th>
+          <th>과목</th>
+          <th>지역</th>
+          <th>모집 시작일</th>
+          <th>강의 시작일</th>
+          <th>금액</th>
           <th>신청</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td></td>
-          <td><a href="">[서초1동] 헬스 오후 - 2025.3분기</a></td>
-          <td>서초1동 자치회관</td>
-          <td>2025-07-01 ~ 2025-09-30</td>
-          <td>2025-06-23 ~ 2025-06-27</td>
-          <td><button class="btn-manage" onclick="onClickPay();">결제</button>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><a href="">[서초1동] 헬스 오후 - 2025.3분기</a></td>
-          <td>서초1동 자치회관</td>
-          <td>2025-07-01 ~ 2025-09-30</td>
-          <td>2025-06-23 ~ 2025-06-27</td>
-          <td><button class="btn-manage">결제</button>
-          </td>
-        </tr>
-        <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
+        <c:if test="${not empty bookmarks}">
+          <c:forEach var="b" items="${bookmarks}">
+            <tr>
+              <td>
+                <!-- 북마크 해제 버튼 또는 아이콘 -->
+                <button class="btn-bookmark-remove" data-bookmark-no="${b.bookmarkNo}">★</button>
+              </td>
+              <td>${b.courseTitle}</td>
+              <td>${b.instructorName}</td>
+              <td>
+                <c:choose>
+                  <c:when test="${b.gradeType == 'E'}">초등</c:when>
+                  <c:when test="${b.gradeType == 'M'}">중등</c:when>
+                  <c:when test="${b.gradeType == 'H'}">고등</c:when>
+                  <c:otherwise>기타</c:otherwise>
+                </c:choose>
+              </td>
+              <td>${b.subject}</td>
+              <td>${b.region}</td>
+              <td><fmt:formatDate value="${b.recruitDate}" pattern="yyyy-MM-dd"/></td>
+              <td><fmt:formatDate value="${b.courseStartDate}" pattern="yyyy-MM-dd"/></td>
+              <td>${b.coursePrice}원</td>
+              <td>
+                <button class="btn-apply" data-course-no="${b.courseNo}">신청</button>
+              </td>
+            </tr>
+          </c:forEach>
+        </c:if>
+
+
+        <c:if test="${empty bookmarks}">
+          <tr>
+          북마크한게 없네용!ㅋㅋ
+          </tr>
+        </c:if>
         </tbody>
       </table>
+        <div id="pageBar">
+          ${pageBar}
+        </div>
     </div>
 
   <style>

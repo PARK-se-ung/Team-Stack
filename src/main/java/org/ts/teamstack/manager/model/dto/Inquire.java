@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 public class Inquire {
     private int inquireNo;
     private String userId;
+    private String inquireTitle;
     private String inquireContent;
     private Timestamp inquireDate;
     private String inquireStatus;
