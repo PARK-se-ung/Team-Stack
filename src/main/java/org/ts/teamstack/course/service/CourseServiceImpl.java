@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.course.model.dao.CourseDao;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.course.model.dto.CourseAttach;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +15,11 @@ public class CourseServiceImpl implements CourseService {
     private final SqlSession sqlSession;
 
     @Override
+    public int insertAttach(CourseAttach attach) {
+        return courseDao.insertAttach(sqlSession,attach);
+    }
+
+    @Override
     public int insertCourse(Course course) {
         return courseDao.insertCourse(sqlSession, course);
     }
@@ -21,5 +27,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public int deleteBookmark(int bookmarkNo) {
         return courseDao.deleteBookmark(sqlSession,bookmarkNo);
+    }
+
+    @Override
+    public Course searchCourseByNo(int courseNo) {
+        return courseDao.searchCourseByNo(sqlSession, courseNo);
     }
 }

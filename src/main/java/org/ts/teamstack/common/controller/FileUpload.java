@@ -2,6 +2,7 @@ package org.ts.teamstack.common.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
+import org.ts.teamstack.course.model.dto.Course;
 
 import java.io.File;
 import java.io.IOException;

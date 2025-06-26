@@ -78,7 +78,19 @@ public class ManagerServiceImpl implements ManagerService{
     }
 
     @Override
-    public List<Inquire> searchInquire(PageInfo pageInfo) {
-        return dao.searchInquire(session, pageInfo);
+    public List<Inquire> searchInquire(PageInfo pageInfo, String status) {
+        return dao.searchInquire(session, pageInfo, status);
+    }
+
+    @Override
+    public int searchInquireCount(String status) {
+        return dao.searchInquireCount(session, status);
+    }
+
+    @Override
+    public int updateInquire(Alarm alarm, String type, int no) {
+        int result = dao.updateInquire(session, no);
+        if(result == 0) return -1;
+        return dao.insertAlarm(session, alarm);
     }
 }

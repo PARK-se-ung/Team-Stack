@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/manage")
@@ -89,9 +90,11 @@ public class ManagerController {
 
     @RequestMapping("/insertalarm")
     @ResponseBody
-    public int insertAlarm(@RequestParam String type,
-                              @RequestParam String time,
-                              @RequestParam String content, Model model){
+    public int insertAlarm(@RequestParam Map<String, String> params, Model model){
+        String type = params.get("type"),
+                time = params.get("time") ,
+                content = params.get("content"),
+                tabId = params.get("tabId");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date parsedDate = new Date();
         try{
@@ -106,7 +109,10 @@ public class ManagerController {
                             .build();
         int result = 0;
         try{
-            result = service.insertAlarm(alarm, type);
+            switch (tabId) {
+                case "inquire" : result = service.updateInquire(alarm, type, Integer.parseInt(params.get("no"))); break;
+                case "alarm" : result = service.insertAlarm(alarm, type); break;
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
@@ -132,13 +138,16 @@ public class ManagerController {
     }
 
     @RequestMapping("/inquire")
-    public String inquire(Model model, @RequestParam(defaultValue = "1") int cPage) {
+    public String inquire(Model model, @RequestParam(defaultValue = "1") int cPage, String status) {
         pageInfo.initialize();
         pageInfo.setCurPage(cPage);
-        List<Inquire> inquires = service.searchInquire(pageInfo);
+        pageInfo.setTotalData(service.searchInquireCount(status));
+        List<Inquire> inquires = service.searchInquire(pageInfo, status);
         model.addAttribute("pageBar",
                 PageBarFactory.ajaxPageBuilder(pageInfo, "loadInquire"));
         model.addAttribute("inquires", inquires);
+        model.addAttribute("status", status);
         return  "manage/ajax/inquire";
     }
+
 }

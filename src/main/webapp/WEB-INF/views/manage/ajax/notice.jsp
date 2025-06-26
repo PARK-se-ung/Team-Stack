@@ -23,7 +23,7 @@
             </tr>
             </thead>
             <tbody>
-            <c:if test="${empty notices}">
+            <c:if var="noticeFlag" test="${empty notices}">
                 <td colspan="5" class="text-center"> 조회된 결과가 없습니다.</td>
             </c:if>
             <c:if test="${!noticeFlag}">

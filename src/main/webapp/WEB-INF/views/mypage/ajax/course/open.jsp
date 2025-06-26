@@ -1,5 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="org.ts.teamstack.user.model.dto.Users" %>
+<%
+  Users loginUser = (Users)session.getAttribute("loginUser");
+%>
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 
@@ -15,6 +19,20 @@
   .image-upload {
     width: 100%;
     height: 300px;
+    border: 2px dashed #aaa;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .detail-upload {
+    width: 100%;
+    height: 100px;
     border: 2px dashed #aaa;
     border-radius: 8px;
     background: #fff;
@@ -42,7 +60,7 @@
     display: none;
   }
 
-  .detailImage {
+  .slide-image {
     gap: 6px;
   }
 
@@ -181,17 +199,28 @@
         <input type="text" name="courseTitle" id="title" placeholder="강의명을 입력해주세요." required>
 
         <label>강사명</label>
-        <input type="text" name="userId" placeholder="강사명을 입력해주세요." required value="${loginUser.userName}">
+        <input type="text" name="userId" placeholder="강사명을 입력해주세요."  value="<%= loginUser.getName() %>" >
 
-        <label>설명</label>
-        <div class="detailImage" id="detailImageContainer" style="display: flex">
+        <label>슬라이드 이미지</label>
+        <div class="slide-image" id="slideImageContainer" style="display: flex">
           <div class="ex-upload">
             <img class="preview" alt="미리보기">
-            <span class="placeholder">상세 이미지</span>
-            <input type="file" name="image" accept="image/*" required onchange="previewImage2(event)">
+            <span class="placeholder">슬라이드 이미지</span>
+            <input type="file" name="slideImage" accept="image/*" required onchange="previewImage2(event)">
           </div>
           <button type="button" class="addButton">+</button>
         </div>
+
+        <label>상세 이미지</label>
+        <div class="detailImage" id="detailImageContainer" style="display: flex">
+          <div class="detail-upload"
+               onclick="document.getElementById('detailInput').click();">
+            <img id="preview" alt="미리보기">
+            <span id="detailPlaceholder">상세 이미지</span>
+            <input type="file" id="detailInput" name="courseContent" accept="image/*" style="display:none" required onchange="previewImage3(event)">
+          </div>
+        </div>
+
 
         <label>가격</label>
         <input type="number" name="coursePrice" id="price" placeholder="가격을 입력해주세요." required>
@@ -303,14 +332,31 @@
     }
   }
 
+  function previewImage3(event) {
+    const input = event.target;
+    const container = input.closest('.detail-upload');
+    const preview = container.querySelector('img');
+    const placeholder = container.querySelector('span');
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
   document.querySelector('.addButton').addEventListener('click', function (e) {
     e.preventDefault();
 
-    const container = document.getElementById('detailImageContainer');
+    const container = document.getElementById('slideImageContainer');
     const currentBoxes = container.querySelectorAll('.ex-upload').length;
 
     if (currentBoxes >= 3) {
-      alert("상세 이미지는 최대 3개까지만 업로드할 수 있습니다.");
+      alert("슬라이드 이미지는 최대 3개까지만 업로드할 수 있습니다.");
       return;
     }
 
@@ -319,11 +365,18 @@
 
     newBox.innerHTML = `
       <img class="preview" alt="미리보기">
-      <span class="placeholder">상세 이미지</span>
-      <input type="file" name="courseContent" accept="image/*" required onchange="previewImage2(event)">
+      <span class="placeholder">슬라이드 이미지</span>
+      <input type="file" name="silideImage" accept="image/*" required onchange="previewImage2(event)">
     `;
 
     container.insertBefore(newBox, this);
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.detail-upload')
+            .addEventListener('click', () => {
+              document.querySelector('.detail-upload input[type="file"]').click();
+            });
   });
 
   document.addEventListener('click', function (e) {

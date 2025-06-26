@@ -12,9 +12,9 @@
     <h2>문의 내역</h2>
     <hr>
     <div>
-      <select id="status" class="form-select">
-        <option value="T">전체</option>
-        <option value="N">미처리</option>
+      <select id="inquire-status" class="form-select">
+        <option value="T" ${status == "T"? "selected" : ""}>전체</option>
+        <option value="N" ${status == "N"? "selected" : ""}>미처리</option>
       </select>
     </div>
     <table>
@@ -28,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-      <if var="emptyFlag" test="${not empty inquires}">
+      <c:if var="emptyFlag" test="${not empty inquires}">
         <c:forEach var="inquire" items="${inquires}">
           <tr>
             <td>${inquire.inquireNo}</td>
@@ -37,7 +37,7 @@
             <td>${inquire.inquireDate}</td>
             <td>
               <c:if var="statusFlag" test="${inquire.inquireStatus.equals('N')}">
-                <button class="btn btn-outline-orange" onclick="">문의 처리</button>
+                <button class="btn btn-outline-orange" onclick="alarmModal(${inquire.inquireNo})">문의 처리</button>
               </c:if>
               <c:if test="${not statusFlag}">
                 처리 완료
@@ -45,10 +45,10 @@
             </td>
           </tr>
         </c:forEach>
-      </if>
-      <if test="${not emptyFlag}">
+      </c:if>
+      <c:if test="${!emptyFlag}">
         <td colspan="5"> 조회된 결과가 없습니다.</td>
-      </if>
+      </c:if>
       </tbody>
 
     </table>
@@ -56,4 +56,38 @@
   <div>
     ${pageBar}
   </div>
+
+  <!-- 모달 -->
+  <div class="modal fade" id="alarmModal" tabindex="-1" aria-labelledby="writeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="writeModalLabel">알람 작성</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+      </div>
+
+      <div class="modal-body">
+        <form id="writeForm">
+          <div class="mb-3">
+            <label for="alarm-content" class="form-label">알람 내역</label>
+            <textarea class="form-control" id="alarm-content" rows="4" required></textarea>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-outline-orange" onclick="insertAlarm('inquire')">전송</button>
+        <input type="hidden" id="inquire-no">
+      </div>
+
+      </div>
+    </div>
+  </div>
+<script>
+  $(document).ready(() => {
+            $("#inquire-status").on('change', inquireHandler);
+          })
+</script>
 </article>
