@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.ts.teamstack.user.model.dto.Users;
@@ -22,7 +23,7 @@ public class UserController {
     private UserServiceImpl service;
 
     @RequestMapping("/login.do")
-    public String login(){
+    public String login(@ModelAttribute("user") Users user) {
         return "user/loginpage";
     }
 
@@ -72,8 +73,13 @@ public class UserController {
     @RequestMapping("/enrolluserend.do")
     public String enrolluserend(String userId, String userPwd, String userName, String userEmail
                                 ,String userAddress, String userPhone){
+
         Users user = Users.builder().userId(userId)
-                .userPwd(userPwd).userName(userName).userEmail(userEmail).userAddress(userAddress).userPhone(userPhone).build();
+                .userPwd(userPwd).userName(userName)
+                .userEmail(userEmail).userAddress(userAddress)
+                .userPhone(userPhone).build();
+
+        int insertResult = service.insertUser(user);
         return "redirect:/";
     }
 

@@ -13,6 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class Users implements UserDetails{
     private String userName;
     @NotEmpty(message = "이메일은 필수값입니다.")
     private String userEmail;
-    private Date userCreateTime = Date.valueOf(LocalDate.now());
+    private Timestamp userCreateTime = new Timestamp(System.currentTimeMillis());
     private UserType userType= G;
     @NotEmpty
     private String userPhone;

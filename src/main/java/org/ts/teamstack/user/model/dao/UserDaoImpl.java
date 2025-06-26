@@ -14,8 +14,7 @@ public class UserDaoImpl implements UserDao {
             return session.selectOne("users.searchById",userId);
     }
     @Override
-    public int insertUser(Users user, SqlSession session)
-            throws UsernameNotFoundException {
+    public int insertUser(Users user, SqlSession session) {
         return session.insert("users.insertUser",user);
     }
 }

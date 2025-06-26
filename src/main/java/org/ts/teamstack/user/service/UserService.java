@@ -5,5 +5,5 @@ import org.ts.teamstack.user.model.dto.Users;
 
 public interface UserService {
     Users searchById(String id, String password);
-    int insertUser(Users user, SqlSession session);
+    int insertUser(Users user);
 }
