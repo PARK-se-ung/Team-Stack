@@ -88,7 +88,7 @@ public class Users implements UserDetails{
             message = "특수기호,대문자,숫자포함 9글자 이상입니다.")
     private String userPwd;
     @NotEmpty(message = "이름은 필수값입니다.")
-    private String userName;
+    private String name;
     @NotEmpty(message = "이메일은 필수값입니다.")
     private String userEmail;
     private Timestamp userCreateTime = new Timestamp(System.currentTimeMillis());

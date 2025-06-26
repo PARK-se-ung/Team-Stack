@@ -48,7 +48,7 @@ public class MypageController {
         /*임시 로그인 멤버생성*/
         Users tempUser = Users.builder()
                 .userId("user_0004")
-                .userName("유저0004")
+                .name("유저0004")
                 .userType(I)
                 .userEmail("user0005@user0006.com")
                 .userPhone("010-1111-0003")
@@ -96,7 +96,7 @@ public class MypageController {
 
         Users tempUser = Users.builder()
                 .userId("user_0004")
-                .userName("유저0004")
+                .name("유저0004")
                 .userType(I)
                 .userEmail("user0005@user0006.com")
                 .userPhone("010-1111-0003")
