@@ -172,43 +172,43 @@
     <div class="image-upload" onclick="document.getElementById('imageInput').click();">
       <img id="preview" alt="미리보기">
       <span id="placeholder">강의 썸네일</span>
-      <input type="file" name="image" id="imageInput" accept="image/*" required onchange="previewImage(event)">
+      <input type="file" name="thumbnail" id="imageInput" accept="image/*" required onchange="previewImage(event)">
     </div>
 
     <div class="section1 flex">
       <div style="flex: 1">
         <label>강의명</label>
-        <input type="text" name="title" id="title" placeholder="강의명을 입력해주세요." required>
+        <input type="text" name="courseTitle" id="title" placeholder="강의명을 입력해주세요." required>
 
         <label>강사명</label>
-        <input type="text" name="teacher" placeholder="강사명을 입력해주세요." required value="${loginUser.userName}">
+        <input type="text" name="userId" placeholder="강사명을 입력해주세요." required value="${loginUser.userName}">
 
         <label>설명</label>
         <div class="detailImage" id="detailImageContainer" style="display: flex">
           <div class="ex-upload">
             <img class="preview" alt="미리보기">
             <span class="placeholder">상세 이미지</span>
-            <input type="file" name="image2" accept="image/*" required onchange="previewImage2(event)">
+            <input type="file" name="image" accept="image/*" required onchange="previewImage2(event)">
           </div>
           <button type="button" class="addButton">+</button>
         </div>
 
         <label>가격</label>
-        <input type="number" name="price" id="price" placeholder="가격을 입력해주세요." required>
+        <input type="number" name="coursePrice" id="price" placeholder="가격을 입력해주세요." required>
 
         <label>교과목</label>
-        <input type="text" name="category" placeholder="#교과목" id="catagory" required>
+        <input type="text" name="subject" placeholder="#교과목" id="catagory" required>
       </div>
     </div>
   </div>
 
   <div class="section1">
     <label>일정</label>
-    <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="date">
+    <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="courseStartTime">
 
     <label>장소</label>
     <div class="location">
-      <select name="location" id="location" required>
+      <select name="region" id="location" required>
         <option value="">선택하세요</option>
         <option value="서울특별시">서울특별시</option>
         <option value="부산광역시">부산광역시</option>
@@ -228,14 +228,14 @@
         <option value="경상남도">경상남도</option>
         <option value="제주특별자치도">제주특별자치도</option>
       </select>
-      <input type="text" name="locationDetail" id="locationDetail" placeholder="상세주소를 입력해주세요.">
+      <input type="text" name="courseAddress" id="locationDetail" placeholder="상세주소를 입력해주세요.">
     </div>
   </div>
 
   <div class="file-box">
     <span>강의 계획서</span>
     <label for="planFile" class="custom-file-button">파일 선택</label>
-    <input type="file" name="file" id="planFile" accept=".pdf" style="display: none;">
+    <input type="file" name="originalPlanName" id="planFile" accept=".pdf" style="display: none;">
     <span id="fileName" style="color:white; margin-left: 10px;"></span>
   </div>
 
@@ -254,7 +254,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-        <button type="submit" class="btn btn-primary" formmethod="post" id="modalConfirmBtn">확인</button>
+        <button type="button" class="btn btn-primary" formmethod="post" id="modalConfirmBtn">확인</button>
       </div>
     </div>
   </div>
@@ -320,7 +320,7 @@
     newBox.innerHTML = `
       <img class="preview" alt="미리보기">
       <span class="placeholder">상세 이미지</span>
-      <input type="file" name="image2" accept="image/*" required onchange="previewImage2(event)">
+      <input type="file" name="courseContent" accept="image/*" required onchange="previewImage2(event)">
     `;
 
     container.insertBefore(newBox, this);
@@ -342,6 +342,11 @@
   document.getElementById('modalConfirmBtn').addEventListener('click', function () {
     const form = document.getElementById('courseForm');
 
+    const fd = new FormData(form);
+    for (let [key, val] of fd.entries()) {
+      console.log(`📤 ${key} →`, val);
+    }
+
     if (form.reportValidity()) {
       form.submit(); // 유효하면 전송
       alert("신청 완료")
@@ -352,5 +357,13 @@
       }
     }
   });
+
+
+
+
+
+
+
+
 
 </script>
