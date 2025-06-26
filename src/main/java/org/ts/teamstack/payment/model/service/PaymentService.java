@@ -9,4 +9,6 @@ public interface PaymentService {
     int insertPayment(Payment payment);
     List<Payment> searchAllPayment(String userId, PageInfo pageInfo);
     int searchPaymentCount(String userId);
+
+    boolean existsByPaymentId(String merchantUid);
 }

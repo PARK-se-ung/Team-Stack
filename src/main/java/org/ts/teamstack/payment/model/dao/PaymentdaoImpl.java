@@ -25,4 +25,13 @@ public class PaymentdaoImpl implements Paymentdao {
     public int searchPaymentCount(SqlSession session, String userId) {
         return session.selectOne("payment.searchPaymentCount",userId);
     }
+
+    @Override
+    public boolean existsByPaymentId(SqlSession session, String merchantUid) {
+            int result = session.selectOne("payment.existsByPaymentNo",merchantUid);
+
+        return result > 0;
+        //카운트가 0보다 크면 중복값이 있다는 것
+        //중복값이 없으면 false가 나오지
+    }
 }
