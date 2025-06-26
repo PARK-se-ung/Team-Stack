@@ -10,4 +10,6 @@ public interface Paymentdao {
     int insertPayment(SqlSession session,Payment payment);
     List<Payment> searchAllPayment(SqlSession session, String userId, PageInfo pageInfo);
     int searchPaymentCount(SqlSession session, String userId);
+
+    boolean existsByPaymentId(SqlSession sqlSession, String merchantUid);
 }

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,6 @@
             margin-bottom: 8px;
             background-color: #ffe6d5; /* 밝은 톤으로 배경 */
             border-radius: 6px;
-            display: flex;
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -93,21 +93,22 @@
 <!-- 본문 영역: 메뉴 없음! 내용만 출력 -->
 <div class="class-main-content">
     <div id="tab-content">
-        <p>홈 탭 내용</p>
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
     </div>
 </div>
+<style>
 
+</style>
 <!-- 알림 영역 -->
 <div class="class-side-content" id="dashcontent">알림</div>
-
-
-
 <script src="${path}/resources/js/pdf/build/pdf.mjs" type="module"></script>
 <script type="module">
     let pdfDoc = null;
     let currentPage = 1;
     let totalPage = 0;
-    let renderInProgress = false; // ★ 렌더 중 여부 확인
+    let renderInProgress = false; // 렌더 중 여부 확인
 
     export const coursePlan = async (e) => {
         pdfjsLib.GlobalWorkerOptions.workerSrc = "${path}/resources/js/pdf/build/pdf.worker.mjs";
@@ -121,7 +122,7 @@
 
             renderPage(currentPage);
 
-            // ★ 버튼 이벤트 등록: 서브 JSP 가 들어온 후에 등록!
+            // 버튼 이벤트 등록: 서브 JSP 가 들어온 후에 등록!
             document.getElementById("prevpage").addEventListener('click', () => {
                 if (pdfDoc === null || currentPage <= 1 || renderInProgress) return;
                 currentPage--;
@@ -137,7 +138,7 @@
     };
 
     function renderPage(pageNum) {
-        renderInProgress = true; // ★ 렌더 시작
+        renderInProgress = true;
         pdfDoc.getPage(pageNum).then(page => {
             const viewport = page.getViewport({ scale: 1.5 });
             const canvas = document.getElementById('pdf-render');
@@ -165,11 +166,7 @@
 
 
 </script>
-
-
 <script>
-
-
     const contextPath="${path}";
     // 드래그 가능
     new Sortable(document.getElementById('sortable-tabs'), {
@@ -189,19 +186,19 @@
 
     function loadTab(tabName) {
         const urlMap = {
-            home: contextPath+'/class/home',
-            notice: contextPath+'/class/notice',
-            plan: contextPath+'/class/plan',
-            week: contextPath+'/class/week',
+            home: `${path}/class/home`,
+            notice: '${path}/class/notice',
+            plan: '${path}/class/plan',
+            week: '${path}/class/week',
+            assign: '${path}/class/assign',
+            file: '${path}/class/file',
+            chatting: '${path}/class/chatting',
+            attend: '${path}/class/attend',
+            score: '${path}/class/score',
+            calendar: '${path}/class/calendar'
         };
 
-        <%--urlMap +="?courseNo=${}--%>
-
-        fetch(urlMap[tabName], {
-            method:'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ courseNo: courseNo })
-        })
+        fetch(urlMap[tabName]+`?courseNo=${course}`)
             .then(response => {
                 if (!response.ok) throw new Error('네트워크 오류');
                 return response.text(); // JSP 결과(html)를 텍스트로 받음
@@ -229,8 +226,5 @@
     });
 
 </script>
-
-
-
 </body>
 </html>

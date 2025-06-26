@@ -5,7 +5,6 @@
 
 <%
   Users loginUser = (Users)session.getAttribute("loginUser");
-  System.out.println("loginUser 객체: " + loginUser);
 %>
 
 <!-- 상단 탭이 존재하는 경우 -->
@@ -21,59 +20,66 @@
 
     <%--<!-- 결제 기능 -->--%>
       IMP.init("imp02858447");
-    $(document).on('click', '.btn-apply', function(e){
+
+
+    $(document).on('click', '.btn-apply', async function(e){
+
       const courseNo = $(e.target).data('course-no');
-        IMP.request_pay(
-                {
-                  channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
-                  pg:"uplus",
-                  pay_method: "card",
-                  merchant_uid: new Date().getTime(),// 주문 고유 번호
-                  name: "웹 프로그래밍 입문",
-                  amount: 100,
-                  <%-- 수정된 버전 --%>
-                  buyer_email: "${not empty loginUser ? loginUser.userEmail : ''}",
-                  buyer_name: "${not empty loginUser ? loginUser.userName : ''}",
-                  buyer_tel: "${not empty loginUser ? loginUser.userPhone : ''}"
-                },
-                function (rsp) {
-    // 결제 종료 시 호출되는 콜백 함수
-    // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
-    // 결제 결과를 처리하는 로직을 작성합니다.
-                  if (rsp.success) {
+      const courseTitle = $(e.target).data('course-title');
+      const coursePrice = $(e.target).data('course-price');
 
+      const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk');
 
-                    $.ajax({
-                      type: "POST",
-                      url: '${pageContext.request.contextPath}/payment/insertPayment',
-                      data: {
-                        merchant_uid: rsp.merchant_uid,
-                        userId: "user_0004", // 임시 하드코딩
-                        paymentPrice: rsp.amount,
-                        portonId: rsp.imp_uid,
-                        paymentDate: rsp.paid_at,
-                        courseNo: courseNo // 실제 강의 번호 사용
-                      },
-                      success: function (result) {
-                        if (result === "success") {
-                          alert('결제가 완료되었습니다.');
-                          console.log("결제성공");
-                          tabLoad('bookmark'); // 페이지 새로고침
-                        } else {
-                          alert('결제에 실패하였습니다.');
-                          console.log("결제실패");
-                        }
-                      },
-                      error: function() {
-                        alert('결제 처리 중 오류가 발생했습니다.');
-                      }
-                    });
+      const merchantUid = await merchantUidResponse.text();
+
+      IMP.request_pay(
+              {
+                channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
+                pg:"uplus",
+                pay_method: "card",
+                merchant_uid: merchantUid,
+                name: courseTitle,
+                amount: coursePrice,
+                buyer_email: "${sessionScope.loginUser.userEmail}",
+                buyer_name: "${sessionScope.loginUser.name}",
+                buyer_tel: "${sessionScope.loginUser.userPhone}"
+              },
+              async function (rsp) {
+// 결제 종료 시 호출되는 콜백 함수
+// response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
+// 결제 결과를 처리하는 로직을 작성합니다.
+                if (rsp.success) {
+                  const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
+                          {
+                            method:"POST",
+                            headers:{
+                              'Content-type':'application/json'
+                            },
+                            body:JSON.stringify({
+                              paymentId: rsp.merchant_uid,
+                              userId: "${sessionScope.loginUser.userId}",
+                              paymentPrice: rsp.paid_amount,
+                              portoneId: rsp.imp_uid,
+                              paymentDate:rsp.paid_at,
+                              courseNo: courseNo // 실제 강의 번호 사용
+                            })
+                          });
+                  const result=await response.json();
+
+                  if (result === "success") {
+                    alert('결제가 완료되었습니다.');
+                    console.log("결제성공");
+                    tabLoad('bookmark'); // 페이지 새로고침
                   } else {
-                    var msg = '결제에 실패하였습니다.';
-                    msg += '에러내용 : ' + rsp.error_msg;
-                    alert(msg);
+                    alert('결제에 실패하였습니다.');
+                    console.log("결제실패");
                   }
-                });
+                }else {
+                  var msg = '결제에 실패하였습니다.';
+                  msg += '에러내용 : ' + rsp.error_msg;
+                  alert(msg);
+                }
+              });
     });
 
     <!-- 북마크 취소 기능 -->
@@ -100,7 +106,6 @@
     });
 
 </script>
-
 <div class="navs">
   <div class="nav-item active" data-nav="bookmark">북마크한 강의</div>
   <div class="nav-item" data-nav="reserve">예약한 강의</div>
@@ -164,7 +169,10 @@
           <td><fmt:formatDate value="${b.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${b.coursePrice}" type="number"/>원</td>
           <td>
-            <button class="btn-apply" data-course-no="${b.courseNo}">신청</button>
+            <button class="btn-apply"
+                    data-course-no="${b.courseNo}"
+                    data-course-title="${b.courseTitle}"
+                    data-course-price="${b.coursePrice}">신청</button>
           </td>
         </tr>
       </c:forEach>

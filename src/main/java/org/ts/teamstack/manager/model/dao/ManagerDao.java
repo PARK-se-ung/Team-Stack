@@ -16,5 +16,7 @@ public interface ManagerDao {
     int insertAlarm(SqlSession session, Alarm alarm);
     List<Users> searchUsersByType(SqlSession session, String type);
     int insertInquire(SqlSession session, Inquire inquire);
-    List<Inquire> searchInquire(SqlSession session, PageInfo pageInfo);
+    List<Inquire> searchInquire(SqlSession session, PageInfo pageInfo, String status);
+    int searchInquireCount(SqlSession session, String status);
+    int updateInquire(SqlSession session, int no);
 }

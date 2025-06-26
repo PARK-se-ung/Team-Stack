@@ -97,4 +97,11 @@ public class Users implements UserDetails{
     private String userPhone;
     @NotEmpty
     private String userAddress;
+
+    private long payment;
+
+
+
+
 }
+

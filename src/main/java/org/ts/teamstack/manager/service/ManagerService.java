@@ -14,5 +14,7 @@ public interface ManagerService {
     int insertNotice(Notice notice, String alarm);
     int insertAlarm(Alarm alarm, String type);
     int insertInquire(Inquire inquire);
-    List<Inquire> searchInquire(PageInfo pageInfo);
+    List<Inquire> searchInquire(PageInfo pageInfo, String status);
+    int searchInquireCount(String status);
+    int updateInquire(Alarm alarm, String type, int no);
 }

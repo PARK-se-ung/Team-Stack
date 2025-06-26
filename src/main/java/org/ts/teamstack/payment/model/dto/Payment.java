@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @Builder
 @Component
 public class Payment {
-    private int paymentNo;
+    private String paymentId;
     private String userId;
     private Timestamp paymentDate;
     private int courseNo;
