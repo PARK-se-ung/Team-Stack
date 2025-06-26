@@ -35,9 +35,8 @@ public class ClassPageController1 {
         return "classes/dashmain";
     }
 
-    @PostMapping(value="/home", consumes="application/json", produces="text/html")
-    public String homePost(@RequestBody Map<String,Integer> payload, Model model) {
-        int courseNo = payload.get("courseNo");
+    @GetMapping("/home")
+    public String home(@RequestParam("courseNo") int courseNo, Model model) {
         model.addAttribute("homenotice", service.getHomeNotice(courseNo));
         model.addAttribute("homeassign", service.getHomeAssign(courseNo));
         return "classes/home";
