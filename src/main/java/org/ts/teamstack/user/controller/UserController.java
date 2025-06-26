@@ -29,7 +29,14 @@ public class UserController {
     public String login(@ModelAttribute("user") Users user) {
         return "user/loginpage";
     }
-
+    @RequestMapping("/searchIdByEmail.do")
+    public String searchIdByEmail() {
+        return "user/searchIdByEmail";
+    }
+    @RequestMapping("/searchPwdByEmail.do")
+    public String searchPwdByEmail() {
+        return "user/searchPwdByEmail";
+    }
     // 만들면
 //    @PostMapping(value = "/loginend.do")
 //    public String loginend(){
