@@ -66,7 +66,8 @@ public class UserController {
     }
 
     @RequestMapping("/enrolluser.do")
-    public String enrolluser(){
+    public String enrolluser(@ModelAttribute("member") Users user){
+
         return "user/enrolluserpage";
     }
 
