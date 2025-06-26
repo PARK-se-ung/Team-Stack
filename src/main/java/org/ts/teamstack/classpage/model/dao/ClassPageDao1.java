@@ -2,6 +2,7 @@ package org.ts.teamstack.classpage.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.ts.teamstack.classpage.model.dto.Board;
+import org.ts.teamstack.classpage.model.dto.Chat;
 import org.ts.teamstack.course.model.dto.Course;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface ClassPageDao1 {
     List<Board> getHomeNotice(SqlSession session, int courseNo);
 
     List<Board> getHomeAssign(SqlSession session, int courseNo);
+
+    List<Chat>  getChattingHistory(SqlSession session, int courseNo);
+
+    int setChattingHistory(SqlSession session, Chat chat);
 }

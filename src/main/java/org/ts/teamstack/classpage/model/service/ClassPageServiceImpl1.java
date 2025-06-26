@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.classpage.model.dao.ClassPageDao1;
 import org.ts.teamstack.classpage.model.dto.Board;
+import org.ts.teamstack.classpage.model.dto.Chat;
 import org.ts.teamstack.course.model.dto.Course;
 
 import java.util.List;
@@ -40,4 +41,10 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     public List<Board> getHomeAssign(int courseNo) {
         return classDao.getHomeAssign(session, courseNo);
     }
+
+    @Override
+    public List<Chat> getChattingHistory(int courseNo) { return classDao.getChattingHistory(session,courseNo);}
+
+    @Override
+    public int setChattingHistory(Chat chat) { return classDao.setChattingHistory(session,chat);}
 }

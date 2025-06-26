@@ -1,18 +1,18 @@
 package org.ts.teamstack.payment.controller;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.ts.teamstack.payment.model.dto.Payment;
 import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,17 +21,28 @@ public class PaymentController {
 
     private final PaymentService service;
 
-//    @RequestMapping("/paymentComplete")
-//    public void paymentComplete(String imp_uid, String merchant_uid) {
-//        System.out.println("결제 성공");
-//        System.out.println("imp_uid : " + imp_uid);
-//        System.out.println("merchant_uid : " + merchant_uid);
-//    }
+    @Data
+    public class PaymentRequest {
+        private String paymentId;
+        private String userId;
+        private int paymentPrice;
+        private String portoneId;
+        private Long paymentDate;
+        private int courseNo;
+    }
+
     @RequestMapping("/insertPayment")
     @ResponseBody
-    public String paymentInsert(String userId,int paymentPrice,String portonId,Long paymentDate, int courseNo) {
+    public String insertPayment(@RequestBody PaymentRequest request) {
 
-        Payment payment = Payment.builder().userId(userId).paymentPrice(paymentPrice).portoneId(portonId).paymentDate(new Timestamp(paymentDate*1000)).courseNo(courseNo).build();
+        Payment payment = Payment.builder()
+                            .paymentId(request.getPaymentId())
+                        .userId(request.getUserId())
+                        .paymentPrice(request.getPaymentPrice())
+                        .portoneId(request.getPortoneId())
+                        .paymentDate(new Timestamp(request.getPaymentDate() * 1000))
+                        .courseNo(request.getCourseNo())
+                        .build();
         int result = service.insertPayment(payment);
         if(result > 0) {
             //성공
@@ -40,6 +51,30 @@ public class PaymentController {
             return "fail";
         }
 
+    }
+
+    @GetMapping("generatePaymentPk")
+    @ResponseBody
+    String generatePaymentPk() {
+
+        String merchantUid;
+
+        do {
+        String uuid = UUID.randomUUID().toString();
+
+        Calendar baseCalendar = Calendar.getInstance();
+        baseCalendar.set(2025, Calendar.JANUARY, 1, 0, 0, 0);
+        baseCalendar.set(Calendar.MILLISECOND, 0);
+        long baseTime = baseCalendar.getTimeInMillis();
+
+        long currentTime = System.currentTimeMillis();
+        long ms = currentTime - baseTime;
+
+        merchantUid = uuid + ms;
+
+    } while (service.existsByPaymentId(merchantUid)); // 중복 체크
+        System.out.println(merchantUid);
+        return merchantUid;
     }
 
 }

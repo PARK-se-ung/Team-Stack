@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
+
     private final Paymentdao dao;
     private final SqlSession sqlSession;
 
@@ -31,4 +32,9 @@ public class PaymentServiceImpl implements PaymentService {
     public int searchPaymentCount(String userId) {
         return dao.searchPaymentCount(sqlSession,userId);
     }
+    @Override
+    public boolean existsByPaymentId(String merchantUid) {
+        return dao.existsByPaymentId(sqlSession,merchantUid);
+    }
+
 }
