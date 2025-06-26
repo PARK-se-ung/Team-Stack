@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%@ page import="static org.ts.teamstack.course.model.dto.Course" %>
+
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
@@ -111,7 +113,7 @@
         </thead>
         <tbody>
         <tr onclick="location.href='${pageContext.request.contextPath}/'" style="cursor: pointer;">
-          <td>1050</td>
+          <td>${courseNo}</td>
           <td>[서초1동] 헬스 오후 - 2025.3분기</td>
           <td>서초1동 자치회관</td>
           <td>2025-07-01 ~ 2025-09-30</td>

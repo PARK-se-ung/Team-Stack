@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.course.model.dao.CourseDao;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.course.model.dto.CourseAttach;
 
 @Service
 @RequiredArgsConstructor
@@ -12,6 +13,11 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseDao courseDao;
     private final SqlSession sqlSession;
+
+    @Override
+    public int insertAttach(CourseAttach attach) {
+        return courseDao.insertAttach(sqlSession,attach);
+    }
 
     @Override
     public int insertCourse(Course course) {

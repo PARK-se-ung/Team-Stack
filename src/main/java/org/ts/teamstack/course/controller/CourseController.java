@@ -5,12 +5,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -25,18 +27,12 @@ public class CourseController {
     public Map<String, Object> insertCourse(
             @ModelAttribute Course course,
             BindingResult br,
-            @RequestParam(value = "image",      required = false) MultipartFile[] upfiles,
+            @RequestParam(value = "slideImage", required = false) MultipartFile[] upfiles,
             @RequestParam(value = "thumbnail",  required = false) MultipartFile thumbnail,
+            @RequestParam(value = "courseContent",  required = false) MultipartFile content,
             @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
             HttpSession session
     ) {
-        if (br.hasErrors()) {
-            System.out.println("===== 바인딩 오류 목록 =====");
-            br.getFieldErrors().forEach(err ->
-                    System.out.printf("%s → %s (%s)%n",
-                            err.getField(), err.getDefaultMessage(), err.getRejectedValue())
-            );
-        }
 
         String path = session.getServletContext().getRealPath("/resources/upload/course");
         File dir = new File(path);
@@ -56,31 +52,21 @@ public class CourseController {
             }
         }
 
-        // 상세 이미지 저장
-        if (upfiles != null) {
-            List<CourseAttach> files = new ArrayList<>();
+        if (content != null && !content.isEmpty()) {
+            String oriName = content.getOriginalFilename();
+            String ext = oriName.substring(oriName.lastIndexOf("."));
+            String rename = "content_" + System.currentTimeMillis() + ext;
 
-            for (MultipartFile upFile : upfiles) {
-                if (upFile.isEmpty()) continue;
-
-                String oriName = upFile.getOriginalFilename();
-                String ext = oriName.substring(oriName.lastIndexOf("."));
-                String rename = "detail_" + System.currentTimeMillis() + "_" + new Random().nextInt(1000) + ext;
-
-                try {
-                    upFile.transferTo(new File(dir, rename));
-                    CourseAttach attach = CourseAttach.builder()
-                            .CourseAttachNo(0) // 시퀀스 사용 시 DB에서 처리
-                            .courseAttachName(rename)
-                            .build();
-                    files.add(attach);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                content.transferTo(new File(dir, rename));
+                course.setCourseContent(rename);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            course.setFiles(files);
         }
+
+
+
 
         // 강의 계획서 저장
         if (planFile != null && !planFile.isEmpty()) {
@@ -103,9 +89,33 @@ public class CourseController {
         // INSERT 처리
 
         int result = courseService.insertCourse(course);
-
+        int flag = 0;
+        // 슬라이드 이미지() 이미지 저장
+        if(result > 0) {
+            if ( upfiles!= null) {
+                try{
+                    List<String> renames = FileUpload.saveFiles(upfiles,path);
+                    List<CourseAttach> attachs = new ArrayList<>();
+                    for (int i = 0; i < renames.size(); i++) {
+                        CourseAttach attach = CourseAttach.builder()
+                                .courseNo(course.getCourseNo())
+                                .courseAttachName(renames.get(i))
+                                .courseAttachLevel(i)
+                                .build();
+                        attachs.add(attach);
+                        flag = courseService.insertAttach(attach);
+//                        if(flag == 0) {
+//                            courseService.deleteCourse();
+//                            break;
+//                        }
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
         Map<String, Object> res = new HashMap<>();
-        res.put("success", result > 0);
+        res.put("success", flag > 0);
         return res;
     }
     @DeleteMapping("/bookmark/delete")
