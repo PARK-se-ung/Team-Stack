@@ -32,7 +32,7 @@ public class Course {
     private String renamePlanName;
     private String courseStatus;
     private Timestamp courseDate;
-    private int courseStartTime;
+    private String courseStartTime;
     private int courseTime;
     private int personnel;
     private List<CourseAttach> files;
