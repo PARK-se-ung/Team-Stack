@@ -38,11 +38,11 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
 
     @Override
     public List<Chat> getChattingHistory(SqlSession session, int courseNo) {
-        return (session.selectList("chat.getChattingHistory", courseNo));
+        return (session.selectList("getChattingHistory", courseNo));
     }
 
     @Override
     public int setChattingHistory(SqlSession session,Chat chat) {
-        return (session.insert("chat.setChattingHistory", chat));
+        return (session.insert("setChattingHistory", chat));
     }
 }
