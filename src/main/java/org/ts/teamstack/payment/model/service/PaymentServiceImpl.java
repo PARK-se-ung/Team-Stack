@@ -3,6 +3,7 @@ package org.ts.teamstack.payment.model.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.payment.model.dao.Paymentdao;
 import org.ts.teamstack.payment.model.dto.Payment;
 
@@ -22,7 +23,12 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payment> searchAllPayment(String userId) {
-        return dao.searchAllPayment(sqlSession,userId);
+    public List<Payment> searchAllPayment(String userId, PageInfo pageInfo) {
+        return dao.searchAllPayment(sqlSession,userId,pageInfo);
+    }
+
+    @Override
+    public int searchPaymentCount(String userId) {
+        return dao.searchPaymentCount(sqlSession,userId);
     }
 }

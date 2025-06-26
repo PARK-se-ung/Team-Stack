@@ -13,11 +13,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Component
-public class Alram {
-    private int alramNo;
+public class Alarm {
+    private int alarmNo;
     private String userId;
-    private Timestamp alramDate;
-    private String alramContent;
-    private String alramStatus;
+    private Timestamp alarmDate;
+    private String alarmContent;
+    private String alarmStatus;
 }
 

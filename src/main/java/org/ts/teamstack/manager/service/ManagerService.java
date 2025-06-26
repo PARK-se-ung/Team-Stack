@@ -2,6 +2,8 @@ package org.ts.teamstack.manager.service;
 
 import org.apache.ibatis.session.SqlSession;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
 
 import java.util.List;
@@ -10,4 +12,7 @@ public interface ManagerService {
     List<Notice> searchNotice(PageInfo pageInfo);
     int searchNoticeCount();
     int insertNotice(Notice notice, String alarm);
+    int insertAlarm(Alarm alarm, String type);
+    int insertInquire(Inquire inquire);
+    List<Inquire> searchInquire(PageInfo pageInfo);
 }

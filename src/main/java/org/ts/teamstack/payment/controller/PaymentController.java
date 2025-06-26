@@ -41,24 +41,5 @@ public class PaymentController {
         }
 
     }
-//    @RequestMapping("/searchAllPayment")
-//    public String searchAllPayment(Model model
-//
-//    ) {
-//        /*임시 로그인 멤버생성*/
-//        Users tempUser = Users.builder()
-//                .userId("user_0005")
-//                .userName("유저0005")
-//                .userType("G")
-//                .userEmail("user0005@user0005.com")
-//                .userPhone("010-1111-0003")
-//                .build();
-//
-//        List<Payment> payments = service.searchAllPayment(tempUser.getUserId());
-//        model.addAttribute("paymentList", payments);
-//        return "/mypage/ajax/payment/purchase";
-//
-//
-//    }
 
 }

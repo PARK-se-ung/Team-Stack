@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="col-lg-3 d-flex justify-content-center">
-      <a href="">문의하기</a>
+      <a href="${pageContext.request.contextPath}/manage/inquirepage">문의하기</a>
     </div>
     <div class="col-lg-3 d-flex justify-content-center">
       <a href="">이용약관</a>

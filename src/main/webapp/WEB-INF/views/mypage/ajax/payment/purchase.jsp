@@ -5,6 +5,7 @@
 
 <div class="navs">
     <div class="nav-item active" data-nav="purchase">강의 구매 내역</div>
+    <div class="nav-item" data-nav="requestRefund">환불 신청</div>
 </div>
 
 <!-- 결제 관리 탭 -->
@@ -39,20 +40,34 @@
             <th>결제ID</th>
         </tr>
         </thead>
-        <c:forEach var="pay" items="${paymentList}">
-            <tr>
-                <td>${pay.paymentNo}</td>
-                <td>${pay.courseTitle}</td>
-                <td>${pay.instructorName}</td>
-                <td>${pay.paymentDate}</td>
-                <td>${pay.paymentPrice}</td>
-                <td>${pay.portoneId}</td>
-            </tr>
-        </c:forEach>
-
+        <tbody>
+        <c:if test="${not empty paymentList}">
+            <c:forEach var="pay" items="${paymentList}">
+                <tr>
+                    <td>${pay.paymentNo}</td>
+                    <td>${pay.courseTitle}</td>
+                    <td>${pay.instructorName}</td>
+                    <td>${pay.paymentDate}</td>
+                    <td>${pay.paymentPrice}</td>
+                    <td>${pay.portoneId}</td>
+                </tr>
+            </c:forEach>
+            </c:if>
         <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
         </tbody>
+
+    <c:if test="${empty paymentList}">
+        <tr>
+            결제한게 없네용!ㅋㅋ
+        </tr>
+    </c:if>
     </table>
+
+    <div id="pageBar">
+        ${pageBar}
+    </div>
+
+</div>
 
     <style>
         .search-bar {
@@ -113,7 +128,6 @@
             white-space: nowrap;
         }
     </style>
-</div>
 
 <!-- nav 전환 로직 -->
 <script>

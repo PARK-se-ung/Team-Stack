@@ -76,7 +76,7 @@
         <div class="dash-board" id="dboard-active" style="display: flex">
             <c:forEach var="on" items="${ongoing}">
                 <div class="card" style="width: 18rem;">
-                    <a href="${path}/class/dashmain?courseTitle=${on.courseTitle}">
+                    <a href="${path}/class/dashmain?courseNo=${on.courseNo}">
                         <img src="${path}/resources/upload/${on.thumbnail}" class="card-img-top" alt="썸네일">
                         <div class="card-body">
                             ${on.courseTitle}
@@ -88,7 +88,7 @@
         <div class="dash-board" id="dboard-completed" style="display:none">
             <c:forEach var="com" items="${complete}">
                 <div class="card" style="width: 18rem;">
-                    <a href="${path}/class/dashmain?courseTitle=${com.courseTitle}">
+                    <a href="${path}/class/dashmain?courseNo=${com.courseNo}">
                         <img src="${path}/resources/upload/${com.thumbnail}" class="card-img-top" alt="썸네일">
                         <div class="card-body">
                                 ${com.courseTitle}
@@ -100,7 +100,7 @@
         <div class="dash-board" id="dboard-all" style="display:none">
             <c:forEach var="all" items="${allcourse}">
                 <div class="card" style="width: 18rem;">
-                    <a href="${path}/class/dashmain?courseTitle=${all.courseTitle}">
+                    <a href="${path}/class/dashmain?courseNo=${all.courseNo}">
                         <img src="${path}/resources/upload/${all.thumbnail}" class="card-img-top" alt="썸네일">
                         <div class="card-body">
                                 ${all.courseTitle}

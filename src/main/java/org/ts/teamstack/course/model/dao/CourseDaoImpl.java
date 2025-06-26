@@ -10,5 +10,10 @@ public class CourseDaoImpl implements CourseDao {
     public int insertCourse(SqlSession session, Course course) {
         return session.insert("course.insertCourse", course);
     }
+
+    @Override
+    public int deleteBookmark(SqlSession session, int bookmarkNo) {
+        return session.delete("course.deleteBookmark", bookmarkNo);
+    }
 }
 

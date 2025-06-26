@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.ts.teamstack.common.controller.PageBarFactory;
+import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.mypage.service.MypageService;
@@ -14,12 +17,17 @@ import org.ts.teamstack.user.model.dto.Users;
 
 import java.util.List;
 
+import static org.ts.teamstack.user.model.dto.UserType.G;
+import static org.ts.teamstack.user.model.dto.UserType.I;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/mypage")
 public class MypageController {
 
+
     private final PaymentService paymentService;
+    private final PageInfo pageInfo;
     private final MypageService mypageService;
 
     /* 마이페이지 메인화면 이동*/
@@ -36,19 +44,27 @@ public class MypageController {
 
     /* 북마크 화면 이동 */
     @PostMapping("/bookmark")
-    public String mybookmark(Model model) {
-
+    public String mybookmark(Model model, @RequestParam(defaultValue = "1") int cPage ) {
         /*임시 로그인 멤버생성*/
         Users tempUser = Users.builder()
                 .userId("user_0004")
                 .userName("유저0004")
-                .userType("I")
+                .userType(I)
                 .userEmail("user0005@user0006.com")
                 .userPhone("010-1111-0003")
                 .build();
 
-        List<Course> bookmarks = mypageService.selectBookmarkAll(tempUser.getUserId());
+        //        pageInfo.initialize();
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(mypageService.searchBookmarkCount(tempUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "bookmarkPaging");
+        List<Course> bookmarks = mypageService.selectBookmarkAll(tempUser.getUserId(), pageInfo);
+
         model.addAttribute("bookmarks", bookmarks);
+        model.addAttribute("loginUser", tempUser);
+        model.addAttribute("pageBar", pageBar);
         return "mypage/ajax/user/bookmark";
     }
 
@@ -76,20 +92,31 @@ public class MypageController {
 
     /* 강의 구매 내역 이동 */
     @PostMapping("/purchase")
-    public String mypurchase(Model model) {
+    public String mypurchase(Model model, @RequestParam(defaultValue = "1") int cPage ) {
 
-            /*임시 로그인 멤버생성*/
-            Users tempUser = Users.builder()
-                    .userId("user_0005")
-                    .userName("유저0005")
-                    .userType("G")
-                    .userEmail("user0005@user0005.com")
-                    .userPhone("010-1111-0003")
-                    .build();
+        Users tempUser = Users.builder()
+                .userId("user_0004")
+                .userName("유저0004")
+                .userType(I)
+                .userEmail("user0005@user0006.com")
+                .userPhone("010-1111-0003")
+                .build();
 
-            List<Payment> payments = paymentService.searchAllPayment(tempUser.getUserId());
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(paymentService.searchPaymentCount(tempUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
+
+            List<Payment> payments = paymentService.searchAllPayment(tempUser.getUserId(),pageInfo);
             model.addAttribute("paymentList", payments);
+            model.addAttribute("pageBar", pageBar);
+
         return "mypage/ajax/payment/purchase"; }
+
+    /* 환불 신청 이동 */
+    @RequestMapping("/requestRefund")
+    public String myrequestrefund(Model model) { return "mypage/ajax/payment/requestrefund"; }
 
     /* 환불 신청 조회 이동 */
     @RequestMapping("/refund")

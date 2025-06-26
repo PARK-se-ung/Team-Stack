@@ -31,6 +31,36 @@ function tabLoad(tabId) {
     })
 }
 
+/* 북마크 페이징 처리 */
+function bookmarkPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/bookmark",
+        type: 'POST',
+        data:{
+          "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("bookmark")
+    })
+}
+
+/* 결제 내역 페이징 처리 */
+function purchasePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/purchase",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("purchase")
+    })
+}
+
 /* 로딩 스피너 생성 함수 */
 function loading() {
     const $form = $("<div>").addClass("loading-content");
