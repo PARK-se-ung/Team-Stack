@@ -190,6 +190,12 @@
             notice: '${path}/class/notice',
             plan: '${path}/class/plan',
             week: '${path}/class/week',
+            assign: '${path}/class/assign',
+            file: '${path}/class/file',
+            chatting: '${path}/class/chatting',
+            attend: '${path}/class/attend',
+            score: '${path}/class/score',
+            calendar: '${path}/class/calendar'
         };
 
         fetch(urlMap[tabName]+`?courseNo=${course}`)
