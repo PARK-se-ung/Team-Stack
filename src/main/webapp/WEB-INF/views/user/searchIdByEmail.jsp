@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
-    <jsp:param name="title" value="로그인페이지"/>
+    <jsp:param name="title" value="아이디 찾기"/>
 </jsp:include>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
@@ -34,7 +34,7 @@
         pointer-events: none;
     }
 
-    .login-container {
+    .find-container {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
         border-radius: 24px;
@@ -78,13 +78,39 @@
         font-weight: 400;
     }
 
-    .login-form {
+    .page-title {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .page-title h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .page-title p {
+        color: #6b7280;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .find-form {
         margin-bottom: 32px;
     }
 
     .form-group {
         position: relative;
         margin-bottom: 24px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #374151;
+        font-weight: 500;
+        font-size: 14px;
     }
 
     .form-group input {
@@ -110,7 +136,45 @@
         font-weight: 400;
     }
 
-    .login-btn {
+    .find-method {
+        margin-bottom: 24px;
+    }
+
+    .method-tabs {
+        display: flex;
+        border-radius: 12px;
+        background: #f3f4f6;
+        padding: 4px;
+        margin-bottom: 24px;
+    }
+
+    .method-tab {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 14px;
+        color: #6b7280;
+    }
+
+    .method-tab.active {
+        background: white;
+        color: #ff6b35;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .method-content {
+        display: none;
+    }
+
+    .method-content.active {
+        display: block;
+    }
+
+    .find-btn {
         width: 100%;
         padding: 16px;
         background: linear-gradient(135deg, #ff6b35, #f7931e);
@@ -125,25 +189,24 @@
         overflow: hidden;
     }
 
-    .login-btn:hover {
+    .find-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 15px 30px rgba(255, 107, 53, 0.4);
     }
 
-    .login-btn:active {
+    .find-btn:active {
         transform: translateY(0);
     }
 
-    .login-links {
+    .back-links {
         display: flex;
         justify-content: center;
         gap: 20px;
-        margin-bottom: 32px;
         padding-top: 16px;
         border-top: 1px solid #e5e7eb;
     }
 
-    .login-links a {
+    .back-links a {
         color: #6b7280;
         text-decoration: none;
         font-size: 14px;
@@ -151,72 +214,9 @@
         transition: color 0.3s ease;
     }
 
-    .login-links a:hover {
+    .back-links a:hover {
         color: #ff6b35;
     }
-
-    .divider {
-        position: relative;
-        text-align: center;
-        margin: 32px 0;
-    }
-
-    .divider::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: #e5e7eb;
-    }
-
-    .divider span {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 0 20px;
-        color: #9ca3af;
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .social-login {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-
-    .social-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px;
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        background: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: #374151;
-        font-weight: 500;
-        font-size: 14px;
-    }
-
-    .social-btn:hover {
-        border-color: #d1d5db;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .social-btn img {
-        width: 20px;
-        height: 20px;
-        margin-right: 8px;
-    }
-
-    .kakao { background: #fee500; border-color: #fee500; color: #000; }
-    .google { background: white; }
-    .github { background: #181717; color: white; border-color: #181717; }
-    .apple { background: #000; color: white; border-color: #000; }
 
     .floating-elements {
         position: absolute;
@@ -265,16 +265,13 @@
     }
 
     @media (max-width: 480px) {
-        .login-container {
+        .find-container {
             margin: 20px;
             padding: 32px 24px;
         }
-
-        .social-login {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
+
 <div class="main-content">
     <div class="floating-elements">
         <div class="floating-circle"></div>
@@ -282,52 +279,88 @@
         <div class="floating-circle"></div>
     </div>
 
-    <div class="login-container">
+    <div class="find-container">
         <div class="logo">
             <h1>사이트 이름</h1>
             <p>오프라인으로 만나는 생생한 강의</p>
         </div>
 
-        <form class="login-form" action="${pageContext.request.contextPath}/loginend.do" method="post">
-            <div class="form-group">
-                <label for="userId">아이디</label>
-                <input type="text" name="userId" placeholder="아이디를 입력하세요" required>
-            </div>
-            <div class="form-group">
-                <label for="userPwd">비밀번호</label>
-                <input type="password" name="userPwd" placeholder="비밀번호를 입력하세요" required>
-            </div>
-            <button type="submit" class="login-btn">로그인</button>
-        </form>
+        <div class="page-title">
+            <h2>아이디 찾기</h2>
+            <p>가입 시 등록한 정보로 아이디를 찾을 수 있습니다.</p>
+        </div>
 
-        <div class="login-links">
-            <a href="${pageContext.request.contextPath}/user/searchIdByEmail.do">아이디 찾기</a>
+        <div class="find-method">
+            <div class="method-tabs">
+                <div class="method-tab active" onclick="switchMethod('email')">이메일</div>
+                <div class="method-tab" onclick="switchMethod('phone')">휴대폰</div>
+            </div>
+
+            <form class="find-form" action="${pageContext.request.contextPath}/findIdEnd.do" method="post">
+                <input type="hidden" name="method" id="findMethod" value="email">
+
+                <div class="method-content active" id="email-method">
+                    <div class="form-group">
+                        <label for="userName">이름</label>
+                        <input type="text" name="userName" placeholder="가입 시 등록한 이름을 입력하세요" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">이메일</label>
+                        <input type="email" name="userEmail" placeholder="가입 시 등록한 이메일을 입력하세요" required>
+                    </div>
+                </div>
+
+                <div class="method-content" id="phone-method">
+                    <div class="form-group">
+                        <label for="userName2">이름</label>
+                        <input type="text" name="userName2" placeholder="가입 시 등록한 이름을 입력하세요">
+                    </div>
+                    <div class="form-group">
+                        <label for="userPhone">휴대폰 번호</label>
+                        <input type="tel" name="userPhone" placeholder="가입 시 등록한 휴대폰 번호를 입력하세요">
+                    </div>
+                </div>
+
+                <button type="submit" class="find-btn">아이디 찾기</button>
+            </form>
+        </div>
+
+        <div class="back-links">
+            <a href="${pageContext.request.contextPath}/user/login.do">로그인</a>
             <a href="${pageContext.request.contextPath}/user/searchPwdByEmail.do">비밀번호 찾기</a>
             <a href="${pageContext.request.contextPath}/user/enrolluser.do">회원가입</a>
         </div>
-
-        <div class="divider">
-            <span>또는</span>
-        </div>
-
-        <div class="social-login">
-            <a href="#" class="social-btn kakao">
-                <img src="${pageContext.request.contextPath}/resources/images/kakao_icon.jpeg" alt="카카오" onerror="this.style.display='none'">
-                카카오
-            </a>
-            <a href="#" class="social-btn google">
-                <img src="${pageContext.request.contextPath}/resources/images/google_icon.jpeg" alt="구글" onerror="this.style.display='none'">
-                구글
-            </a>
-            <a href="#" class="social-btn github">
-                <img src="${pageContext.request.contextPath}/resources/images/github_icon.jpeg" alt="깃허브" onerror="this.style.display='none'">
-                깃허브
-            </a>
-            <a href="#" class="social-btn apple">
-                <img src="${pageContext.request.contextPath}/resources/images/apple_icon.jpeg" alt="애플" onerror="this.style.display='none'">
-                애플
-            </a>
-        </div>
     </div>
 </div>
+
+<script>
+    function switchMethod(method) {
+        // 탭 활성화 상태 변경
+        document.querySelectorAll('.method-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        event.target.classList.add('active');
+
+        // 컨텐츠 표시/숨김
+        document.querySelectorAll('.method-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(method + '-method').classList.add('active');
+
+        // hidden input 값 변경
+        document.getElementById('findMethod').value = method;
+
+        // 필수 입력 필드 설정
+        const allInputs = document.querySelectorAll('.method-content input');
+        allInputs.forEach(input => {
+            input.removeAttribute('required');
+        });
+
+        const activeInputs = document.querySelectorAll('.method-content.active input');
+        activeInputs.forEach(input => {
+            input.setAttribute('required', '');
+        });
+    }
+</script>
+
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
