@@ -6,4 +6,5 @@ import org.ts.teamstack.course.model.dto.Course;
 public interface CourseService {
     int insertCourse(Course course);
     int deleteBookmark(int bookmarkNo);
+    Course searchCourseByNo(int courseNo);
 }

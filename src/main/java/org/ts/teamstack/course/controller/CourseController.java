@@ -2,6 +2,7 @@ package org.ts.teamstack.course.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,8 +10,12 @@ import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.net.http.HttpResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -118,5 +123,25 @@ public class CourseController {
         return result;
     }
 
+
+    @RequestMapping("searchcoursebyno")
+    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
+                                   Model model, HttpServletResponse response){
+        Set<Integer> courseNos = new LinkedHashSet<>();
+        courseNos.add(courseNo);
+        if(recentView != null && !recentView.getValue().isEmpty()){
+            for(String no : recentView.getValue().split(",")){
+                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
+            }
+        }
+
+
+        Course course = courseService.searchCourseByNo(courseNo);
+        model.addAttribute("course", course);
+
+
+
+        return "course/course";
+    }
 }
 

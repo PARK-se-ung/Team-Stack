@@ -24,7 +24,7 @@
             <h3>초등학교</h3>
             <div class="image-container">
                 <div class="card" style="width: 18rem;">
-                    <a href="${pageContext.request.contextPath}/course/details?courseNo=${course.courseNo}">
+                    <a href="${pageContext.request.contextPath}/course/searchcoursebyno?courseNo=${course.courseNo}">
                         <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
                         <div class="card-body">
                             ${course.courseTitle}
