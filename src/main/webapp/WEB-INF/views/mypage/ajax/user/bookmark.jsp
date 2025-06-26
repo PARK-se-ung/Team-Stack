@@ -5,7 +5,6 @@
 
 <%
   Users loginUser = (Users)session.getAttribute("loginUser");
-  System.out.println("loginUser 객체: " + loginUser);
 %>
 
 <!-- 상단 탭이 존재하는 경우 -->
@@ -32,9 +31,9 @@
                   name: "웹 프로그래밍 입문",
                   amount: 100,
                   <%-- 수정된 버전 --%>
-                  buyer_email: "${not empty loginUser ? loginUser.userEmail : ''}",
-                  buyer_name: "${not empty loginUser ? loginUser.userName : ''}",
-                  buyer_tel: "${not empty loginUser ? loginUser.userPhone : ''}"
+                  buyer_email: "${sessionScope.loginUser.userEmail}",
+                  buyer_name: "${sessionScope.loginUser.name}",
+                  buyer_tel: "${sessionScope.loginUser.userPhone}"
                 },
                 function (rsp) {
     // 결제 종료 시 호출되는 콜백 함수
