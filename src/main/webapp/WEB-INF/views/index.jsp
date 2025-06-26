@@ -23,9 +23,13 @@
         <div class="list">
             <h3>초등학교</h3>
             <div class="image-container">
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
+                <div class="card" style="width: 18rem;">
+                    <a href="${pageContext.request.contextPath}/course/details?courseNo=${course.courseNo}">
+                        <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                        <div class="card-body">
+                            ${course.courseTitle}
+                        </div>
+                    </a>
                 </div>
                 <div class="image-card">
                     <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">

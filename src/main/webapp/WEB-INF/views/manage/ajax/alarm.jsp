@@ -25,7 +25,7 @@
       <input id="timeId" type="date" class="d-none form-controll">
     </div>
     <div>
-      <button onclick="insertAlarm()" class="btn btn-outline-orange"> 전송 </button>
+      <button onclick="insertAlarm('alarm')" class="btn btn-outline-orange"> 전송 </button>
     </div>
   </div>
   <textarea id="alarm-content" class="form-control" style="width: 100%;min-height: 400px;" placeholder="200자 이하의 알람 메세지 작성"></textarea>

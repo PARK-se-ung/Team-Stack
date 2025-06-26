@@ -63,7 +63,7 @@ function insertNotice() {
 }
 
 /* 알람 전송 */
-function insertAlarm() {
+function insertAlarm(tabId) {
     let type = $("#alarmTarget").val();
     if(type === 'custom'){
         type = $("#targetId").val();
@@ -75,27 +75,39 @@ function insertAlarm() {
         time = getCurrentTimestamp(new Date());
     }
     const content = $("#alarm-content").val();
-
+    const no = $("#inquire-no").val();
+    console.log(no);
     $.ajax({
             url: getContextPath() + "/manage/insertalarm",
             type: 'POST',
             data:{
                 "type": type,
                 "time": time,
-                "content": content
+                "content": content,
+                "tabId": tabId,
+                "no": no
             },
             success: function(data) {
-                if(data == -1){
-                    alert('대상 유저를 찾을 수 없습니다.');
-                } else if(data == 0){
-                    alert('알람 전송에 실패하였습니다.');
-                } else {
-                    alert('알람을 전송하였습니다.')
+                if(tabId === 'alarm'){
+                    if(data === -1) alert('대상 유저를 찾을 수 없습니다.');
+                    else if(data === 0) alert('알람 전송에 실패하였습니다.');
+                    else alert('알람을 전송하였습니다.');
+                } else if(tabId === 'inquire') {
+                    if(data === -1) alert('문의 처리에 실패하였습니다.');
+                    else if(data === 0) alert('알람 전송에 실패하였습니다.');
+                    else alert('문의를 처리하였습니다.');
                 }
-                manageLoad('alarm');
+                $("#alarmModal").modal('hide');
+                manageLoad(tabId);
             },
-            error: errorContent('alarm')
+            error: errorContent(tabId)
         })
+}
+
+/* 알람모달 호출 */
+function alarmModal(no) {
+    $("input#inquire-no").val(no);
+    $('#alarmModal').modal('show');
 }
 
 /* 현재시각 문자열 획득 */
@@ -135,4 +147,78 @@ function insertInquire() {
         },
         error: errorContent('alarm')
     })
+}
+
+/* 문의 상태 select  */
+function inquireHandler()  {
+    const status = $("#inquire-status").val();
+    $.ajax({
+        url: getContextPath() + "/manage/inquire",
+        method: 'POST',
+        data: {
+            "status": status
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent('inquire')
+    })
+}
+
+/* 문의 페이징 처리 */
+function loadInquire(cPage) {
+    $.ajax({
+        url: getContextPath() + "/manage/inquire",
+        type: 'POST',
+        data: {"cPage" : cPage},
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent('inquire')
+    })
+}
+
+/* 메모리 기능 객체 */
+class DequeData{
+    constructor(pageData={backward:[], forward:[]}) {
+        this.move=function(type,tabId){
+            console.log(pageData,tabId);
+            switch(type) {
+                case 'shift':
+                    pageData.forward.length = 0;
+                    const last = pageData.backward.pop();
+                    if(last !== tabId) pageData.backward.push(last);
+                    pageData.backward.push(tabId);
+                    if(pageData.backward.length > 10) pageData.backward.shift();
+                    return tabId;
+                case 'prev':
+                    const p = pageData.backward.pop();
+                    pageData.forward.unshift(tabId);
+                    if(pageData.forward.length > 10) pageData.forward.pop();
+                    return p;
+                case 'next':
+                    const n = pageData.forward.shift();
+                    pageData.backward.push(tabId);
+                    if(pageData.backward.length > 10) pageData.backward.shift();
+                    return n;
+                default: return tabId;
+            }
+        }
+        this.hasBlankForward=function(){
+
+            return pageData.forward.length === 0;
+        }
+        this.hasBlankBackward=function(){
+
+            return pageData.backward.length === 0;
+        }
+    }
+}
+
+/* 메모리 활성 처리 */
+function disableHandler(dequeData) {
+    if(dequeData.hasBlankBackward()) $(".arrows[data-type=prev]").prop("disabled", true);
+    else $(".arrows[data-type=prev]").prop("disabled", false);
+    if(dequeData.hasBlankForward()) $(".arrows[data-type=next]").prop("disabled", true);
+    else $(".arrows[data-type=next]").prop("disabled", false);
 }
