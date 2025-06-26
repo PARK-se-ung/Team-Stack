@@ -1,17 +1,11 @@
 package org.ts.teamstack.classpage.controller;
 
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.ts.teamstack.classpage.model.dto.Board;
 import org.ts.teamstack.classpage.model.service.ClassPageService1;
-import org.ts.teamstack.course.model.dto.Course;
-import org.ts.teamstack.user.model.dto.Users;
-import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -56,5 +50,35 @@ public class ClassPageController1 {
     @RequestMapping("/week")
     public String week() {
         return "classes/week";
+    }
+
+    @RequestMapping("/assign")
+    public String assign() {
+        return "classes/assign";
+    }
+
+    @RequestMapping("/file")
+    public String file() {
+        return "classes/file";
+    }
+
+//    @RequestMapping("/chatting")
+//    public String chatting() {
+//        return "classes/chatting";
+//    }
+
+    @RequestMapping("/atttend")
+    public String attend() {
+        return "classes/attend";
+    }
+
+    @RequestMapping("/score")
+    public String score() {
+        return "classes/score";
+    }
+
+    @RequestMapping("/calendar")
+    public String calendar() {
+        return "classes/calendar";
     }
 }
