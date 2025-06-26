@@ -47,7 +47,7 @@
                 <%}%>
                 <% if (loginUser != null && (loginUser.getUserType().equals(G) ||
                         loginUser.getUserType().equals(I))){ %>
-                <p><strong><%= loginUser.getUsername() %></strong> 님 환영합니다!</p>
+                <p><strong><%= loginUser.getName() %></strong> 님 환영합니다!</p>
                 <a class="me-3" href="${pageContext.request.contextPath}/mypage">마이페이지</a>
                 <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
                 <% } %>
@@ -56,7 +56,6 @@
                 <a class="me-3" href="${pageContext.request.contextPath}/manage">관리자페이지</a>
                 <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
                 <%}%>
-
                 <a href="">
                     알람
                 </a>
