@@ -14,8 +14,9 @@ public class MypageDaoImpl implements MypageDao {
 
     @Override
     public List<Course> selectBookmarkAll(SqlSession session, String userId, PageInfo pageInfo) {
-        RowBounds rb = new RowBounds((pageInfo.getCurPage() - 1) * pageInfo.getNumPerpage(), pageInfo.getNumPerpage());
-        return session.selectList("bookmark.selectBookmarkAll",userId, rb);
+        //RowBounds rb = new RowBounds((pageInfo.getCurPage() - 1) * pageInfo.getNumPerpage(), pageInfo.getNumPerpage());
+//        return session.selectList("bookmark.selectBookmarkAll",userId, rb);
+        return session.selectList("bookmark.selectBookmarkAll",userId, pageInfo.getRowBounds());
     }
 
     @Override
