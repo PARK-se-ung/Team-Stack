@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
     <jsp:param name="title" value="회원가입페이지"/>
 </jsp:include>
@@ -225,69 +226,68 @@
     </style>
 </head>
 <section id="main">
-<div class="signup-container">
-    <div class="signup-header">
-        <h1>회원가입</h1>
-        <p>새로운 계정을 만들어보세요</p>
-    </div>
-
-    <form id="signupForm" method="post" action="${pageContext.request.contextPath}/user/enrolluserend.do">
-        <div class="form-group">
-            <label for="userId">아이디</label>
-            <input type="text" id="userId" name="userId" minlength="6" placeholder="6글자이상 사용할 아이디를 입력해주세요" required>
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1>회원가입</h1>
+            <p>새로운 계정을 만들어보세요</p>
         </div>
 
-        <div class="form-group">
-            <label for="userPwd">비밀번호</label>
-            <input type="password" id="userPwd" name="userPwd" placeholder="특수문자,대문자,숫자를 포함해주세요" required>
-        </div>
-
-        <div class="form-group">
-            <label for="passwordcheck">비밀번호 확인</label>
-            <input type="password" id="passwordcheck" name="password" placeholder="비밀번호를 확인합니다." required><br>
-            <span id="msg">비밀번호가 일치하지 않습니다.</span>
-        </div>
-
-        <div class="form-group">
-            <label for="userName">이름</label>
-            <input type="text" id="userName" name="userName" placeholder="안전한 비밀번호를 입력하세요" required>
-        </div>
-
-
-        <div class="form-group email-auth-group">
-            <label for="userEmail">이메일</label>
-            <div class="form-row">
-                <input type="email" id="userEmail" name="userEmail" placeholder="example@email.com" required>
-                <button type="button" class="btn-auth" id="sendMailCheckNumber">인증번호 전송</button>
+        <!-- 여기에 modelAttribute="member" 빠져있음 -->
+        <form:form id="signupForm" modelAttribute="users" method="post" action="${pageContext.request.contextPath}/user/enrolluserend.do">
+            <div class="form-group">
+                <label for="userId">아이디</label>
+                <form:input path="userId" type="text" id="userId" minlength="6" placeholder="6글자이상 사용할 아이디를 입력해주세요" required="required"/>
             </div>
-        </div>
 
-        <div class="form-group email-auth-group">
-            <label for="emailCode">인증번호 입력</label>
-            <div class="form-row" id="mail check input box false">
-                <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력" required>
-                <button type="button" class="btn-auth" id="verifyAuthCode">인증 확인</button>
+            <div class="form-group">
+                <label for="userPwd">비밀번호</label>
+                <form:input path="userPwd" type="password" id="userPwd" placeholder="특수문자,대문자,숫자를 포함해주세요" required="required"/>
             </div>
+
+            <div class="form-group">
+                <label for="passwordcheck">비밀번호 확인</label>
+                <input type="password" id="passwordcheck" name="password" placeholder="비밀번호를 확인합니다." required="required"/><br>
+                <span id="msg">비밀번호가 일치하지 않습니다.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="name">이름</label>
+                <form:input path="name" type="text" id="name" placeholder="안전한 비밀번호를 입력해주세요" required="required"/>
+            </div>
+
+            <div class="form-group email-auth-group">
+                <label for="userEmail">이메일</label>
+                <div class="form-row">
+                    <form:input path="userEmail" type="email" id="userEmail" placeholder="example@email.com" required="required"/>
+                    <button type="button" class="btn-auth" id="sendMailCheckNumber">인증번호 전송</button>
+                </div>
+            </div>
+
+            <div class="form-group email-auth-group">
+                <label for="emailCode">인증번호 입력</label>
+                <div class="form-row">
+                    <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력" required="required"/>
+                    <button type="button" class="btn-auth" id="verifyAuthCode">인증 확인</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="userAddress">거주지</label>
+                <form:input path="userAddress" type="text" id="userAddress" placeholder="거주지를 입력해주세요" required="required"/>
+            </div>
+
+            <div class="form-group">
+                <label for="userPhone">전화번호</label>
+                <form:input  path="userPhone" type="tel" id="userPhone" placeholder="010-1234-5678" maxlength="13" required="required"/>
+            </div>
+
+            <button type="submit" class="btn-signup" id="saveInfo" disabled>가입하기</button>
+        </form:form>
+
+        <div class="success-message" id="successMessage">
+            🎉 회원가입이 완료되었습니다!
         </div>
-
-        <div class="form-group">
-            <label for="userAddress">거주지</label>
-            <input type="text" id="userAddress" name="userAddress" placeholder="거주지를 입력하세요" required>
-        </div>
-
-        <div class="form-group">
-            <label for="phone">전화번호</label>
-            <input type="tel" id="userPhone" name="userPhone" placeholder="010-1234-5678" max="11" required>
-        </div>
-
-        <button type="submit" class="btn-signup" id="saveInfo" disabled >가입하기</button>
-    </form>
-
-    <div class="success-message" id="successMessage">
-        🎉 회원가입이 완료되었습니다!
     </div>
-</div>
-
 </section>
 <script>
     // 요소 참조

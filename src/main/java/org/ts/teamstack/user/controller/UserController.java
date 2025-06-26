@@ -6,6 +6,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import org.ts.teamstack.user.model.dto.Users;
 import org.ts.teamstack.user.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -26,7 +29,14 @@ public class UserController {
     public String login(@ModelAttribute("user") Users user) {
         return "user/loginpage";
     }
-
+    @RequestMapping("/searchIdByEmail.do")
+    public String searchIdByEmail() {
+        return "user/searchIdByEmail";
+    }
+    @RequestMapping("/searchPwdByEmail.do")
+    public String searchPwdByEmail() {
+        return "user/searchPwdByEmail";
+    }
     // 만들면
 //    @PostMapping(value = "/loginend.do")
 //    public String loginend(){
@@ -52,7 +62,6 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof Users) {
             Users user = (Users) auth.getPrincipal();
-            System.out.println(user.getUsername());
             request.getSession().setAttribute("loginUser", user);
         }
         return "redirect:/";
@@ -66,11 +75,24 @@ public class UserController {
     }
 
     @RequestMapping("/enrolluser.do")
-    public String enrolluser(){
+    public String enrolluser(@ModelAttribute("users") Users user){
         return "user/enrolluserpage";
     }
+    @PostMapping("/enrolluserend.do")
+    public String enrollUserEnd(@Validated Users users, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "user/enrolluserpage";
+        }
+        int insertResult = service.insertUser(users);
+        if (insertResult > 0) {
 
-    @RequestMapping("/enrolluserend.do")
+        }
+
+        return "redirect:/";
+
+    }
+
+    /*@RequestMapping("/enrolluserend.do")
     public String enrolluserend(String userId, String userPwd, String userName, String userEmail
                                 ,String userAddress, String userPhone){
 
@@ -81,7 +103,7 @@ public class UserController {
 
         int insertResult = service.insertUser(user);
         return "redirect:/";
-    }
+    }*/
 
 
 

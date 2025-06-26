@@ -1,8 +1,13 @@
+<%@ page import="org.ts.teamstack.user.model.dto.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
+<%
+  Users loginUser = (Users)session.getAttribute("loginUser");
+  System.out.println("loginUser 객체: " + loginUser);
+%>
+
 <!-- 상단 탭이 존재하는 경우 -->
 <script>
     <!-- nav 전환 로직 -->
@@ -26,9 +31,10 @@
                   merchant_uid: new Date().getTime(),// 주문 고유 번호
                   name: "웹 프로그래밍 입문",
                   amount: 100,
-                  buyer_email: "test@example.com",        // 하드코딩으로 임시 해결
-                  buyer_name: "테스트사용자",                // 하드코딩으로 임시 해결
-                  buyer_tel: "010-1234-5678"              // 하드코딩으로 임시 해결
+                  <%-- 수정된 버전 --%>
+                  buyer_email: "${not empty loginUser ? loginUser.userEmail : ''}",
+                  buyer_name: "${not empty loginUser ? loginUser.userName : ''}",
+                  buyer_tel: "${not empty loginUser ? loginUser.userPhone : ''}"
                 },
                 function (rsp) {
     // 결제 종료 시 호출되는 콜백 함수
@@ -71,27 +77,27 @@
     });
 
     <!-- 북마크 취소 기능 -->
-    $(document).on('click', '.btn-bookmark-remove', function(e){
-    // $('.btn-bookmark-remove').on('click',function(e){
-      const bookmarkNo = $(e.target).data('bookmark-no');
-      if(!confirm("북마크를 취소하시겠씁니까?")) return;
-      //취소면 return
-      $.ajax({
-        url:getContextPath()+"/course/bookmark/delete?bookmarkNo="+String(bookmarkNo),
-        type:"DELETE",
-        success:function (result){
+    $(document).ready(function() {
+      $(document).on('click', '.btn-bookmark-remove', function (e) {
+        // $('.btn-bookmark-remove').on('click',function(e){
+        const bookmarkNo = $(e.target).data('bookmark-no');
+        if (!confirm("북마크를 취소하시겠씁니까?")) return;
+        //취소면 return
+        $.ajax({
+          url: getContextPath() + "/course/bookmark/delete?bookmarkNo=" + String(bookmarkNo),
+          type: "DELETE",
+          success: function (result) {
 
-        tabLoad('bookmark');//새로고침
+            tabLoad('bookmark');//새로고침
 
-        },
-        error:function (){
-          alert("북마크 취소가 안됩니당 :(");
-        }
-      })
+          },
+          error: function () {
+            alert("북마크 취소가 안됩니당 :(");
+          }
+        });
 
-
-
-    })
+      });
+    });
 
 </script>
 

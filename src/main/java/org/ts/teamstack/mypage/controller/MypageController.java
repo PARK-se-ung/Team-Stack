@@ -1,9 +1,11 @@
 package org.ts.teamstack.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.ts.teamstack.common.controller.PageBarFactory;
@@ -15,6 +17,7 @@ import org.ts.teamstack.payment.model.dto.Payment;
 import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.ts.teamstack.user.model.dto.UserType.G;
@@ -44,26 +47,28 @@ public class MypageController {
 
     /* 북마크 화면 이동 */
     @PostMapping("/bookmark")
-    public String mybookmark(Model model, @RequestParam(defaultValue = "1") int cPage ) {
+    public String mybookmark(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
         /*임시 로그인 멤버생성*/
-        Users tempUser = Users.builder()
-                .userId("user_0004")
-                .userName("유저0004")
-                .userType(I)
-                .userEmail("user0005@user0006.com")
-                .userPhone("010-1111-0003")
-                .build();
+//        Users tempUser = Users.builder()
+//                .userId("user_0004")
+//                .userName("유저0004")
+//                .userType(I)
+//                .userEmail("user0005@user0006.com")
+//                .userPhone("010-1111-0003")
+//                .build();
 
-        //        pageInfo.initialize();
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+        
         pageInfo.setCurPage(cPage);
-        pageInfo.setTotalData(mypageService.searchBookmarkCount(tempUser.getUserId()));
+        pageInfo.setTotalData(mypageService.searchBookmarkCount(loginUser.getUserId()));
         pageInfo.setNumPerpage(10);
 
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "bookmarkPaging");
-        List<Course> bookmarks = mypageService.selectBookmarkAll(tempUser.getUserId(), pageInfo);
+        List<Course> bookmarks = mypageService.selectBookmarkAll(loginUser.getUserId(), pageInfo);
 
         model.addAttribute("bookmarks", bookmarks);
-        model.addAttribute("loginUser", tempUser);
+        model.addAttribute("loginUser", loginUser);
         model.addAttribute("pageBar", pageBar);
         return "mypage/ajax/user/bookmark";
     }
@@ -92,23 +97,24 @@ public class MypageController {
 
     /* 강의 구매 내역 이동 */
     @PostMapping("/purchase")
-    public String mypurchase(Model model, @RequestParam(defaultValue = "1") int cPage ) {
+    public String mypurchase(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
 
-        Users tempUser = Users.builder()
-                .userId("user_0004")
-                .userName("유저0004")
-                .userType(I)
-                .userEmail("user0005@user0006.com")
-                .userPhone("010-1111-0003")
-                .build();
-
+//        Users tempUser = Users.builder()
+//                .userId("user_0004")
+//                .userName("유저0004")
+//                .userType(I)
+//                .userEmail("user0005@user0006.com")
+//                .userPhone("010-1111-0003")
+//                .build();
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
         pageInfo.setCurPage(cPage);
-        pageInfo.setTotalData(paymentService.searchPaymentCount(tempUser.getUserId()));
+        pageInfo.setTotalData(paymentService.searchPaymentCount(loginUser.getUserId()));
         pageInfo.setNumPerpage(10);
 
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
 
-            List<Payment> payments = paymentService.searchAllPayment(tempUser.getUserId(),pageInfo);
+            List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
             model.addAttribute("paymentList", payments);
             model.addAttribute("pageBar", pageBar);
 
