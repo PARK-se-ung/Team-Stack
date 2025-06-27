@@ -45,7 +45,17 @@ public class ManagerDaoImpl implements ManagerDao{
     }
 
     @Override
-    public List<Inquire>  searchInquire(SqlSession session, PageInfo pageInfo) {
-        return session.selectList("manager.searchInquire", pageInfo.getRowBounds());
+    public List<Inquire>  searchInquire(SqlSession session, PageInfo pageInfo, String status) {
+        return session.selectList("manager.searchInquire", status, pageInfo.getRowBounds());
+    }
+
+    @Override
+    public int searchInquireCount(SqlSession session, String status) {
+        return session.selectOne("manager.searchInquireCount", status);
+    }
+
+    @Override
+    public int updateInquire(SqlSession session, int no){
+        return session.update("manager.updateInquire", no);
     }
 }

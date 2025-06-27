@@ -1,13 +1,18 @@
 package org.ts.teamstack;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.Cookie;
 
 @Controller
 public class HomeController {
     @RequestMapping("/")
-    public String index(){
+    public String index(@CookieValue(name = "teamstackRecentView",required = false) Cookie cookie , Model model){
+
         return "index";
     }
 

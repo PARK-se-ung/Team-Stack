@@ -33,7 +33,7 @@
         <div class="menu-section">
             <div class="menu-title">클래스</div>
             <ul>
-                <li class="menu-item" data-tab="class">클래스 바로가기</li>
+                <li class="menu-item" onclick="openClass();">클래스 바로가기</li>
             </ul>
         </div>
         <div class="menu-section">
@@ -71,6 +71,10 @@ $(document).ready(function() {
         tabLoad(tabId);
     })
 })
+
+function openClass(){
+    window.open("${pageContext.request.contextPath}/class/dashboard");
+}
 
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
