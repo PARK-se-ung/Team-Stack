@@ -6,4 +6,5 @@ import org.ts.teamstack.course.model.dto.Course;
 public interface CourseDao {
     int insertCourse(SqlSession session,Course course);
     int deleteBookmark(SqlSession sqlSession,int bookmarkNo);
+    int getCoursePrice(SqlSession session,int courseNo);
 }

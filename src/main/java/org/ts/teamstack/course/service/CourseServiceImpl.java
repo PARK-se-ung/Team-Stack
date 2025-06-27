@@ -22,4 +22,9 @@ public class CourseServiceImpl implements CourseService {
     public int deleteBookmark(int bookmarkNo) {
         return courseDao.deleteBookmark(sqlSession,bookmarkNo);
     }
+
+    @Override
+    public int getCoursePrice(int courseNo) {
+        return courseDao.getCoursePrice(sqlSession, courseNo);
+    }
 }
