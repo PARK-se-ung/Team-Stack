@@ -1,6 +1,7 @@
 package org.ts.teamstack.course.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ import java.util.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/course")
+@Slf4j
 public class CourseController {
 
     private final CourseService courseService;
@@ -39,88 +41,81 @@ public class CourseController {
             HttpSession session
     ) {
 
+        // path 생성
         String path = session.getServletContext().getRealPath("/resources/upload/course");
         File dir = new File(path);
-        if (!dir.exists()) dir.mkdirs();
-
-        // 썸네일 저장
-        if (thumbnail != null && !thumbnail.isEmpty()) {
-            String oriName = thumbnail.getOriginalFilename();
-            String ext = oriName.substring(oriName.lastIndexOf("."));
-            String rename = "thumb_" + System.currentTimeMillis() + ext;
-
-            try {
-                thumbnail.transferTo(new File(dir, rename));
-                course.setThumbnail(rename);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if(!dir.exists()){
+            boolean flag = dir.mkdirs();
+            if(!flag) log.error("create fail");
         }
 
-        if (content != null && !content.isEmpty()) {
-            String oriName = content.getOriginalFilename();
-            String ext = oriName.substring(oriName.lastIndexOf("."));
-            String rename = "content_" + System.currentTimeMillis() + ext;
-
-            try {
-                content.transferTo(new File(dir, rename));
-                course.setCourseContent(rename);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-
-
-        // 강의 계획서 저장
-        if (planFile != null && !planFile.isEmpty()) {
-            String oriName = planFile.getOriginalFilename();
-            String ext = oriName.substring(oriName.lastIndexOf("."));
-            String rename = "plan_" + System.currentTimeMillis() + ext;
-
-            try {
-                planFile.transferTo(new File(dir, rename));
-                course.setOriginalPlanName(oriName);
-                course.setRenamePlanName(rename);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println(">> courseTitle = " + course.getCourseTitle());
         // 강의 상태를 "STAY"로 기본 설정 (승인 대기)
         course.setCourseStatus("STAY");
 
-        // INSERT 처리
+        // 썸네일 rename
+        if (thumbnail != null && !thumbnail.isEmpty()) {
+            course.setThumbnail(FileUpload.renameFile(thumbnail));
+        }
 
-        int result = courseService.insertCourse(course);
-        int flag = 0;
-        // 슬라이드 이미지() 이미지 저장
-        if(result > 0) {
-            if ( upfiles!= null) {
-                try{
-                    List<String> renames = FileUpload.saveFiles(upfiles,path);
-                    List<CourseAttach> attachs = new ArrayList<>();
-                    for (int i = 0; i < renames.size(); i++) {
-                        CourseAttach attach = CourseAttach.builder()
-                                .courseNo(course.getCourseNo())
-                                .courseAttachName(renames.get(i))
-                                .courseAttachLevel(i)
-                                .build();
-                        attachs.add(attach);
-                        flag = courseService.insertAttach(attach);
-//                        if(flag == 0) {
-//                            courseService.deleteCourse();
-//                            break;
-//                        }
-                    }
-                }catch (IOException e){
-                    e.printStackTrace();
+        // content rename
+        if (content != null && !content.isEmpty()) {
+            course.setCourseContent(FileUpload.renameFile(content));
+        }
+
+        // attach rename
+        List<CourseAttach> attachList = new ArrayList<>();
+        if(upfiles != null && upfiles.length > 0){
+            int level = 1;
+            for(MultipartFile file : upfiles){
+                if(file != null & !file.isEmpty()){
+                    CourseAttach courseAttach = CourseAttach.builder()
+                            .courseAttachLevel(level++)
+                            .courseAttachName(FileUpload.renameFile(file))
+                            .build();
+                    attachList.add(courseAttach);
                 }
             }
         }
+        course.setFiles(attachList);
+
+        // 강의 계획서 rename
+        if (planFile != null && !planFile.isEmpty()) {
+            course.setOriginalPlanName(planFile.getOriginalFilename());
+            course.setRenamePlanName(FileUpload.renameFile(planFile));
+        }
+
+        // 강의 & files INSERT 처리
+
+        int result = 0;
+        try{
+            result = courseService.insertCourse(course);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // DB 저장결과 기반 파일들 upload 폴더에 저장
+        if(result > 0){
+            try{
+                // 썸네일 저장
+                FileUpload.saveFile(thumbnail, path, course.getThumbnail());
+                // content 저장
+                FileUpload.saveFile(content, path, course.getCourseContent());
+                // files 저장
+                int order = 0;
+                for(MultipartFile file : upfiles){
+                    if(file != null && !file.isEmpty()){
+                        FileUpload.saveFile(file, path, attachList.get(order++).getCourseAttachName());
+                    }
+                }
+                // plan 저장
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         Map<String, Object> res = new HashMap<>();
-        res.put("success", flag > 0);
+        res.put("success", result > 0);
         return res;
     }
     @DeleteMapping("/bookmark/delete")
