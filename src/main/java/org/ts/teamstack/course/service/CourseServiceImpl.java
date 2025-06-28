@@ -39,4 +39,9 @@ public class CourseServiceImpl implements CourseService {
     public Course searchCourseByNo(int courseNo) {
         return courseDao.searchCourseByNo(sqlSession, courseNo);
     }
+
+    @Override
+    public int getCoursePrice(int courseNo) {
+        return courseDao.getCoursePrice(sqlSession, courseNo);
+    }
 }

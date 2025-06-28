@@ -8,4 +8,5 @@ public interface CourseService {
     int insertCourse(Course course);
     int deleteBookmark(int bookmarkNo);
     Course searchCourseByNo(int courseNo);
+    int getCoursePrice(int courseNo);
 }

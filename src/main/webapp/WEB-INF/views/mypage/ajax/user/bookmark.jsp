@@ -28,26 +28,27 @@
       const courseTitle = $(e.target).data('course-title');
       const coursePrice = $(e.target).data('course-price');
 
-      const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk');
+      const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
 
       const merchantUid = await merchantUidResponse.text();
 
+      console.log("야호"+merchantUid)
       IMP.request_pay(
               {
                 channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
                 pg:"uplus",
                 pay_method: "card",
-                merchant_uid: merchantUid,
+                merchant_uid: "a83bc9cf-55a3-4695-b82b-9eae3529d7de15400142244",
                 name: courseTitle,
-                amount: coursePrice,
+                amount: 5000,
                 buyer_email: "${sessionScope.loginUser.userEmail}",
                 buyer_name: "${sessionScope.loginUser.name}",
                 buyer_tel: "${sessionScope.loginUser.userPhone}"
               },
               async function (rsp) {
-// 결제 종료 시 호출되는 콜백 함수
-// response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
-// 결제 결과를 처리하는 로직을 작성합니다.
+              // 결제 종료 시 호출되는 콜백 함수
+              // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
+              // 결제 결과를 처리하는 로직을 작성합니다.
                 if (rsp.success) {
                   const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
                           {
@@ -64,7 +65,7 @@
                               courseNo: courseNo // 실제 강의 번호 사용
                             })
                           });
-                  const result=await response.json();
+                  const result=await response.text();
 
                   if (result === "success") {
                     alert('결제가 완료되었습니다.');
@@ -81,6 +82,10 @@
                 }
               });
     });
+
+    //결제 저장 기능
+
+
 
     <!-- 북마크 취소 기능 -->
     $(document).ready(function() {

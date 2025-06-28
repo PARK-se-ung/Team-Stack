@@ -26,5 +26,10 @@ public class CourseDaoImpl implements CourseDao {
     public Course searchCourseByNo(SqlSession session, int courseNo) {
         return session.selectOne("course.searchCourseByNo", courseNo);
     }
+
+    @Override
+    public int getCoursePrice(SqlSession session, int courseNo) {
+        return session.selectOne("course.getCoursePrice", courseNo);
+    }
 }
 

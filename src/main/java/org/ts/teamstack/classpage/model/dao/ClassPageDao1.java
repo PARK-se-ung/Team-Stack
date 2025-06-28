@@ -23,4 +23,6 @@ public interface ClassPageDao1 {
     List<Chat>  getChattingHistory(SqlSession session, int courseNo);
 
     int setChattingHistory(SqlSession session, Chat chat);
+
+    Course getCourse(SqlSession session, int courseNo);
 }
