@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -21,9 +22,9 @@ public class Course {
     private int coursePrice;
     private String courseAddress;
     private String courseContent;
-    private Date courseStartDate;
+    private Timestamp courseStartDate;
     private int totalWeek;
-    private Date recruitDate;
+    private Timestamp recruitDate;
     private String thumbnail;
     private String gradeType;
     private String subject;
