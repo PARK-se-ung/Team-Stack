@@ -21,4 +21,6 @@ public interface ClassPageService1 {
     List<Chat> getChattingHistory (int courseNo);
 
     int setChattingHistory (Chat chat);
+
+    Course getCourse(int courseNo);
 }
