@@ -31,24 +31,27 @@
     <table class="payment-table">
         <thead>
         <tr>
-            <th>결제번호</th>
             <th>강의명</th>
             <th>강사명</th>
             <th>결제일</th>
             <th>금액</th>
-            <th>결제ID</th>
+            <th>환불 신청</th>
+
         </tr>
         </thead>
         <tbody>
         <c:if test="${not empty paymentList}">
             <c:forEach var="pay" items="${paymentList}">
                 <tr>
-                    <td>${pay.paymentNo}</td>
                     <td>${pay.courseTitle}</td>
                     <td>${pay.instructorName}</td>
                     <td>${pay.paymentDate}</td>
                     <td>${pay.paymentPrice}</td>
-                    <td>${pay.portoneId}</td>
+                    <td>  <button class="btn-apply"
+                                  data-course-no="${b.courseNo}"
+                                  data-course-title="${b.courseTitle}"
+                                  data-course-price="${b.coursePrice}">신청</button></td>
+
                 </tr>
             </c:forEach>
         </c:if>
@@ -62,11 +65,18 @@
         </c:if>
     </table>
 
+
     <div id="pageBar">
         ${pageBar}
     </div>
 
 </div>
+
+<script>
+
+
+
+</script>
 
 <style>
     .search-bar {

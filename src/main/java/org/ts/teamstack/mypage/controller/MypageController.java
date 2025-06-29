@@ -59,7 +59,7 @@ public class MypageController {
 
         Users loginUser = (Users) session.getAttribute("loginUser");
         pageInfo.initialize();//set한걸 초기화
-        
+
         pageInfo.setCurPage(cPage);
         pageInfo.setTotalData(mypageService.searchBookmarkCount(loginUser.getUserId()));
         pageInfo.setNumPerpage(10);
@@ -113,16 +113,31 @@ public class MypageController {
         pageInfo.setNumPerpage(10);
 
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
+        List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
 
-            List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
-            model.addAttribute("paymentList", payments);
-            model.addAttribute("pageBar", pageBar);
+        model.addAttribute("paymentList", payments);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
 
         return "mypage/ajax/payment/purchase"; }
 
     /* 환불 신청 이동 */
     @RequestMapping("/requestRefund")
-    public String myrequestrefund(Model model) { return "mypage/ajax/payment/requestrefund"; }
+    public String myrequestrefund(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(paymentService.searchPaymentCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
+        List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
+
+        model.addAttribute("paymentList", payments);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+        return "mypage/ajax/payment/requestrefund"; }
 
     /* 환불 신청 조회 이동 */
     @RequestMapping("/refund")
