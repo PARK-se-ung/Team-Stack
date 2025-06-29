@@ -5,13 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 
 public class Chat {
+    private int chatNo;
     private int courseNo;
     private String userId;
     private String chatMsg;
+    private Date chatTime;
 }

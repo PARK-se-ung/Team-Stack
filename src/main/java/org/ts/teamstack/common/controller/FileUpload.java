@@ -12,23 +12,50 @@ import java.util.UUID;
 
 @Slf4j
 public class FileUpload {
-    public static List<String> saveFiles(MultipartFile[] files, String path) throws IOException{
+    public static List<String> createFiles(MultipartFile[] files, String path) throws IOException{
         List<String> list = new ArrayList<String>();
-        File dir = new File(path);
-        if(!dir.exists()) {
-            boolean result = dir.mkdirs();
-            if(!result) log.error("file path generate fail");
-        }
-        for(MultipartFile f : files) {
-            if(!f.isEmpty()){
-                String origin = f.getOriginalFilename();
-                String uuid = UUID.randomUUID().toString();
-                String fileName = uuid+"_"+origin;
+        if(createPath(path)) log.error("file path generate fail");
+        for(MultipartFile file : files) {
+            if(!file.isEmpty()){
+                String fileName = renameFile(file);
                 File newImage = new File(path, fileName);
-                f.transferTo(newImage);
+                file.transferTo(newImage);
                 list.add(fileName);
             }
         }
         return list;
     }
+
+    public static String createFile(MultipartFile file, String path) throws IOException {
+        if(createPath(path)) log.error("file path generate fail");
+        if(!file.isEmpty()){
+            String fileName = renameFile(file);
+            File newImage = new File(path, fileName);
+            file.transferTo(newImage);
+            return fileName;
+        }
+        return null;
+    }
+
+    public static void saveFile(MultipartFile file, String path, String rename) throws IOException {
+        if(!file.isEmpty()){
+            File newImage = new File(path, rename);
+            file.transferTo(newImage);
+        }
+    }
+
+    private static boolean createPath(String path){
+        File file = new File(path);
+        if(!file.exists()){
+            return file.mkdirs();
+        }
+        return true;
+    }
+
+    public static String renameFile(MultipartFile file){
+        String origin = file.getOriginalFilename();
+        String uuid = UUID.randomUUID().toString();
+        return uuid+"_"+origin;
+    }
+
 }

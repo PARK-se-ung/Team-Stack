@@ -3,6 +3,7 @@ package org.ts.teamstack.course.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ts.teamstack.course.model.dao.CourseDao;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
@@ -15,13 +16,18 @@ public class CourseServiceImpl implements CourseService {
     private final SqlSession sqlSession;
 
     @Override
-    public int insertAttach(CourseAttach attach) {
-        return courseDao.insertAttach(sqlSession,attach);
-    }
-
-    @Override
+    @Transactional
     public int insertCourse(Course course) {
-        return courseDao.insertCourse(sqlSession, course);
+        int result = courseDao.insertCourse(sqlSession, course);
+        if(result > 0){
+            for(CourseAttach attach : course.getFiles()){
+                int flag = courseDao.insertAttach(sqlSession, attach);
+                if(flag == 0) {
+                    throw new RuntimeException("attach insert fail");
+                }
+            }
+        }
+        return result;
     }
 
     @Override
@@ -32,5 +38,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course searchCourseByNo(int courseNo) {
         return courseDao.searchCourseByNo(sqlSession, courseNo);
+    }
+
+    @Override
+    public int getCoursePrice(int courseNo) {
+        return courseDao.getCoursePrice(sqlSession, courseNo);
     }
 }
