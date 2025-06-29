@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
     <!-- section -->
     <section class="main-container">
@@ -23,119 +24,61 @@
         <div class="list">
             <h3>초등학교</h3>
             <div class="image-container">
-                <div class="card" style="width: 18rem;">
-                    <a href="${pageContext.request.contextPath}/course/searchcoursebyno?courseNo=${course.courseNo}">
-                        <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
-                        <div class="card-body">
-                            ${course.courseTitle}
+                <c:if var="elemFlag" test="${not empty course.get('elem')}">
+                    <c:forEach var="course" items="${course.get('elem')}">
+                        <div class="card" style="width: 18rem;">
+                            <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <div class="card-body">
+                                        ${course.courseTitle}
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div><div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="/WEB-INF/resources/images/logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${not elemFlag}">
+                    조회된 결과가 없습니다.
+                </c:if>
             </div>
         </div>
         <div class="list">
             <h3>중학교</h3>
             <div class="image-container">
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
+                <c:if var="elemFlag" test="${not empty course.get('midd')}">
+                    <c:forEach var="course" items="${course.get('midd')}">
+                        <div class="card" style="width: 18rem;">
+                            <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <div class="card-body">
+                                        ${course.courseTitle}
+                                </div>
+                            </a>
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${not elemFlag}">
+                    조회된 결과가 없습니다.
+                </c:if>
             </div>
         </div>
         <div class="list">
             <h3>고등학교</h3>
             <div class="image-container">
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
-                <div class="image-card">
-                    <img src="./logo.png" width="100px" height="120px" alt="python">
-                    <span>category | title</span>
-                </div>
+                <c:if var="elemFlag" test="${not empty course.get('high')}">
+                    <c:forEach var="course" items="${course.get('high')}">
+                        <div class="card" style="width: 18rem;">
+                            <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <div class="card-body">
+                                        ${course.courseTitle}
+                                </div>
+                            </a>
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <c:if test="${not elemFlag}">
+                    조회된 결과가 없습니다.
+                </c:if>
             </div>
         </div>
     </section>

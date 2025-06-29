@@ -47,4 +47,9 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
 
     @Override
     public int setChattingHistory(Chat chat) { return classDao.setChattingHistory(session,chat);}
+
+    @Override
+    public Course getCourse(int courseNo) {
+        return classDao.getCourse(session, courseNo);
+    }
 }
