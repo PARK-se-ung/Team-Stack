@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,7 +27,10 @@ public class Course {
     private String courseContent;
     private String courseStartDate;
     private int totalWeek;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date recruitDate;
+
     private String thumbnail;
     private String gradeType;
     private String subject;

@@ -241,7 +241,10 @@
 
   <div class="section1">
     <label>일정</label>
-    <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="courseStartDate">
+    <input type="text" id="datePicker" placeholder="시작일 (총주차)">
+    <input type="hidden" id="courseStartDate" name="courseStartDate"/>
+    <input type="hidden" id="totalWeek"       name="totalWeek"/>
+    <input type="hidden" id="recruitDate"     name="recruitDate"/>
 
     <label>장소</label>
     <div class="location">
@@ -408,6 +411,9 @@
       console.log(`📤 ${key} →`, val);
     }
 
+
+
+
     if (form.reportValidity()) {
       form.submit(); // 유효하면 전송
       alert("신청 완료")
@@ -421,6 +427,31 @@
 
 
 
+  <%--document.getElementById('modalConfirmBtn').addEventListener('click', function () {--%>
+  <%--  // flatpickr 인스턴스를 전역에 저장했다면--%>
+  <%--  // updateHiddenDates(null, null, window._flatpickrInstance);--%>
+  <%--  //--%>
+  <%--  // 아니면 단순히 input 값을 재파싱해도 됩니다:--%>
+  <%--  const raw = $("#datePicker").val().split(" to ");--%>
+  <%--  if (raw.length === 2) {--%>
+  <%--    const [s, e] = raw;--%>
+  <%--    const start = new Date(s), end = new Date(e);--%>
+  <%--    const msPerWeek = 7 * 24 * 60 * 60 * 1000;--%>
+  <%--    const weeks = Math.round((end - start) / msPerWeek);--%>
+  <%--    const recruit = new Date(start.getTime() + msPerWeek);--%>
+
+  <%--    const pad = n => n.toString().padStart(2, "0");--%>
+  <%--    const fmtYmd = d =>--%>
+  <%--            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;--%>
+  <%--    const fmtFull = d =>--%>
+  <%--            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +--%>
+  <%--            `${pad(d.getHours())}:${pad(d.getMinutes())}`;--%>
+
+  <%--    $("#courseStartDate").val(fmtFull(start));--%>
+  <%--    $("#totalWeek").val(weeks);--%>
+  <%--    $("#recruitDate").val(fmtYmd(recruit));--%>
+  <%--  }--%>
+  <%--});--%>
 
 
 

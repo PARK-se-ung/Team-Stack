@@ -1,5 +1,5 @@
 .header{
-        background-color: var(--ts-primary);
+        background-color: #f3936e;
         padding: 8px 0;
         margin: 0;
         color: var(--bs-blind-text);
@@ -19,16 +19,17 @@
 }
 
 .brand{
+    justify-content: center;
     color: white;
     font-weight: 700;
     text-decoration: none;
     display: flex;
-    align-items: center;
     font-size: 0.95rem;
 }
 
 .search{
     position: relative;
+    align-self: center;
 }
 
 .search input{
@@ -37,7 +38,7 @@
     border-radius: 24px;
     color: white;
     padding-left: 40px;
-    height: 40px;
+    height: 44px;
     font-size: 0.95rem;
 }
 
@@ -47,9 +48,13 @@
 
 .top-nav{
     font-size: 0.9rem;
-    background-color: var(--ts-primary);
+    background-color: #f3936e;
     padding: 8px 0;
     overflow: visible !important;
+}
+
+.d-flex {
+     display: flex !important;
 }
 
 .top-nav a {

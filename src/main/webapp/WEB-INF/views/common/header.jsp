@@ -39,7 +39,7 @@
         </div>
         <!-- nav -->
         <div class="col-lg-2 top-nav">
-            <div class="d-flex align-items-center">
+            <div class="align-items-center">
                 <% if (loginUser==null) { %>
                 <a class="me-3" href="${pageContext.request.contextPath}/user/login.do">
                     로그인

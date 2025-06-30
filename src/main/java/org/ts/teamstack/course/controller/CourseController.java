@@ -44,22 +44,6 @@ public class CourseController {
         course.setUserId(loginUser.getUserId());
 
 
-
-        String range = course.getCourseStartDate();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        String[] parts = range.split("~");
-
-        LocalDateTime startLdt = LocalDateTime.parse(parts[0].trim(), fmt);
-        LocalDateTime endLdt   = LocalDateTime.parse(parts[1].trim(), fmt);
-
-// 만약 “강의 일수”만 필요하다면 날짜끼리 계산
-        long days = ChronoUnit.DAYS.between(startLdt.toLocalDate(), endLdt.toLocalDate()) + 1;
-        int weeks = (int) Math.ceil(days / 7.0);
-
-// DTO에 원하는 형태로 세팅
-        course.setCourseStartTime(startLdt.format(fmt));  // 또는 startLdt.toString()
-        course.setTotalWeek(weeks);
-
         // path 생성
         String path = session.getServletContext().getRealPath("/resources/upload/course");
         File dir = new File(path);
