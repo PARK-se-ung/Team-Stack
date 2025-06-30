@@ -14,8 +14,110 @@ function tabLoad(tabId) {
         type: 'POST',
         success: function(data) {
             $(".main-content").html(data);
+            if(tabId === 'open'){
+                flatpickr("#datePicker", {
+                    mode: "range",
+                    dateFormat: "Y-m-d H:i",
+                    minDate: "today",
+                    defaultDate: [new Date(), new Date()],
+                    locale: "ko",
+                    altInput: true,
+                    altFormat: "Y년 m월 d일",
+                    enableTime: true
+                });
+            }
         },
         error: errorContent(tabId)
+    })
+}
+
+/* 북마크 페이징 처리 */
+function bookmarkPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/bookmark",
+        type: 'POST',
+        data:{
+          "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("bookmark")
+    })
+}
+
+/* 결제 내역 페이징 처리 */
+function purchasePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/purchase",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("purchase")
+    })
+}
+
+/* 예약 내역 페이징 처리 */
+function reservePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/reserve",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("reserve")
+    })
+}
+
+/* 신청한 강의 내역 페이징 처리 */
+function applyPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/apply",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("apply")
+    })
+}
+
+
+/* 수강중인 강의 내역 페이징 처리 */
+function takePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/take",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("take")
+    })
+}
+/* 수강 완료 강의 내역 페이징 처리 */
+function completePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/complete",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("complete")
     })
 }
 
@@ -40,6 +142,7 @@ function errorContent(tabId) {
     const $button = $("<button>").addClass("btn btn-outline-orange")
         .attr('onclick', `tabLoad(${tabId})`)
         .text("다시 시도");
+    return $form.append($i).append($msg).append($button);
 }
 
 
@@ -47,3 +150,5 @@ function errorContent(tabId) {
 function getContextPath() {
     return "/" + window.location.pathname.split("/")[1];
 }
+
+

@@ -1,5 +1,12 @@
+<%@ page import="org.ts.teamstack.user.model.dto.Users" %>
+<%@ page import="static org.ts.teamstack.user.model.dto.UserType.G" %>
+<%@ page import="static org.ts.teamstack.user.model.dto.UserType.I" %>
+<%@ page import="static org.ts.teamstack.user.model.dto.UserType.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+    Users loginUser = (Users)session.getAttribute("loginUser");
+%>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,12 +40,22 @@
         <!-- nav -->
         <div class="col-lg-2 top-nav">
             <div class="d-flex align-items-center">
+                <% if (loginUser==null) { %>
                 <a class="me-3" href="${pageContext.request.contextPath}/user/login.do">
                     로그인
                 </a>
-                <a class="me-3" href="">
-                    관리자페이지
-                </a>
+                <%}%>
+                <% if (loginUser != null && (loginUser.getUserType().equals(G) ||
+                        loginUser.getUserType().equals(I))){ %>
+                <p><strong><%= loginUser.getName() %></strong> 님 환영합니다!</p>
+                <a class="me-3" href="${pageContext.request.contextPath}/mypage">마이페이지</a>
+                <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
+                <% } %>
+                <% if (loginUser != null && loginUser.getUserType().equals(A)){%>
+                <p><strong><%= loginUser.getUsername() %></strong> 님 환영합니다!</p>
+                <a class="me-3" href="${pageContext.request.contextPath}/manage">관리자페이지</a>
+                <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
+                <%}%>
                 <a href="">
                     알람
                 </a>

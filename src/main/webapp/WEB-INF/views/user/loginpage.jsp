@@ -288,7 +288,7 @@
             <p>오프라인으로 만나는 생생한 강의</p>
         </div>
 
-        <form class="login-form" action="${pageContext.request.contextPath}/logincheck.do" method="post">
+        <form class="login-form" action="${pageContext.request.contextPath}/loginend.do" method="post">
             <div class="form-group">
                 <label for="userId">아이디</label>
                 <input type="text" name="userId" placeholder="아이디를 입력하세요" required>
@@ -301,8 +301,8 @@
         </form>
 
         <div class="login-links">
-            <a href="#">아이디 찾기</a>
-            <a href="#">비밀번호 찾기</a>
+            <a href="${pageContext.request.contextPath}/user/searchIdByEmail.do">아이디 찾기</a>
+            <a href="${pageContext.request.contextPath}/user/searchPwdByEmail.do">비밀번호 찾기</a>
             <a href="${pageContext.request.contextPath}/user/enrolluser.do">회원가입</a>
         </div>
 

@@ -15,7 +15,7 @@
         <Logger name="jdbc.resultsettable" additivity="false" level="INFO">
             <AppenderRef ref="sqlLogger"/>
         </Logger>
-        <Logger name="com.bs.spring" level="debug">
+        <Logger name="org.ts.teamstack" level="debug">
             <AppenderRef ref="rollingFile"/>
         </Logger>
         <Logger name="org.springframework.context" level="INFO"/>

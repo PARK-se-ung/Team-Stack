@@ -11,7 +11,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
-  <div class="nav-item" data-nav="manage">강의 개설</div>
+  <div class="nav-item" data-nav="open">강의 개설</div>
   <div class="nav-item" data-nav="courseapply">강의 개설 승인</div>
   <div class="nav-item" data-nav="studentapply">신청 학생 승인</div>
   <div class="nav-item active" data-nav="coursetake">진행중인 강의</div>

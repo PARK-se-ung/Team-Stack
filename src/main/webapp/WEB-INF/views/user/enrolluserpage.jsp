@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <jsp:include page="/WEB-INF/views/common/header.jsp">
     <jsp:param name="title" value="회원가입페이지"/>
 </jsp:include>
@@ -9,7 +10,7 @@
     <style>
         #main{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff6b35, #f7931e, #ff8c42);
+            background: antiquewhite;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -105,6 +106,27 @@
         .btn-signup:active {
             transform: translateY(0);
         }
+        .btn-signup:disabled {
+            background: #ccc !important;
+            color: #666 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        .btn-auth:disabled {
+            background-color: #ccc !important;  /* 회색 배경 */
+            color: #666 !important;             /* 흐린 글자 */
+            cursor: not-allowed !important;     /* 금지 마우스 커서 */
+            box-shadow: none !important;
+            transform: none !important;
+        }
+        button.btn-auth:disabled {
+            background: #ccc !important;
+            color: #666 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
 
         .form-row {
             display: flex;
@@ -191,7 +213,11 @@
         .email-auth-group {
             margin-bottom: 20px;
         }
-
+        button.btn-disabled:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
         .form-group:nth-child(1) { animation-delay: 0.1s; }
         .form-group:nth-child(2) { animation-delay: 0.2s; }
         .form-group:nth-child(3) { animation-delay: 0.3s; }
@@ -200,69 +226,68 @@
     </style>
 </head>
 <section id="main">
-<div class="signup-container">
-    <div class="signup-header">
-        <h1>회원가입</h1>
-        <p>새로운 계정을 만들어보세요</p>
-    </div>
-
-    <form id="signupForm" method="post" action="${pageContext.request.contextPath}/user/enrolluserend.do">
-        <div class="form-group">
-            <label for="userId">아이디</label>
-            <input type="text" id="userId" name="userId" minlength="6" placeholder="6글자이상 사용할 아이디를 입력해주세요" required>
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1>회원가입</h1>
+            <p>새로운 계정을 만들어보세요</p>
         </div>
 
-        <div class="form-group">
-            <label for="userPwd">비밀번호</label>
-            <input type="password" id="userPwd" name="userPwd" placeholder="특수문자,대문자,숫자를 포함해주세요" required>
-        </div>
-
-        <div class="form-group">
-            <label for="passwordcheck">비밀번호 확인</label>
-            <input type="password" id="passwordcheck" name="password" placeholder="비밀번호를 확인합니다." required><br>
-            <span id="msg">비밀번호가 일치하지 않습니다.</span>
-        </div>
-
-        <div class="form-group">
-            <label for="userName">이름</label>
-            <input type="text" id="userName" name="userName" placeholder="안전한 비밀번호를 입력하세요" required>
-        </div>
-
-
-        <div class="form-group email-auth-group">
-            <label for="userEmail">이메일</label>
-            <div class="form-row">
-                <input type="email" id="userEmail" name="userEmail" placeholder="example@email.com" required>
-                <button type="button" class="btn-auth" onclick="sendAuthEmail()">인증번호 전송</button>
+        <!-- 여기에 modelAttribute="member" 빠져있음 -->
+        <form:form id="signupForm" modelAttribute="users" method="post" action="${pageContext.request.contextPath}/user/enrolluserend.do">
+            <div class="form-group">
+                <label for="userId">아이디</label>
+                <form:input path="userId" type="text" id="userId" minlength="6" placeholder="6글자이상 사용할 아이디를 입력해주세요" required="required"/>
             </div>
-        </div>
 
-        <div class="form-group email-auth-group">
-            <label for="emailCode">인증번호 입력</label>
-            <div class="form-row" id="mail check input box false">
-                <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력">
-                <button type="button" class="btn-auth" onclick="verifyAuthCode()">인증 확인</button>
+            <div class="form-group">
+                <label for="userPwd">비밀번호</label>
+                <form:input path="userPwd" type="password" id="userPwd" placeholder="특수문자,대문자,숫자를 포함해주세요" required="required"/>
             </div>
+
+            <div class="form-group">
+                <label for="passwordcheck">비밀번호 확인</label>
+                <input type="password" id="passwordcheck" name="password" placeholder="비밀번호를 확인합니다." required="required"/><br>
+                <span id="msg">비밀번호가 일치하지 않습니다.</span>
+            </div>
+
+            <div class="form-group">
+                <label for="name">이름</label>
+                <form:input path="name" type="text" id="name" placeholder="안전한 비밀번호를 입력해주세요" required="required"/>
+            </div>
+
+            <div class="form-group email-auth-group">
+                <label for="userEmail">이메일</label>
+                <div class="form-row">
+                    <form:input path="userEmail" type="email" id="userEmail" placeholder="example@email.com" required="required"/>
+                    <button type="button" class="btn-auth" id="sendMailCheckNumber">인증번호 전송</button>
+                </div>
+            </div>
+
+            <div class="form-group email-auth-group">
+                <label for="emailCode">인증번호 입력</label>
+                <div class="form-row">
+                    <input type="text" id="emailCode" placeholder="이메일로 받은 인증번호 입력" required="required"/>
+                    <button type="button" class="btn-auth" id="verifyAuthCode">인증 확인</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="userAddress">거주지</label>
+                <form:input path="userAddress" type="text" id="userAddress" placeholder="거주지를 입력해주세요" required="required"/>
+            </div>
+
+            <div class="form-group">
+                <label for="userPhone">전화번호</label>
+                <form:input  path="userPhone" type="tel" id="userPhone" placeholder="010-1234-5678" maxlength="13" required="required"/>
+            </div>
+
+            <button type="submit" class="btn-signup" id="saveInfo" disabled>가입하기</button>
+        </form:form>
+
+        <div class="success-message" id="successMessage">
+            🎉 회원가입이 완료되었습니다!
         </div>
-
-        <div class="form-group">
-            <label for="userAddress">거주지</label>
-            <input type="text" id="userAddress" name="userAddress" placeholder="거주지를 입력하세요" required>
-        </div>
-
-        <div class="form-group">
-            <label for="phone">전화번호</label>
-            <input type="tel" id="phone" name="phone" placeholder="010-1234-5678" required>
-        </div>
-
-        <button type="submit" class="btn-signup">가입하기</button>
-    </form>
-
-    <div class="success-message" id="successMessage">
-        🎉 회원가입이 완료되었습니다!
     </div>
-</div>
-
 </section>
 <script>
     // 요소 참조
@@ -272,7 +297,7 @@
     const emailInput = document.getElementById('userEmail');
     const msg = document.getElementById('msg');
 
-    let authCode = ""; //
+
 
     // 아이디 길이 검증 (포커스를 벗어나면 나타나는 blur)
     userIdInput.addEventListener('blur', () => {
@@ -291,7 +316,7 @@
 
     userPwdInput.addEventListener('blur', () => {
         if (!passwordPattern(userPwdInput.value)) {
-            alert("비밀번호는 특수문자, 대문자, 숫자를 포함한 8자 이상이어야 합니다.");
+            alert("비밀번호는 특수문자, 대문자, 숫자를 포함한 9자 이상이어야 합니다.");
         }
     });
 
@@ -306,40 +331,68 @@
         }
     });
 
-    // 이메일 인증 전송 버튼 클릭 시
-    function sendAuthEmail() {
-        const email = emailInput.value;
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            alert("유효한 이메일을 입력해주세요.");
-            return;
-        }
 
-        // Ajax로 서버에 이메일 전송 요청
-        fetch("/sendEmail", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    alert("인증번호가 이메일로 발송되었습니다.");
-                    authCode = data.code; // 서버에서 받은 인증번호 저장
-                } else {
-                    alert("이메일 전송에 실패했습니다.");
-                }
-            });
-    }
+    // 이메일 인증 전송 버튼 클릭 시
+   $('#sendMailCheckNumber').click(function(){
+       const email = $("#userEmail").val();
+       console.log('이메일 : ' + email);
+       $.ajax({
+           url : '${pageContext.request.contextPath}/sendEmail',
+           type:'post',
+           contentType : 'application/json; charset=utf-8',
+           data : JSON.stringify({email:email}),
+           success: function(response) {
+               if(response.sendmailresult){
+                   alert('인증번호 발송되었습니다.');
+               } else {
+                   alert('이메일 전송에 실패했습니다.');
+               }
+           },
+           error: function(){
+               alert('서버오류발생');
+       }
+       });
+   })
 
     // 인증번호 확인
-    function verifyAuthCode() {
+    $('#verifyAuthCode').click(function(){
         const inputCode = document.getElementById('emailCode').value;
-        if (inputCode === authCode) {
-            alert("✅ 이메일 인증 완료");
-        } else {
-            alert("❌ 인증번호가 일치하지 않습니다.");
+        console.log(inputCode);
+        $.ajax({
+            url: '${pageContext.request.contextPath}/verifyAuthCode',
+            type : 'post',
+            contentType : 'application/json; charset=utf-8',
+            data : JSON.stringify({inputCode:inputCode}),
+            success: function (response){
+                if (response.checkAuthCode) {
+                    alert("✅ 이메일 인증 완료");
+                    // document.getElementById('saveInfo').removeAttribute("disabled");
+                    document.getElementById('saveInfo').disabled = false;
+                    document.getElementById('userEmail').readOnly = true;
+                    /*setAttribute가 아니라 .readOnly 속성을 true로 바꿔줌*/
+                    document.getElementById('emailCode').disabled= true;
+                    /*이메일 전송, 인증번호 확인 인증 버튼 비활성화*/
+                    document.getElementById('sendMailCheckNumber').disabled=true;
+                    document.getElementById('verifyAuthCode').disabled=true;
+
+                } else {
+                    alert("❌ 인증번호가 일치하지 않습니다.");
+                }
+            }
         }
-    }
+        )
+    })
+    document.getElementById('userPhone').addEventListener('input', function (e) {
+        let number = e.target.value.replace(/\D/g, '');
+        if (number.length < 4) {
+            e.target.value = number;
+        } else if (number.length < 8) {
+            e.target.value = number.replace(/(\d{3})(\d{1,4})/, '$1-$2');
+        } else {
+            e.target.value = number.replace(/(\d{3})(\d{4})(\d{1,4})/, '$1-$2-$3');
+        }
+    });
+
 </script>
 
 

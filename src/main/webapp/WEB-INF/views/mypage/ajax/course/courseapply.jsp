@@ -8,10 +8,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%@ page import="static org.ts.teamstack.course.model.dto.Course" %>
+
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
-  <div class="nav-item" data-nav="manage">강의 개설</div>
+  <div class="nav-item" data-nav="open">강의 개설</div>
   <div class="nav-item active" data-nav="courseapply">강의 개설 승인</div>
   <div class="nav-item" data-nav="studentapply">신청 학생 승인</div>
   <div class="nav-item" data-nav="coursetake">진행중인 강의</div>
@@ -37,7 +39,7 @@
 
     .tabs {
       display: flex;
-      border-bottom: 2px solid #ccc;
+      border-bottom: 2px solid #ff7d4d;
       margin-bottom: 20px;
     }
 
@@ -47,13 +49,14 @@
       padding: 15px 0;
       cursor: pointer;
       font-weight: bold;
-      background: #ff7d4d;
+      background: #fff;
       border-radius: 10px 10px 0 0;
     }
 
     .tab.active {
-      background: #fff;
       border-bottom: 2px solid #fff;
+      background: #ff7d4d;
+      color: white;
     }
 
     table {
@@ -66,11 +69,16 @@
       background: #f5f5f5;
     }
 
+    th {
+      font-size: 16px;
+    }
+
     th, td {
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #ddd;
       vertical-align: top;
+      font-size : 13px;
     }
 
     tr:hover {
@@ -82,10 +90,8 @@
       font-weight: bold;
     }
   </style>
-  </head>
 
   <div class="container">
-    <h1>강의 개설 승인</h1>
 
     <div class="tabs">
       <div class="tab active" onclick="showTab('pending')">승인 대기중</div>
@@ -98,7 +104,7 @@
         <thead>
         <tr>
           <th>번호</th>
-          <th>제목</th>
+          <th>강의명</th>
           <th>교육기관</th>
           <th>교육기간</th>
           <th>접수기간</th>
@@ -106,9 +112,9 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>1050</td>
-          <td>[서초1동] 헬스 오후 - 2025.3분기<br><small>교재비: 0원, 수강료: 75000원</small></td>
+        <tr onclick="location.href='${pageContext.request.contextPath}/'" style="cursor: pointer;">
+          <td>${courseNo}</td>
+          <td>[서초1동] 헬스 오후 - 2025.3분기</td>
           <td>서초1동 자치회관</td>
           <td>2025-07-01 ~ 2025-09-30</td>
           <td>2025-06-23 ~ 2025-06-27</td>
@@ -133,7 +139,7 @@
         <thead>
         <tr>
           <th>번호</th>
-          <th>제목</th>
+          <th>강의명</th>
           <th>교육기관</th>
           <th>교육기간</th>
           <th>접수기간</th>
@@ -154,18 +160,7 @@
     </div>
   </div>
 
-  <script>
-    function showTab(tabId) {
-      const tabs = document.querySelectorAll(".tab");
-      const contents = document.querySelectorAll(".tab-content");
 
-      tabs.forEach(tab => tab.classList.remove("active"));
-      contents.forEach(content => content.style.display = "none");
-
-      document.querySelector(`#${tabId}`).style.display = "block";
-      event.target.classList.add("active");
-    }
-  </script>
 
 
 
@@ -180,5 +175,21 @@
     $current.addClass("active");
     tabLoad(tabId);
   });
+
+  function showTab(tabId) {
+    const tabs = document.querySelectorAll(".tab");
+    const contents = document.querySelectorAll(".tab-content");
+
+    // 모든 탭에서 active 제거, 콘텐츠 숨김
+    tabs.forEach(tab => tab.classList.remove("active"));
+    contents.forEach(content => content.style.display = "none");
+
+    // 클릭한 탭 활성화 및 해당 콘텐츠 보이기
+    const clickedTab = Array.from(tabs).find(tab => tab.textContent.includes(tabId === 'pending' ? '승인 대기중' : '결과'));
+    if (clickedTab) clickedTab.classList.add("active");
+
+    const targetContent = document.getElementById(tabId);
+    if (targetContent) targetContent.style.display = "block";
+  }
 
 </script>
