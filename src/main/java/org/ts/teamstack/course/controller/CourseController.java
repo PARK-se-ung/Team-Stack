@@ -3,6 +3,8 @@ package org.ts.teamstack.course.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +34,13 @@ public class CourseController {
 
     @PostMapping("/insert")
     public Map<String, Object> insertCourse(
-            @ModelAttribute Course course,
-            BindingResult br,
+            @RequestParam String courseStartDate,
             @RequestParam(value = "slideImage", required = false) MultipartFile[] upfiles,
             @RequestParam(value = "thumbnail",  required = false) MultipartFile thumbnail,
             @RequestParam(value = "courseContent",  required = false) MultipartFile content,
             @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
+            @RequestParam Course course,
+            @AuthenticationPrincipal UserDetails user,
             HttpSession session
     ) {
 
@@ -49,8 +52,10 @@ public class CourseController {
             if(!flag) log.error("create fail");
         }
 
-        // 강의 상태를 "STAY"로 기본 설정 (승인 대기)
+        // 강의 정보 입력
         course.setCourseStatus("STAY");
+        course.setUserId(user.getUsername());
+
 
         // 썸네일 rename
         if (thumbnail != null && !thumbnail.isEmpty()) {
@@ -83,6 +88,8 @@ public class CourseController {
             course.setOriginalPlanName(planFile.getOriginalFilename());
             course.setRenamePlanName(FileUpload.renameFile(planFile));
         }
+
+        System.out.println(course);
 
         // 강의 & files INSERT 처리
 

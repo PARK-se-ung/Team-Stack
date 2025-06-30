@@ -15,11 +15,13 @@ function tabLoad(tabId) {
         success: function(data) {
             $(".main-content").html(data);
             if(tabId === 'open'){
+                const twoWeeksLater = new Date();
+                twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
                 flatpickr("#datePicker", {
                     mode: "range",
                     dateFormat: "Y-m-d H:i",
                     minDate: "today",
-                    defaultDate: [new Date(), new Date()],
+                    defaultDate: [twoWeeksLater, twoWeeksLater],
                     locale: "ko",
                     altInput: true,
                     altFormat: "Y년 m월 d일",
