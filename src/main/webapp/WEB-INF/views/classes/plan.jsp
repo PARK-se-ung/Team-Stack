@@ -1,15 +1,43 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/classes.css">
 
-<div id="pdf-controls">
-<%--    강의계획서--%>
-</div>
 <div class="pdf-pagination">
     <button id="prevpage" class="pdf-btn">이전</button>
     <span id="pageInfo" class="pdf-page-info">1 / ?</span>
     <button id="nextpage" class="pdf-btn">다음</button>
 </div>
+
 <div style="display: flex;justify-content: center">
-    <canvas id="pdf-render" style="border:1px solid #ccc; max-height: 80vh"></canvas>
+    <canvas id="pdf-render" style="border:1px solid #ccc; max-height: 75vh"></canvas>
+</div>
+<div class="pdf-down-btn" >
+    <a href="${pageContext.request.contextPath}/resources/pdf/${planfile.renamePlanName}"
+       download="${planfile.originalPlanName}"
+       class="btn pdf-down">
+        PDF 다운로드
+    </a>
+    <c:if test="${loginUser.userId eq courseid}">
+        <button type="button" class="btn pdf-down" id="openUploadModal">
+            PDF 업로드
+        </button>
+    </c:if>
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>강의계획서 업로드</h2>
+            <form action="${pageContext.request.contextPath}/class/uploadPlan"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input type="hidden" name="courseNo" value="${courseid}" />
+                <input type="file" name="planFile" accept="application/pdf" required />
+                <button type="submit" class="btn pdf-down" style="margin-top:8px;">
+                    업로드
+                </button>
+            </form>
+        </div>
+    </div>
+
 </div>
 <style>
     .pdf-pagination {

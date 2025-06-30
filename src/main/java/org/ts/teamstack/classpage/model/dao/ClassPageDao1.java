@@ -1,8 +1,10 @@
 package org.ts.teamstack.classpage.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
+import org.ts.teamstack.classpage.model.dto.Assign;
 import org.ts.teamstack.classpage.model.dto.Board;
 import org.ts.teamstack.classpage.model.dto.Chat;
+import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.course.model.dto.Course;
 
 import java.util.List;
@@ -16,13 +18,31 @@ public interface ClassPageDao1 {
     //모든 강의목록
     List<Course> getAllCourses(SqlSession session, String userId);
 
+    String checkUserType(SqlSession session, String userId);
+
+    List<Course> getmyCourses(SqlSession session, String userId);
+
+    Course getPlanFile(SqlSession session, int courseNo);
+
+    List<Schedule> getCalDate(SqlSession session, int courseNo);
+
+    List<Schedule> getCalAssign(SqlSession session, int courseNo);
+
     List<Board> getHomeNotice(SqlSession session, int courseNo);
 
-    List<Board> getHomeAssign(SqlSession session, int courseNo);
+    List<Assign> getHomeAssign(SqlSession session, int courseNo);
 
     List<Chat>  getChattingHistory(SqlSession session, int courseNo);
 
     int setChattingHistory(SqlSession session, Chat chat);
 
     Course getCourse(SqlSession session, int courseNo);
+
+    List<Board> getNotice(SqlSession session, int courseNo);
+
+    List<Schedule> getWeek(SqlSession session, int courseNo);
+
+    String getCourseId(SqlSession session, int courseNo);
+
+    int getWeekForInsert(SqlSession session, int courseNo);
 }

@@ -4,7 +4,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.classpage.model.dto.Board;
 import org.ts.teamstack.classpage.model.dto.Chat;
+import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.classpage.model.dto.Assign;
 
 import java.util.List;
 
@@ -27,27 +29,72 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     }
 
     @Override
+    public String checkUserType(SqlSession session, String userId) {
+        return session.selectOne("checkUserType", userId);
+    }
+
+    @Override
+    public List<Course> getmyCourses(SqlSession session, String userId) {
+        return session.selectList("getmyCourses", userId);
+    }
+
+    @Override
+    public Course getPlanFile(SqlSession session, int courseNo) {
+        return session.selectOne("getPlanFile", courseNo);
+    }
+
+    @Override
+    public List<Chat> getChattingHistory(SqlSession session, int courseNo) {
+        return List.of();
+    }
+
+    @Override
+    public int setChattingHistory(SqlSession session, Chat chat) {
+        return 0;
+    }
+
+    @Override
+    public Course getCourse(SqlSession session, int courseNo) {
+        return null;
+    }
+
+    @Override
+    public List<Schedule> getCalDate(SqlSession session, int courseNo) {
+        return session.selectList("getCalDate",courseNo);
+    }
+
+    @Override
+    public List<Schedule> getCalAssign(SqlSession session, int courseNo) {
+        return session.selectList("getCalAssign",courseNo);
+    }
+
+    @Override
     public List<Board> getHomeNotice(SqlSession session, int courseNo) {
         return session.selectList("getHomeNotice", courseNo);
     }
 
     @Override
-    public List<Board> getHomeAssign(SqlSession session, int courseNo) {
+    public List<Assign> getHomeAssign(SqlSession session, int courseNo) {
         return session.selectList("getHomeAssign", courseNo);
     }
 
     @Override
-    public List<Chat> getChattingHistory(SqlSession session, int courseNo) {
-        return (session.selectList("classes.getChatHistory", courseNo));
+    public List<Board> getNotice(SqlSession session, int courseNo) {
+        return session.selectList("getDashNotice", courseNo);
     }
 
     @Override
-    public int setChattingHistory(SqlSession session,Chat chat) {
-        return (session.insert("classes.setChatHistory", chat));
+    public List<Schedule> getWeek(SqlSession session, int courseNo) {
+        return session.selectList("getWeek", courseNo);
     }
 
     @Override
-    public Course getCourse(SqlSession session, int courseNo) {
-        return (session.selectOne("classes.getCourse", courseNo));
+    public String getCourseId(SqlSession session, int courseNo) {
+        return session.selectOne("getCourseId", courseNo);
+    }
+
+    @Override
+    public int getWeekForInsert(SqlSession session, int courseNo) {
+        return session.selectOne("getWeekForInsert", courseNo);
     }
 }
