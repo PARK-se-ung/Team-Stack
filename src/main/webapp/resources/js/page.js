@@ -61,6 +61,66 @@ function purchasePaging(cPage){
     })
 }
 
+/* 예약 내역 페이징 처리 */
+function reservePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/reserve",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("reserve")
+    })
+}
+
+/* 신청한 강의 내역 페이징 처리 */
+function applyPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/apply",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("apply")
+    })
+}
+
+
+/* 수강중인 강의 내역 페이징 처리 */
+function takePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/take",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("take")
+    })
+}
+/* 수강 완료 강의 내역 페이징 처리 */
+function completePaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/complete",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("complete")
+    })
+}
+
 /* 로딩 스피너 생성 함수 */
 function loading() {
     const $form = $("<div>").addClass("loading-content");

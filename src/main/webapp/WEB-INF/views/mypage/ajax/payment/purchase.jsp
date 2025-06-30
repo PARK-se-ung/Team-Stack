@@ -32,24 +32,20 @@
     <table class="payment-table">
         <thead>
         <tr>
-            <th>결제번호</th>
             <th>강의명</th>
             <th>강사명</th>
             <th>결제일</th>
             <th>금액</th>
-            <th>결제ID</th>
         </tr>
         </thead>
         <tbody>
         <c:if test="${not empty paymentList}">
             <c:forEach var="pay" items="${paymentList}">
                 <tr>
-                    <td>${pay.paymentNo}</td>
                     <td>${pay.courseTitle}</td>
                     <td>${pay.instructorName}</td>
                     <td>${pay.paymentDate}</td>
                     <td>${pay.paymentPrice}</td>
-                    <td>${pay.portoneId}</td>
                 </tr>
             </c:forEach>
             </c:if>
