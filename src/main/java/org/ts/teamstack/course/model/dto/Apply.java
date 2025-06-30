@@ -15,6 +15,6 @@ public class Apply {
         private int applyNo;
         private String userId;
         private Integer courseNo;
-        private String applyType;     // (RESERVE,TAKE등)
+        private ApplyType applyType;     // (RESERVE,TAKE등)
         private Timestamp applyDate;
 }
