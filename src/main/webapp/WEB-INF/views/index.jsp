@@ -1,18 +1,18 @@
 <%@ page language="java" contentType="text/html;charset=utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
-<script src="/resources/js/home.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/home.js"></script>
     <!-- section -->
     <section class="main-container">
         <div class="category" id="category-selector">
-            <button class="btn btn-outline-orange me-3" data-type="전체">전체</button>
-            <button class="btn btn-outline-orange me-3" data-type="국어">국어</button>
-            <button class="btn btn-outline-orange me-3" data-type="수학">수학</button>
-            <button class="btn btn-outline-orange me-3" data-type="영어">영어</button>
-            <button class="btn btn-outline-orange me-3" data-type="과학">과학</button>
-            <button class="btn btn-outline-orange me-3" data-type="코딩">코딩</button>
-            <button class="btn btn-outline-orange me-3" data-type="정보">정보</button>
-            <button class="btn btn-outline-orange me-3" data-type="기타">기타</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('전체')">전체</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('국어')">국어</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('수학')">수학</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('영어')">영어</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('과학')">과학</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('코딩')">코딩</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('정보')">정보</button>
+            <button class="btn btn-outline-orange me-3" onclick="courseList('기타')">기타</button>
         </div>
         <div class="list">
             <h3>최근 본 강의 </h3>

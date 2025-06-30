@@ -7,15 +7,13 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.home.service.HomeService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -23,6 +21,7 @@ import java.util.stream.Collectors;
 public class HomeController {
 
     private final HomeService service;
+    private final PageInfo pageInfo;
 
     @RequestMapping("/")
     public String index(@CookieValue(name = "teamstackRecentView",required = false)
@@ -49,15 +48,36 @@ public class HomeController {
     }
 
     @RequestMapping("/home/searchcourselist")
-    public String searchcourselist(@RequestParam String category,
-                                   @RequestParam(defaultValue = "total") String subject,
-                                   @RequestParam(defaultValue = "total") String region,
-                                   @RequestParam(defaultValue = "total") List<String> week,
-                                   @RequestParam(defaultValue = "") String searchData,
+    public String searchcourselist(@RequestParam(defaultValue = "전체") String category,
                                    Model model){
-
-
+        pageInfo.initialize();
+        pageInfo.setNumPerpage(15);
+        pageInfo.setCurPage(1);
+        List<Course> courses = service.searchCourseByRest(Map.of("category", category), pageInfo);
+        model.addAttribute("courses", courses);
         return "course/course";
+    }
+
+    @RequestMapping("/home/searchcoursebyrest")
+    public String searchcoursebyrest(@RequestParam(defaultValue = "1") int cPage,
+                                    @RequestParam Map<String, String> params,
+                                     Model model){
+        pageInfo.initialize();
+        pageInfo.setNumPerpage(15);
+        pageInfo.setCurPage(cPage);
+
+        Map<String, Object> parsedParams = new HashMap<>(params);
+
+        if (params.containsKey("schools")) {
+            parsedParams.put("schools", List.of(params.get("schools").split(",")));
+        }
+        if (params.containsKey("weeks")) {
+            parsedParams.put("weeks", List.of(params.get("weeks").split(",")));
+        }
+
+        List<Course> courses = service.searchCourseByRest(parsedParams, pageInfo);
+        model.addAttribute("courses", courses);
+        return "course/courseinner";
     }
 
     @RequestMapping("/home/searchcoursebyno")
@@ -79,6 +99,7 @@ public class HomeController {
 
         /* course search */
         Course course = service.searchCourseByNo(courseNo);
+        System.out.println(course);
         model.addAttribute("course", course);
 
         return "course/coursedetail";

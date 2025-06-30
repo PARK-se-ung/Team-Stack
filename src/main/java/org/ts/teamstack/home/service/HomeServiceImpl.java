@@ -4,6 +4,7 @@ package org.ts.teamstack.home.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.home.model.dao.HomeDao;
@@ -42,4 +43,8 @@ public class HomeServiceImpl implements HomeService {
         return dao.selectCoursesByCourseNos(session, courseNoList);
     }
 
+    @Override
+    public List<Course> searchCourseByRest(Map<String, Object> parsedParams, PageInfo  pageInfo) {
+        return dao.searchCourseByRest(session, parsedParams, pageInfo);
+    }
 }
