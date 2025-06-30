@@ -5,17 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class Course {
+public class ApplyCourse {
     private int courseNo;
     private String userId;
     private String courseTitle;
@@ -37,4 +33,9 @@ public class Course {
     private int courseTime;
     private int personnel;
     private List<CourseAttach> files;
+
+    private String instructorName;
+    private int applyNo;
+
+
 }

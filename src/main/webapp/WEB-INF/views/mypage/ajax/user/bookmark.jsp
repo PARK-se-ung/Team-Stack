@@ -1,12 +1,13 @@
 <%@ page import="org.ts.teamstack.user.model.dto.Users" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <%
   Users loginUser = (Users)session.getAttribute("loginUser");
 %>
-
 <!-- 상단 탭이 존재하는 경우 -->
 <script>
     <!-- nav 전환 로직 -->
@@ -18,6 +19,40 @@
         tabLoad(tabId);
       });
 
+    <!-- 환불 으어어억 기능 -->
+    $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){
+      const courseNo = $(e.target).data('course-no');
+      const userId = "${sessionScope.loginUser.userId}";
+      const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
+      const impUid = await impUidResponse.text();
+      $.ajax({
+        url:"${pageContext.request.contextPath}/payment/cancelPayment",
+        type:"POST",
+        contentType:"application/json",
+        data:JSON.stringify({
+          "imp_uid": impUid,
+          "reason": "사용자 요청 환불",
+          "userId":userId,
+          "courseNo":courseNo
+        }),
+        dataType:"text",
+        success: function(result) {
+          if(result === "success") {
+            alert("환불이 정상적으로 처리되었습니다.");
+            tabLoad('bookmark'); // 페이지 새로고침
+          } else {
+            alert("환불 처리에 실패했습니다.");
+            tabLoad('bookmark');
+          }
+        },
+        error: function() {
+          alert("서버 오류로 환불 요청에 실패했습니다.");
+          tabLoad('bookmark');
+        }
+      });
+    });
+
+
     <%--<!-- 결제 기능 -->--%>
       IMP.init("imp02858447");
 
@@ -27,6 +62,7 @@
       const courseNo = $(e.target).data('course-no');
       const courseTitle = $(e.target).data('course-title');
       const coursePrice = $(e.target).data('course-price');
+      const applyType = $(e.target).data('apply-type');
 
       const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
 
@@ -40,7 +76,7 @@
                 pay_method: "card",
                 merchant_uid: merchantUid,
                 name: courseTitle,
-                amount: 5000,
+                amount: coursePrice,
                 buyer_email: "${sessionScope.loginUser.userEmail}",
                 buyer_name: "${sessionScope.loginUser.name}",
                 buyer_tel: "${sessionScope.loginUser.userPhone}"
@@ -62,7 +98,8 @@
                               paymentPrice: rsp.paid_amount,
                               portoneId: rsp.imp_uid,
                               paymentDate:rsp.paid_at,
-                              courseNo: courseNo // 실제 강의 번호 사용
+                              courseNo: courseNo, // 실제 강의 번호 사용
+                              applyType:applyType
                             })
                           });
                   const result=await response.text();
@@ -73,6 +110,7 @@
                     tabLoad('bookmark'); // 페이지 새로고침
                   } else {
                     alert('결제에 실패하였습니다.');
+                    tabLoad('bookmark');
                     console.log("결제실패 = 가격이 달라서 내가 막은거지?");
                   }
                 }else {
@@ -104,6 +142,7 @@
           },
           error: function () {
             alert("북마크 취소가 안됩니당 :(");
+            tabLoad('bookmark');
           }
         });
 
@@ -136,6 +175,8 @@
     <strong><a>이미지형</a></strong> | <a>리스트형</a>
   </div>
 
+
+
   <table>
     <thead>
     <tr>
@@ -154,6 +195,15 @@
     <tbody>
     <c:if test="${not empty bookmarks}">
       <c:forEach var="b" items="${bookmarks}">
+        <%-- 모집 시작일 Date 객체로 변환 --%>
+        <fmt:parseDate value="${b.recruitDate}" pattern="yyyy-MM-dd" var="recruitDateObj"/>
+        <%-- 모집 종료일 = 모집 시작일 + 7일(밀리초) --%>
+        <c:set var="millisIn7Days" value="${7 * 24 * 60 * 60 * 1000}" />
+        <c:set var="recruitEndDateMillis" value="${recruitDateObj.time + millisIn7Days}" />
+        <%-- 오늘 날짜 --%>
+        <c:set var="now" value="<%= new java.util.Date() %>" />
+        <c:set var="nowMillis" value="${now.time}" />
+
         <tr>
           <td>
             <button class="btn-bookmark-remove" data-bookmark-no="${b.bookmarkNo}">★</button>
@@ -174,10 +224,74 @@
           <td><fmt:formatDate value="${b.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${b.coursePrice}" type="number"/>원</td>
           <td>
-            <button class="btn-apply"
-                    data-course-no="${b.courseNo}"
-                    data-course-title="${b.courseTitle}"
-                    data-course-price="${b.coursePrice}">신청</button>
+            <c:choose>
+              <%-- 1. 무료 강의 --%>
+              <c:when test="${b.coursePrice == 0}">
+                <c:choose>
+                  <%-- 모집 종료 --%>
+                  <c:when test="${nowMillis > recruitEndDateMillis}">
+                    <span style="color:#888;">모집 종료</span>
+                  </c:when>
+                  <%-- 모집 시작 전: 예약 --%>
+                  <c:when test="${nowMillis < recruitDateObj.time}">
+                    <button class="btn-freeApply"
+                            data-course-no="${b.courseNo}"
+                            data-course-title="${b.courseTitle}"
+                            data-apply-type="RESERVE">예약</button>
+                  </c:when>
+                  <%-- 모집 시작~종료: 신청 --%>
+                  <c:otherwise>
+                    <button class="btn-freeApply"
+                            data-course-no="${b.courseNo}"
+                            data-course-title="${b.courseTitle}"
+                            data-apply-type="APPLY">신청</button>
+                  </c:otherwise>
+                </c:choose>
+              </c:when>
+              <%-- 2. 유료 강의 --%>
+              <c:otherwise>
+                <c:choose>
+                  <%-- 신청 이력 없음 --%>
+                  <c:when test="${empty b.applyNo}">
+                    <c:choose>
+                      <c:when test="${nowMillis > recruitEndDateMillis}">
+                        <span style="color:#888;">모집 종료</span>
+                      </c:when>
+                      <c:when test="${nowMillis < recruitDateObj.time}">
+                        <button class="btn-apply"
+                                data-course-no="${b.courseNo}"
+                                data-course-title="${b.courseTitle}"
+                                data-course-price="${b.coursePrice}"
+                                data-apply-type="RESERVE">예약</button>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn-apply"
+                                data-course-no="${b.courseNo}"
+                                data-course-title="${b.courseTitle}"
+                                data-course-price="${b.coursePrice}"
+                                data-apply-type="APPLY">신청/결제</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </c:when>
+                  <%-- 신청 이력 있음 --%>
+                  <c:otherwise>
+                    <c:choose>
+                      <c:when test="${b.applyType == 'APPLY' || b.applyType == 'RESERVE'}">
+                        <button class="btn-refund"
+                                data-apply-no="${b.applyNo}"
+                                data-course-no="${b.courseNo}">환불신청</button>
+                      </c:when>
+                      <c:when test="${b.applyType == 'TAKE' || b.applyType == 'COMPLETE'}">
+                        <span style="color:#888;">수강중/완료</span>
+                      </c:when>
+                      <c:otherwise>
+                        <!-- 기타 상태 처리 -->
+                      </c:otherwise>
+                    </c:choose>
+                  </c:otherwise>
+                </c:choose>
+              </c:otherwise>
+            </c:choose>
           </td>
         </tr>
       </c:forEach>
@@ -229,7 +343,7 @@
     margin-top: 10px;
   }
 
-  .btn-apply, .btn-bookmark-remove {
+  .btn-apply, .btn-bookmark-remove,.btn-refund,.btn-freeApply,.btn-reserve {
     padding: 4px 10px;
     font-size: 13px;
     background: #455ba8;
