@@ -49,7 +49,7 @@
                 left: 0;
                 width: 0;           /* 초기 width 0 */
                 height: 10px;
-                background-color: #d88a16;
+                background-color: #ff944d;
                 border-radius: 10px;
                 transition: left 0.3s ease, width 0.3s ease;
                 z-index: 0;
@@ -69,6 +69,9 @@
         <div class="dash-select active" data-board="ongoing">수강중</div>
         <div class="dash-select" data-board="completed">수강완료</div>
         <div class="dash-select" data-board="all">전체</div>
+        <c:if test="${type eq 'I'}">
+        <div class="dash-select" data-board="iboard">개설한 강의</div>
+        </c:if>
         <span class="tab-underline" id="underline"></span>
     </div>
 
@@ -109,6 +112,18 @@
                 </div>
             </c:forEach>
         </div>
+        <div class="dash-board" id="dboard-iboard" style="display: none">
+            <c:forEach var="mc" items="${mycourse}">
+                <div class="card" style="width: 18rem;">
+                    <a href="${path}/class/dashmain?courseNo=${mc.courseNo}">
+                        <img src="${path}/resources/upload/${mc.thumbnail}" class="card-img-top" alt="썸네일">
+                        <div class="card-body">
+                                ${mc.courseTitle}
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
     </div>
 
     <script>
@@ -123,7 +138,6 @@
             }
 
             function showBoard(key) {
-                // ongoing → dboard-active, completed → dboard-completed, all → dboard-all
                 const targetId = (key === 'ongoing') ? 'dboard-active' : 'dboard-' + key;
                 boards.forEach(b => {
                     b.style.display = (b.id === targetId) ? 'flex' : 'none';
