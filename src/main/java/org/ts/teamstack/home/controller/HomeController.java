@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.home.service.HomeService;
@@ -51,10 +52,12 @@ public class HomeController {
     public String searchcourselist(@RequestParam(defaultValue = "전체") String category,
                                    Model model){
         pageInfo.initialize();
-        pageInfo.setNumPerpage(15);
+        pageInfo.setTotalData(service.searchCourseCount(Map.of("category", category)));
+        pageInfo.setNumPerpage(10);
         pageInfo.setCurPage(1);
         List<Course> courses = service.searchCourseByRest(Map.of("category", category), pageInfo);
         model.addAttribute("courses", courses);
+        model.addAttribute("pageBar", PageBarFactory.ajaxPageBuilder(pageInfo, "loadCourse"));
         return "course/course";
     }
 
@@ -62,10 +65,6 @@ public class HomeController {
     public String searchcoursebyrest(@RequestParam(defaultValue = "1") int cPage,
                                     @RequestParam Map<String, String> params,
                                      Model model){
-        pageInfo.initialize();
-        pageInfo.setNumPerpage(15);
-        pageInfo.setCurPage(cPage);
-
         Map<String, Object> parsedParams = new HashMap<>(params);
 
         if (params.containsKey("schools")) {
@@ -75,8 +74,14 @@ public class HomeController {
             parsedParams.put("weeks", List.of(params.get("weeks").split(",")));
         }
 
+        pageInfo.initialize();
+        pageInfo.setTotalData(service.searchCourseCount(parsedParams));
+        pageInfo.setNumPerpage(10);
+        pageInfo.setCurPage(cPage);
+
         List<Course> courses = service.searchCourseByRest(parsedParams, pageInfo);
         model.addAttribute("courses", courses);
+        model.addAttribute("pageBar", PageBarFactory.ajaxPageBuilder(pageInfo, "loadCourse"));
         return "course/courseinner";
     }
 

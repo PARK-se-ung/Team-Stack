@@ -11,4 +11,5 @@ public interface HomeService {
     List<Course> selectCoursesByCourseNos(List<Integer> courseNoList);
     Course searchCourseByNo(int courseNo);
     List<Course> searchCourseByRest(Map<String, Object> parsedParams, PageInfo pageInfo);
+    int searchCourseCount(Map<String, Object> parsedParams);
 }

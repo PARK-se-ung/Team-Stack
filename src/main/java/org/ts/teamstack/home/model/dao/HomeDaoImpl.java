@@ -41,5 +41,9 @@ public class HomeDaoImpl implements HomeDao {
         return session.selectList("home.searchCourseByRest", parsedParams, pageInfo.getRowBounds());
     }
 
+    @Override
+    public int searchCourseCount(SqlSession session, Map<String, Object> parsedParams) {
+        return session.selectOne("home.searchCourseCount", parsedParams);
+    }
 
 }

@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <script src="${pageContext.request.contextPath}/resources/js/home.js"></script>
 <section>
-  <div>
+  <div class="d-flex justify-content-between align-items-center">
     <c:if var="courseFlag" test="${not empty courses}">
       <c:forEach var="course" items="${courses}">
         <div class="card" style="width: 18rem;">
@@ -16,7 +16,7 @@
       </c:forEach>
     </c:if>
     <c:if test="${not courseFlag}">
-
+      조회된 결과가 없습니다.
     </c:if>
   </div>
   <div>

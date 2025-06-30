@@ -14,4 +14,5 @@ public interface HomeDao {
     List<Course> selectHighCourses(SqlSession session);
     Course searchCourseByNo(SqlSession session, int courseNo);
     List<Course> searchCourseByRest(SqlSession session, Map<String, Object> parsedParams, PageInfo pageInfo);
+    int searchCourseCount(SqlSession session,  Map<String, Object> parsedParams);
 }

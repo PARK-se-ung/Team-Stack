@@ -47,4 +47,9 @@ public class HomeServiceImpl implements HomeService {
     public List<Course> searchCourseByRest(Map<String, Object> parsedParams, PageInfo  pageInfo) {
         return dao.searchCourseByRest(session, parsedParams, pageInfo);
     }
+
+    @Override
+    public int searchCourseCount(Map<String, Object> parsedParams) {
+        return dao.searchCourseCount(session, parsedParams);
+    }
 }

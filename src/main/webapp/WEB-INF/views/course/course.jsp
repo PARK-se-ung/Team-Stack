@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/WEB-INF/views/common/header.jsp"%>
+<script src="${pageContext.request.contextPath}/resources/js/home.js"></script>
 <section class="main-content">
     <div class="search-form d-flex justify-content-center">
         <table class="table table-bordered" style="max-width: 1200px;">
@@ -71,6 +72,27 @@
         <button class="btn btn-outline-orange btn-active-orange me-4">이미지</button>
         <button class="btn btn-outline-orange">리스트</button>
     </div>
-    <div id="courselist-container" class="main-content"></div>
+    <div id="course-container" class="main-content">
+        <div class="d-flex justify-content-between align-items-center">
+            <c:if var="courseFlag" test="${not empty courses}">
+                <c:forEach var="course" items="${courses}">
+                    <div class="card" style="width: 18rem;">
+                        <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
+                            <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                            <div class="card-body">
+                                    ${course.courseTitle}
+                            </div>
+                        </a>
+                    </div>
+                </c:forEach>
+            </c:if>
+            <c:if test="${not courseFlag}">
+                조회된 결과가 없습니다.
+            </c:if>
+        </div>
+        <div>
+            ${pageBar}
+        </div>
+    </div>
 </section>
 <%@include file="/WEB-INF/views/common/footer.jsp"%>
