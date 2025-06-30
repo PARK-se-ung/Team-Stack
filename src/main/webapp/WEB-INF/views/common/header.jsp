@@ -40,26 +40,124 @@
         <!-- nav -->
         <div class="col-lg-2 top-nav">
             <div class="align-items-center">
-                <% if (loginUser==null) { %>
+                <% if(loginUser==null) { %>
                 <a class="me-3" href="${pageContext.request.contextPath}/user/login.do">
                     로그인
                 </a>
-                <%}%>
-                <% if (loginUser != null && (loginUser.getUserType().equals(G) ||
-                        loginUser.getUserType().equals(I))){ %>
-                <p><strong><%= loginUser.getName() %></strong> 님 환영합니다!</p>
-                <a class="me-3" href="${pageContext.request.contextPath}/mypage">마이페이지</a>
-                <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
+                <% } else { %>
+                    <p><strong><%= loginUser.getName() %></strong> 님 환영합니다!</p>
+                <% if((loginUser.getUserType().equals(G) || loginUser.getUserType().equals(I))){ %>
+                    <a class="me-3" href="${pageContext.request.contextPath}/mypage">마이페이지</a>
+                <% } else { %>
+                    <a class="me-3" href="${pageContext.request.contextPath}/manage">관리자페이지</a>
                 <% } %>
-                <% if (loginUser != null && loginUser.getUserType().equals(A)){%>
-                <p><strong><%= loginUser.getUsername() %></strong> 님 환영합니다!</p>
-                <a class="me-3" href="${pageContext.request.contextPath}/manage">관리자페이지</a>
-                <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
-                <%}%>
-                <a href="">
-                    알람
-                </a>
+                    <a class="me-3" href="${pageContext.request.contextPath}/logout.do">로그아웃</a>
+                    <button id="alarmMessages" class="btn btn-orange" type="button">
+                        알람
+                    </button>
+                    <!-- Alarm List -->
+                    <div id="alarmDropdown" style="display: none; position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; width: 200px;">
+                        <ul id="alarmList" style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding: 10px;">알림 1</li>
+                        </ul>
+                    </div>
+                    <!-- Alarm Modal -->
+                    <div class="modal fade" id="alarmModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">알림 내용</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body" id="alarmModalBody">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
             </div>
         </div>
     </div>
 </header>
+<script>
+    $(document).ready(function() {
+        $('#alarmMessages').on('click', function(e) {
+            e.stopPropagation();
+            loadAlarms();
+            $('#alarmDropdown').slideToggle(200);
+        });
+
+        $(document).on('click', function() {
+            $('#alarmDropdown').slideUp(200);
+        });
+
+        $('#alarmDropdown').on('click', function(e) {
+            e.stopPropagation();
+        });
+    });
+
+    let toRemoveAlarmId = null;
+    function alarmOpener(){
+
+        const alarmId = $(this).data('id');
+        const content = $(this).data('content');
+
+        $('#alarmModalBody').text(content);
+        $('#alarmModal').modal('show');
+
+        toRemoveAlarmId = alarmId;
+    }
+    // $(document).on('click','.alarm-item', function () {
+    //     alert("test");
+    //     const alarmId = $(this).data('id');
+    //     const content = $(this).data('content');
+    //
+    //     $('#alarmModalBody').text(content);
+    //     $('#alarmModal').modal('show');
+    //
+    //     toRemoveAlarmId = alarmId;
+    // });
+
+    $('#alarmModal').on('hidden.bs.modal', function () {
+        if (toRemoveAlarmId !== null) {
+            $.ajax({
+                url:'${pageContext.request.contextPath}/home/updateAlarm',
+                method: "POST",
+                data: {"no":toRemoveAlarmId},
+                success: function(data) {
+
+                    loadAlarms();
+                }
+            });
+            toRemoveAlarmId = null;
+        }
+    });
+
+    /* 헤더 알람 로드 */
+    function loadAlarms() {
+        $.ajax({
+            url: '${pageContext.request.contextPath}/home/alarmslist',
+            method: 'GET',
+            success: function(data) {
+                const $list = $('#alarmList');
+                $list.empty();
+                if(data.length > 0){
+                    data.forEach(function(alarm) {
+                        let li = $("<li>").addClass("alarm-item").attr({
+                            'data-id':alarm.alarmNo,
+                            'data-content':alarm.alarmContent
+                        }).append($("<div>").addClass("alarm-content").text(alarm.alarmContent))
+
+                        li.click(alarmOpener);
+
+                        $list.append(li);
+                    });
+                } else {
+                    let li = $("<li>").text("조회된 알람이 없습니다.").addClass("text-center");
+                    $list.append(li);
+                }
+            }
+        })
+    }
+</script>

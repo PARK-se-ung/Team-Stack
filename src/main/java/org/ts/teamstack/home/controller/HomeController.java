@@ -3,17 +3,17 @@ package org.ts.teamstack.home.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.home.service.HomeService;
+import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,6 +46,18 @@ public class HomeController {
         /* 초중고 데이터 저장 */
         model.addAttribute("course" , service.homeCourses());
         return "index";
+    }
+
+    @RequestMapping("/home/alarmslist")
+    @ResponseBody
+    public List<Alarm> alarmslist(HttpSession session){
+        String userId = ((Users) session.getAttribute("loginUser")).getUserId();
+        return service.searchAlarm(userId);
+    }
+
+    @RequestMapping("/home/updateAlarm")
+    public int updateAlarm(@RequestParam(value = "no") int no){
+        return service.updateAlarm(no);
     }
 
     @RequestMapping("/home/searchcourselist")

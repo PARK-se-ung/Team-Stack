@@ -8,6 +8,7 @@ import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.home.model.dao.HomeDao;
+import org.ts.teamstack.manager.model.dto.Alarm;
 
 import java.util.*;
 
@@ -17,6 +18,16 @@ public class HomeServiceImpl implements HomeService {
 
     private final HomeDao dao;
     private final SqlSession session;
+
+    @Override
+    public List<Alarm> searchAlarm(String userId) {
+        return dao.searchAlarm(session, userId);
+    }
+
+    @Override
+    public int updateAlarm(int no) {
+     return dao.updateAlarm(session, no);
+    }
 
     public Map<String, List<Course>> homeCourses() {
         Map<String, List<Course>> map = new HashMap<>();

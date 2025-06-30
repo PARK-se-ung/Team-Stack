@@ -1,19 +1,40 @@
 package org.ts.teamstack.manager.model.dao;
 
-import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
 import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
+import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.user.model.dto.Users;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class ManagerDaoImpl implements ManagerDao{
+
+    @Override
+    public List<Approve> searchAppr(SqlSession session, PageInfo pageInfo){
+        return session.selectList("manager.searchAppr", null, pageInfo.getRowBounds());
+    }
+
+    @Override
+    public int searchApprCount(SqlSession session){
+        return session.selectOne("manager.searchApprCount");
+    }
+
+    @Override
+    public List<Course>  searchCourseByAppr(SqlSession session, PageInfo pageInfo){
+        return session.selectList("manager.searchCourseByAppr", null, pageInfo.getRowBounds());
+    }
+
+    @Override
+    public int searchCourseApprCount(SqlSession session){
+        return session.selectOne("manager.searchCourseApprCount");
+    }
+
     @Override
     public List<Notice> searchNotice(SqlSession session, PageInfo pageInfo){
         return session.selectList("manager.searchNotice", null, pageInfo.getRowBounds());

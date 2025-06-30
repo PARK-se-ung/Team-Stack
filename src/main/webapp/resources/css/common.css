@@ -37,3 +37,17 @@ body {
     color:  var(--ts-text);
     border-color:  var(--ts-primary);
 }
+
+/* filled orange button */
+.btn-orange {
+    background-color: var(--ts-primary);
+    color: var(--ts-text);
+    border: 1px solid var(--ts-primary);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-orange:hover {
+    background-color: #fff;
+    color: var(--ts-primary);
+    border-color: var(--ts-primary);
+}

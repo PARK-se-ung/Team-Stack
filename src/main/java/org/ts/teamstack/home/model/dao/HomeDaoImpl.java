@@ -5,12 +5,23 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.manager.model.dto.Alarm;
 
 import java.util.List;
 import java.util.Map;
 
 @Repository
 public class HomeDaoImpl implements HomeDao {
+
+    @Override
+    public List<Alarm> searchAlarm(SqlSession session, String userId) {
+        return session.selectList("home.searchAlarm", userId, new RowBounds(0, 5));
+    }
+
+    @Override
+    public int updateAlarm(SqlSession session, int no) {
+        return session.update("home.updateAlarm", no);
+    }
 
     @Override
     public List<Course> selectCoursesByCourseNos(SqlSession session, List<Integer> courseNoList) {

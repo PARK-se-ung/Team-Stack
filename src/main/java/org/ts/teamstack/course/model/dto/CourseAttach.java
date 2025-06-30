@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CourseAttach {
     private int CourseAttachNo;
-    private int courseNum;
+    private int courseNo;
     private int courseAttachLevel;
     private String courseAttachName;
 }
