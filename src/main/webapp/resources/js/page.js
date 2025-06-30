@@ -14,20 +14,51 @@ function tabLoad(tabId) {
         type: 'POST',
         success: function(data) {
             $(".main-content").html(data);
-            if(tabId === 'open'){
-                const twoWeeksLater = new Date();
-                twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
+            if (tabId === 'open') {
                 flatpickr("#datePicker", {
                     mode: "range",
                     dateFormat: "Y-m-d H:i",
                     minDate: "today",
-                    defaultDate: [twoWeeksLater, twoWeeksLater],
+                    defaultDate: [new Date(), (() => {
+                        const d = new Date();
+                        d.setDate(d.getDate() + 14);
+                        return d;
+                    })()],
                     locale: "ko",
                     altInput: true,
                     altFormat: "Y년 m월 d일",
-                    enableTime: true
+                    enableTime: true,
+                    onClose: function(selectedDates) {
+                        if (selectedDates.length === 2) {
+                            const [start, end] = selectedDates;
+                            const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+                            const weeks = Math.round((end - start) / msPerWeek);
+                            const recruit = new Date(start.getTime() + msPerWeek);
+
+                            // 포맷 함수: yyyy-MM-dd (java.sql.Date용)
+                            const pad = n => n.toString().padStart(2, "0");
+                            const fmtYmd = d =>
+                                `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+                            // 포맷 함수: yyyy-MM-dd HH:mm (startDate)
+                            const fmtFull = d =>
+                                `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+                                `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+                            // hidden inputs 에 값 세팅
+                            $("#courseStartDate").val(fmtFull(start));
+                            $("#totalWeek").val(weeks);
+                            $("#recruitDate").val(fmtYmd(recruit));
+                        }
+                    }
                 });
             }
+
+            // 폼 제출 전에도 한 번 더 확실히 세팅
+            $("#courseForm").on("submit", function() {
+                if (!$("#totalWeek").val()) {
+                    console.warn("totalWeek가 비어있음!");
+                }
+            });
         },
         error: errorContent(tabId)
     })

@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ page import="static org.ts.teamstack.course.model.dto.Course" %>
+<%@ page import="org.ts.teamstack.course.model.dto.Course" %>
 
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
@@ -78,7 +78,11 @@
       text-align: left;
       border-bottom: 1px solid #ddd;
       vertical-align: top;
-      font-size : 13px;
+      font-size : 18px;
+    }
+
+    tr {
+      font-weight: 500;
     }
 
     tr:hover {
@@ -105,29 +109,20 @@
         <tr>
           <th>번호</th>
           <th>강의명</th>
-          <th>교육기관</th>
           <th>교육기간</th>
           <th>접수기간</th>
           <th>상태</th>
         </tr>
         </thead>
         <tbody>
-        <tr onclick="location.href='${pageContext.request.contextPath}/'" style="cursor: pointer;">
-          <td>${courseNo}</td>
-          <td>[서초1동] 헬스 오후 - 2025.3분기</td>
-          <td>서초1동 자치회관</td>
-          <td>2025-07-01 ~ 2025-09-30</td>
-          <td>2025-06-23 ~ 2025-06-27</td>
-          <td class="status">접수대기</td>
-        </tr>
         <tr>
-          <td>1049</td>
-          <td>[서초1동] 헬스 오전 - 2025.3분기</td>
-          <td>서초1동 자치회관</td>
-          <td>2025-07-01 ~ 2025-09-30</td>
-          <td>2025-06-23 ~ 2025-06-27</td>
-          <td class="status">접수대기</td>
+          <td></td>
+          <td>[서초1동] 헬스 오후 - 2025.3분기</td>
+          <td>courseStartDate</td>
+          <td>recuitDate</td>
+          <td class="status">STAY</td>
         </tr>
+
         <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
         </tbody>
       </table>
@@ -140,7 +135,6 @@
         <tr>
           <th>번호</th>
           <th>강의명</th>
-          <th>교육기관</th>
           <th>교육기간</th>
           <th>접수기간</th>
           <th>상태</th>
@@ -150,7 +144,6 @@
         <tr>
           <td>1039</td>
           <td>[예시] 미술 심화 - 2025.3분기</td>
-          <td>서초2동 자치회관</td>
           <td>2025-07-01 ~ 2025-09-30</td>
           <td>2025-06-20 ~ 2025-06-27</td>
           <td class="status">승인완료</td>

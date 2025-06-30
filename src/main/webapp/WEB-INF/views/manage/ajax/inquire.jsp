@@ -6,6 +6,35 @@
   Time: 오후 5:26
   To change this template use File | Settings | File Templates.
 --%>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  thead {
+    background: #f5f5f5;
+  }
+
+  th {
+    font-size: 16px;
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+    font-size : 13px;
+  }
+
+  tr:hover {
+    background-color: #fafafa;
+  }
+
+
+</style>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <article>
   <div>
