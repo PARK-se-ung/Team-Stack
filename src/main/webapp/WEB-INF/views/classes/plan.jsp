@@ -17,26 +17,6 @@
        class="btn pdf-down">
         PDF 다운로드
     </a>
-    <c:if test="${loginUser.userId eq courseid}">
-        <button type="button" class="btn pdf-down" id="openUploadModal">
-            PDF 업로드
-        </button>
-    </c:if>
-    <div id="uploadModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>강의계획서 업로드</h2>
-            <form action="${pageContext.request.contextPath}/class/uploadPlan"
-                  method="post"
-                  enctype="multipart/form-data">
-                <input type="hidden" name="courseNo" value="${courseid}" />
-                <input type="file" name="planFile" accept="application/pdf" required />
-                <button type="submit" class="btn pdf-down" style="margin-top:8px;">
-                    업로드
-                </button>
-            </form>
-        </div>
-    </div>
 
 </div>
 <style>
