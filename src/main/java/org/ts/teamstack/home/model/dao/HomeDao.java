@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface HomeDao {
+    List<Course>  selectCoursesByCourseNos(SqlSession session, List<Integer> courseNoList);
     List<Course> selectElementaryCourses(SqlSession session);
     List<Course> selectMiddleCourses(SqlSession session);
     List<Course> selectHighCourses(SqlSession session);
+    Course searchCourseByNo(SqlSession session, int courseNo);
 }

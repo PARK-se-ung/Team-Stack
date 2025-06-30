@@ -7,4 +7,6 @@ import java.util.Map;
 
 public interface HomeService {
     Map<String, List<Course>> homeCourses();
+    List<Course> selectCoursesByCourseNos(List<Integer> courseNoList);
+    Course searchCourseByNo(int courseNo);
 }

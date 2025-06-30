@@ -129,24 +129,5 @@ public class CourseController {
     }
 
 
-    @RequestMapping("searchcoursebyno")
-    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
-                                   Model model, HttpServletResponse response){
-        Set<Integer> courseNos = new LinkedHashSet<>();
-        courseNos.add(courseNo);
-        if(recentView != null && !recentView.getValue().isEmpty()){
-            for(String no : recentView.getValue().split(",")){
-                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
-            }
-        }
-
-
-        Course course = courseService.searchCourseByNo(courseNo);
-        model.addAttribute("course", course);
-
-
-
-        return "course/course";
-    }
 }
 

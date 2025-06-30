@@ -5,12 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.home.model.dao.HomeDao;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +27,19 @@ public class HomeServiceImpl implements HomeService {
         map.put("high", high);
         return map;
     };
+
+    @Override
+    public Course searchCourseByNo(int courseNo) {
+        Course course = dao.searchCourseByNo(session, courseNo);
+        if(course.getFiles() != null) {
+            course.getFiles().sort(Comparator.comparingInt(CourseAttach::getCourseAttachLevel));
+        }
+        return course;
+    }
+
+    @Override
+    public List<Course> selectCoursesByCourseNos(List<Integer> courseNoList) {
+        return dao.selectCoursesByCourseNos(session, courseNoList);
+    }
 
 }

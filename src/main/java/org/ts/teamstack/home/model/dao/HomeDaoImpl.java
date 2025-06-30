@@ -12,16 +12,26 @@ import java.util.Map;
 public class HomeDaoImpl implements HomeDao {
 
     @Override
+    public List<Course> selectCoursesByCourseNos(SqlSession session, List<Integer> courseNoList) {
+        return session.selectList("home.selectCoursesByCourseNos", courseNoList);
+    }
+
+    @Override
     public List<Course> selectElementaryCourses(SqlSession session){
-        return session.selectList("course.selectElementaryCourses");
+        return session.selectList("home.selectElementaryCourses", null, new RowBounds(0, 5));
     }
 
     @Override
     public List<Course> selectMiddleCourses(SqlSession session) {
-        return session.selectList("course.selectMiddleCourses");
+        return session.selectList("home.selectMiddleCourses", null, new RowBounds(0, 5));
     }
     @Override
     public List<Course> selectHighCourses(SqlSession session) {
-        return session.selectList("course.selectHighCourses");
+        return session.selectList("home.selectHighCourses", null, new RowBounds(0, 5));
+    }
+
+    @Override
+    public Course searchCourseByNo(SqlSession session, int courseNo) {
+        return session.selectOne("home.selectCourseByNo", courseNo);
     }
 }
