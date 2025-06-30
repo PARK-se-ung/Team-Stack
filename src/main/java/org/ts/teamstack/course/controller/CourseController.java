@@ -2,24 +2,22 @@ package org.ts.teamstack.course.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
+import org.ts.teamstack.user.model.dto.Users;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @RestController
@@ -33,20 +31,41 @@ public class CourseController {
     @PostMapping("/insert")
     public Map<String, Object> insertCourse(
             @ModelAttribute Course course,
-            BindingResult br,
             @RequestParam(value = "slideImage", required = false) MultipartFile[] upfiles,
-            @RequestParam(value = "thumbnail",  required = false) MultipartFile thumbnail,
-            @RequestParam(value = "courseContent",  required = false) MultipartFile content,
-            @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
+            @RequestParam(value = "thumbnailFile",  required = false) MultipartFile thumbnail,
+            @RequestParam(value = "contentFile",  required = false) MultipartFile content,
+            @RequestParam(value = "planFile", required = false) MultipartFile planFile,
             HttpSession session
     ) {
+        Users loginUser = (Users)session.getAttribute("loginUser");
+        if (loginUser == null) {
+
+        }
+        course.setUserId(loginUser.getUserId());
+
+
+
+        String range = course.getCourseStartDate();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String[] parts = range.split("~");
+
+        LocalDateTime startLdt = LocalDateTime.parse(parts[0].trim(), fmt);
+        LocalDateTime endLdt   = LocalDateTime.parse(parts[1].trim(), fmt);
+
+// 만약 “강의 일수”만 필요하다면 날짜끼리 계산
+        long days = ChronoUnit.DAYS.between(startLdt.toLocalDate(), endLdt.toLocalDate()) + 1;
+        int weeks = (int) Math.ceil(days / 7.0);
+
+// DTO에 원하는 형태로 세팅
+        course.setCourseStartTime(startLdt.format(fmt));  // 또는 startLdt.toString()
+        course.setTotalWeek(weeks);
 
         // path 생성
         String path = session.getServletContext().getRealPath("/resources/upload/course");
         File dir = new File(path);
-        if(!dir.exists()){
+        if (!dir.exists()) {
             boolean flag = dir.mkdirs();
-            if(!flag) log.error("create fail");
+            if (!flag) log.error("create fail");
         }
 
         // 강의 상태를 "STAY"로 기본 설정 (승인 대기)
@@ -64,15 +83,15 @@ public class CourseController {
 
         // attach rename
         List<CourseAttach> attachList = new ArrayList<>();
-        if(upfiles != null && upfiles.length > 0){
+        if (upfiles != null && upfiles.length > 0) {
             int level = 1;
-            for(MultipartFile file : upfiles){
-                if(file != null & !file.isEmpty()){
-                    CourseAttach courseAttach = CourseAttach.builder()
+            for (MultipartFile file : upfiles) {
+                if (file != null && !file.isEmpty()) {
+                    CourseAttach attach = CourseAttach.builder()
                             .courseAttachLevel(level++)
                             .courseAttachName(FileUpload.renameFile(file))
                             .build();
-                    attachList.add(courseAttach);
+                    attachList.add(attach);
                 }
             }
         }
@@ -84,33 +103,29 @@ public class CourseController {
             course.setRenamePlanName(FileUpload.renameFile(planFile));
         }
 
-        // 강의 & files INSERT 처리
-
+        // insert 처리
         int result = 0;
-        try{
+        try {
             result = courseService.insertCourse(course);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("insertCourse error", e);
         }
 
-        // DB 저장결과 기반 파일들 upload 폴더에 저장
-        if(result > 0){
-            try{
-                // 썸네일 저장
+        // 파일 저장
+        if (result > 0) {
+            try {
                 FileUpload.saveFile(thumbnail, path, course.getThumbnail());
-                // content 저장
                 FileUpload.saveFile(content, path, course.getCourseContent());
-                // files 저장
                 int order = 0;
-                for(MultipartFile file : upfiles){
-                    if(file != null && !file.isEmpty()){
+                for (MultipartFile file : upfiles) {
+                    if (file != null && !file.isEmpty()) {
                         FileUpload.saveFile(file, path, attachList.get(order++).getCourseAttachName());
                     }
                 }
-                // plan 저장
-
+                // planFile 저장
+                FileUpload.saveFile(planFile, path, course.getRenamePlanName());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("file save error", e);
             }
         }
 
@@ -118,35 +133,10 @@ public class CourseController {
         res.put("success", result > 0);
         return res;
     }
+
     @DeleteMapping("/bookmark/delete")
-    @ResponseBody
     public String deleteBookmark(@RequestParam int bookmarkNo) {
-        int res =  courseService.deleteBookmark(bookmarkNo);
-        String result = "";
-        if(res>0) result="success";
-        else result="fail";
-        return result;
-    }
-
-
-    @RequestMapping("searchcoursebyno")
-    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
-                                   Model model, HttpServletResponse response){
-        Set<Integer> courseNos = new LinkedHashSet<>();
-        courseNos.add(courseNo);
-        if(recentView != null && !recentView.getValue().isEmpty()){
-            for(String no : recentView.getValue().split(",")){
-                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
-            }
-        }
-
-
-        Course course = courseService.searchCourseByNo(courseNo);
-        model.addAttribute("course", course);
-
-
-
-        return "course/course";
+        int res = courseService.deleteBookmark(bookmarkNo);
+        return res > 0 ? "success" : "fail";
     }
 }
-

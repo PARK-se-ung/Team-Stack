@@ -19,6 +19,10 @@ body {
     --ts-text: #ffffff;
 }
 
+.row {
+    --bs-gutter-x: 0rem; !important;
+}
+
 
 /* button style */
 .btn-outline-orange {

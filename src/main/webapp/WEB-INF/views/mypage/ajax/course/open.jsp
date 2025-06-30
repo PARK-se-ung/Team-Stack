@@ -190,7 +190,7 @@
     <div class="image-upload" onclick="document.getElementById('imageInput').click();">
       <img id="preview" alt="미리보기">
       <span id="placeholder">강의 썸네일</span>
-      <input type="file" name="thumbnail" id="imageInput" accept="image/*" required onchange="previewImage(event)">
+      <input type="file" name="thumbnailFile" id="imageInput" accept="image/*" required onchange="previewImage(event)">
     </div>
 
     <div class="section1 flex">
@@ -217,13 +217,21 @@
                onclick="document.getElementById('detailInput').click();">
             <img id="preview" alt="미리보기">
             <span id="detailPlaceholder">상세 이미지</span>
-            <input type="file" id="detailInput" name="courseContent" accept="image/*" style="display:none" required onchange="previewImage3(event)">
+            <input type="file" id="detailInput" name="contentFile" accept="image/*" style="display:none" required onchange="previewImage3(event)">
           </div>
         </div>
 
 
         <label>가격</label>
         <input type="number" name="coursePrice" id="price" placeholder="가격을 입력해주세요." required>
+
+        <label>학교급</label>
+        <select name="gradeType" required>
+          <option value="">선택하세요</option>
+          <option value="E">초등</option>
+          <option value="M">중등</option>
+          <option value="H">고등</option>
+        </select>
 
         <label>교과목</label>
         <input type="text" name="subject" placeholder="#교과목" id="catagory" required>
@@ -233,7 +241,7 @@
 
   <div class="section1">
     <label>일정</label>
-    <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="courseStartTime">
+    <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="courseStartDate">
 
     <label>장소</label>
     <div class="location">
@@ -264,7 +272,7 @@
   <div class="file-box">
     <span>강의 계획서</span>
     <label for="planFile" class="custom-file-button">파일 선택</label>
-    <input type="file" name="originalPlanName" id="planFile" accept=".pdf" style="display: none;">
+    <input type="file" name="planFile" id="planFile" accept=".pdf" style="display: none;">
     <span id="fileName" style="color:white; margin-left: 10px;"></span>
   </div>
 

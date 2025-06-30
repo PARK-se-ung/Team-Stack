@@ -8,6 +8,6 @@ public interface CourseDao {
     int insertCourse(SqlSession session,Course course);
     int insertAttach(SqlSession session,CourseAttach attach);
     int deleteBookmark(SqlSession sqlSession,int bookmarkNo);
-    Course searchCourseByNo(SqlSession session, int courseNo);
+//    Course searchCourseByNo(SqlSession session, int courseNo);
     int getCoursePrice(SqlSession session,int courseNo);
 }
