@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.ts.teamstack.home.service.HomeService;
 
 import javax.servlet.http.Cookie;
-
-@Controller
 @RequiredArgsConstructor
 public class HomeController {
 
