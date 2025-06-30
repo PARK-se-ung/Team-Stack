@@ -11,6 +11,7 @@ import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
+import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @RestController
@@ -40,6 +44,12 @@ public class CourseController {
             @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
             HttpSession session
     ) {
+        Users loginUser = (Users)session.getAttribute("loginUser");
+        if (loginUser == null) {
+
+        }
+        course.setUserId(loginUser.getUserId());
+
 
         // path 생성
         String path = session.getServletContext().getRealPath("/resources/upload/course");
@@ -129,5 +139,24 @@ public class CourseController {
     }
 
 
+    @RequestMapping("searchcoursebyno")
+    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
+                                   Model model, HttpServletResponse response){
+        Set<Integer> courseNos = new LinkedHashSet<>();
+        courseNos.add(courseNo);
+        if(recentView != null && !recentView.getValue().isEmpty()){
+            for(String no : recentView.getValue().split(",")){
+                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
+            }
+        }
+
+
+        Course course = courseService.searchCourseByNo(courseNo);
+        model.addAttribute("course", course);
+
+
+
+        return "course/course";
+    }
 }
 

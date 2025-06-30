@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>teamstack</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="${path}/resources/css/common.css">
     <link rel="stylesheet" href="${path}/resources/css/header.css">
@@ -33,13 +33,13 @@
             </a>
         </div>
         <!-- search -->
-        <div class="col-lg-5 search">
+        <div class="col-lg-6 search">
             <i class="bi bi-search search-icon"></i>
             <input type="text" class="form-control" id="search" placeholder="Team Stack">
         </div>
         <!-- nav -->
         <div class="col-lg-2 top-nav">
-            <div class="d-flex align-items-center">
+            <div class="align-items-center">
                 <% if (loginUser==null) { %>
                 <a class="me-3" href="${pageContext.request.contextPath}/user/login.do">
                     로그인
