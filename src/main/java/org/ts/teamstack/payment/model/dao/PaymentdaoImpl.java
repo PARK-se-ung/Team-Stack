@@ -7,6 +7,7 @@ import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.payment.model.dto.Payment;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class PaymentdaoImpl implements Paymentdao {
@@ -35,4 +36,28 @@ public class PaymentdaoImpl implements Paymentdao {
         //중복값이 없으면 false가 나오지
     }
 
+    @Override
+    public String getImpUid(SqlSession sqlSession, Map<String,Object> map) {
+        return sqlSession.selectOne("payment.getImpUid",map);
+    }
+
+    @Override
+    public int insertApply(SqlSession sqlSession, Map<String, Object> param) {
+        return sqlSession.insert("payment.insertApply",param);
+    }
+
+    @Override
+    public String getPaymentId(SqlSession sqlSession, String impUid) {
+        return sqlSession.selectOne("payment.getPaymentId",impUid);
+    }
+
+    @Override
+    public int insertRefund(SqlSession sqlSession, String paymentId) {
+        return sqlSession.insert("payment.insertRefund",paymentId);
+    }
+
+    @Override
+    public int deleteApply(SqlSession sqlSession, Map<String, Object> deleteApply) {
+        return sqlSession.delete("payment.deleteApply",deleteApply);
+    }
 }
