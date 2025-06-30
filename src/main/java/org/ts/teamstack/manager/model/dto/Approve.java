@@ -1,4 +1,4 @@
-package org.ts.teamstack.mypage.model.dto;
+package org.ts.teamstack.manager.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +19,5 @@ public class Approve {
     private String approveOrigin;
     private String approveRename;
     private Timestamp approveDate;
+    private String approveStatus;
 }

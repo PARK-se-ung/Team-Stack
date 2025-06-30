@@ -16,4 +16,5 @@ public class Assign {
     private String assignOriname;
     private String assignRename;
     private int scheduleNo;
+    private int scheduleWeek;
 }

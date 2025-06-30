@@ -22,10 +22,10 @@ public class CourseDaoImpl implements CourseDao {
         return session.delete("course.deleteBookmark", bookmarkNo);
     }
 
-    @Override
-    public Course searchCourseByNo(SqlSession session, int courseNo) {
-        return session.selectOne("course.searchCourseByNo", courseNo);
-    }
+//    @Override
+//    public Course searchCourseByNo(SqlSession session, int courseNo) {
+//        return session.selectOne("course.searchCourseByNo", courseNo);
+//    }
 
     @Override
     public int getCoursePrice(SqlSession session, int courseNo) {

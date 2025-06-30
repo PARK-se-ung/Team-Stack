@@ -35,7 +35,7 @@
             <c:forEach var="an" items="${homeassign}">
                 <div class="class-main-item">
                     <span class="home-title">${an.assignTitle}</span>
-                    <span class="home-date">${an.scheduleNo}주차</span>
+                    <span class="home-date">${an.scheduleWeek}주차</span>
                 </div>
             </c:forEach>
         </c:when>

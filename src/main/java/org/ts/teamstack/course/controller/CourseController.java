@@ -3,6 +3,8 @@ package org.ts.teamstack.course.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
+import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.net.http.HttpResponse;
-import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @RestController
@@ -32,14 +38,20 @@ public class CourseController {
 
     @PostMapping("/insert")
     public Map<String, Object> insertCourse(
-            @ModelAttribute Course course,
-            BindingResult br,
+            @RequestParam String courseStartDate,
             @RequestParam(value = "slideImage", required = false) MultipartFile[] upfiles,
             @RequestParam(value = "thumbnail",  required = false) MultipartFile thumbnail,
             @RequestParam(value = "courseContent",  required = false) MultipartFile content,
             @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
+            @RequestParam Course course,
+            @AuthenticationPrincipal UserDetails user,
             HttpSession session
     ) {
+        Users loginUser = (Users)session.getAttribute("loginUser");
+        if (loginUser == null) {
+            course.setUserId(loginUser.getUserId());
+        }
+
 
         // path 생성
         String path = session.getServletContext().getRealPath("/resources/upload/course");
@@ -49,8 +61,10 @@ public class CourseController {
             if(!flag) log.error("create fail");
         }
 
-        // 강의 상태를 "STAY"로 기본 설정 (승인 대기)
+        // 강의 정보 입력
         course.setCourseStatus("STAY");
+        course.setUserId(user.getUsername());
+
 
         // 썸네일 rename
         if (thumbnail != null && !thumbnail.isEmpty()) {
@@ -129,24 +143,5 @@ public class CourseController {
     }
 
 
-    @RequestMapping("searchcoursebyno")
-    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
-                                   Model model, HttpServletResponse response){
-        Set<Integer> courseNos = new LinkedHashSet<>();
-        courseNos.add(courseNo);
-        if(recentView != null && !recentView.getValue().isEmpty()){
-            for(String no : recentView.getValue().split(",")){
-                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
-            }
-        }
-
-
-        Course course = courseService.searchCourseByNo(courseNo);
-        model.addAttribute("course", course);
-
-
-
-        return "course/course";
-    }
 }
 

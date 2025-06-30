@@ -13,7 +13,7 @@
         <div class="menu-section">
             <div class="menu-title">승인</div>
             <ul>
-                <li class="menu-item active" data-tab="createAppr">권한 승인</li>
+                <li class="menu-item active" data-tab="authorAppr">권한 승인</li>
                 <li class="menu-item" data-tab="courseAppr">강의 승인</li>
             </ul>
         </div>
@@ -44,7 +44,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/manage.js"></script>
 <script>
     $(document).ready(function() {
-        manageLoad('createAppr');
+        manageLoad('authorAppr');
 
         /* 페이지 객체 생성 */
         const dequeData = new DequeData();

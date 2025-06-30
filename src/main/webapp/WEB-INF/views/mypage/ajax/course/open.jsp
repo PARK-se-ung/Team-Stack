@@ -190,7 +190,7 @@
     <div class="image-upload" onclick="document.getElementById('imageInput').click();">
       <img id="preview" alt="미리보기">
       <span id="placeholder">강의 썸네일</span>
-      <input type="file" name="thumbnail" id="imageInput" accept="image/*" required onchange="previewImage(event)">
+      <input type="file" name="thumbnailFile" id="imageInput" accept="image/*" required onchange="previewImage(event)">
     </div>
 
     <div class="section1 flex">
@@ -217,13 +217,21 @@
                onclick="document.getElementById('detailInput').click();">
             <img id="preview" alt="미리보기">
             <span id="detailPlaceholder">상세 이미지</span>
-            <input type="file" id="detailInput" name="courseContent" accept="image/*" style="display:none" required onchange="previewImage3(event)">
+            <input type="file" id="detailInput" name="contentFile" accept="image/*" style="display:none" required onchange="previewImage3(event)">
           </div>
         </div>
 
 
         <label>가격</label>
         <input type="number" name="coursePrice" id="price" placeholder="가격을 입력해주세요." required>
+
+        <label>학교급</label>
+        <select name="gradeType" required>
+          <option value="">선택하세요</option>
+          <option value="E">초등</option>
+          <option value="M">중등</option>
+          <option value="H">고등</option>
+        </select>
 
         <label>교과목</label>
         <input type="text" name="subject" placeholder="#교과목" id="catagory" required>
@@ -233,7 +241,10 @@
 
   <div class="section1">
     <label>일정</label>
-    <input type="text" id="datePicker" placeholder="시작일 (총주차)" name="courseStartTime">
+    <input type="text" id="datePicker" placeholder="시작일 (총주차)">
+    <input type="hidden" id="courseStartDate" name="courseStartDate"/>
+    <input type="hidden" id="totalWeek"       name="totalWeek"/>
+    <input type="hidden" id="recruitDate"     name="recruitDate"/>
 
     <label>장소</label>
     <div class="location">
@@ -264,7 +275,7 @@
   <div class="file-box">
     <span>강의 계획서</span>
     <label for="planFile" class="custom-file-button">파일 선택</label>
-    <input type="file" name="originalPlanName" id="planFile" accept=".pdf" style="display: none;">
+    <input type="file" name="planFile" id="planFile" accept=".pdf" style="display: none;">
     <span id="fileName" style="color:white; margin-left: 10px;"></span>
   </div>
 
@@ -400,6 +411,9 @@
       console.log(`📤 ${key} →`, val);
     }
 
+
+
+
     if (form.reportValidity()) {
       form.submit(); // 유효하면 전송
       alert("신청 완료")
@@ -413,6 +427,31 @@
 
 
 
+  <%--document.getElementById('modalConfirmBtn').addEventListener('click', function () {--%>
+  <%--  // flatpickr 인스턴스를 전역에 저장했다면--%>
+  <%--  // updateHiddenDates(null, null, window._flatpickrInstance);--%>
+  <%--  //--%>
+  <%--  // 아니면 단순히 input 값을 재파싱해도 됩니다:--%>
+  <%--  const raw = $("#datePicker").val().split(" to ");--%>
+  <%--  if (raw.length === 2) {--%>
+  <%--    const [s, e] = raw;--%>
+  <%--    const start = new Date(s), end = new Date(e);--%>
+  <%--    const msPerWeek = 7 * 24 * 60 * 60 * 1000;--%>
+  <%--    const weeks = Math.round((end - start) / msPerWeek);--%>
+  <%--    const recruit = new Date(start.getTime() + msPerWeek);--%>
+
+  <%--    const pad = n => n.toString().padStart(2, "0");--%>
+  <%--    const fmtYmd = d =>--%>
+  <%--            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;--%>
+  <%--    const fmtFull = d =>--%>
+  <%--            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +--%>
+  <%--            `${pad(d.getHours())}:${pad(d.getMinutes())}`;--%>
+
+  <%--    $("#courseStartDate").val(fmtFull(start));--%>
+  <%--    $("#totalWeek").val(weeks);--%>
+  <%--    $("#recruitDate").val(fmtYmd(recruit));--%>
+  <%--  }--%>
+  <%--});--%>
 
 
 

@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="${pageContext.request.contextPath}/resources/js/manage.js"></script>
 
-<h2> 강사 권한 승인</h2>
+<h2> 강의 승인</h2>
 <hr>
+
 

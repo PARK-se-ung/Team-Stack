@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.mypage.service.MypageService;
@@ -59,7 +60,7 @@ public class MypageController {
 
         Users loginUser = (Users) session.getAttribute("loginUser");
         pageInfo.initialize();//set한걸 초기화
-        
+
         pageInfo.setCurPage(cPage);
         pageInfo.setTotalData(mypageService.searchBookmarkCount(loginUser.getUserId()));
         pageInfo.setNumPerpage(10);
@@ -75,13 +76,48 @@ public class MypageController {
 
     /* 예약한 강의 화면 이동 */
     @RequestMapping("/reserve")
-    public String myreserve(Model model) {
+    public String myreserve(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(mypageService.selectReserveCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "reservePaging");
+
+        List<Course> reserve = mypageService.selectReserveAll(loginUser.getUserId(),pageInfo);
+
+        model.addAttribute("reserve" , reserve);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+
         return "mypage/ajax/user/reserve";
+
     }
 
     /* 신청한 강의 이동 */
     @RequestMapping("/apply")
-    public String myapply(Model model) { return "mypage/ajax/user/apply"; }
+    public String myapply(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
+
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(mypageService.selectApplyCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "applyPaging");
+
+        List<Course> apply = mypageService.selectApplyAll(loginUser.getUserId(),pageInfo);
+
+        model.addAttribute("apply" , apply);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+
+        return "mypage/ajax/user/apply"; }
 
     /* 강의 개설 자격 승인 이동 */
     @RequestMapping("/approval")
@@ -89,11 +125,44 @@ public class MypageController {
 
     /* 수강중인 강의 */
     @RequestMapping("/take")
-    public String mytake(Model model) { return "mypage/ajax/user/take"; }
+    public String mytake(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(mypageService.selectTakeCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "takePaging");
+
+        List<Course> take = mypageService.selectTakeAll(loginUser.getUserId(),pageInfo);
+
+        model.addAttribute("take" , take);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+
+
+        return "mypage/ajax/user/take"; }
 
     /* 수강 완료한 강의 */
     @RequestMapping("/complete")
-    public String mycomplete(Model model) { return "mypage/ajax/user/complete"; }
+    public String mycomplete(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(mypageService.selectCompleteCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "completePaging");
+
+        List<Course> complete = mypageService.selectCompleteAll(loginUser.getUserId(),pageInfo);
+
+        model.addAttribute("complete" , complete);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+        return "mypage/ajax/user/complete"; }
 
     /* 강의 구매 내역 이동 */
     @PostMapping("/purchase")
@@ -113,16 +182,32 @@ public class MypageController {
         pageInfo.setNumPerpage(10);
 
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
+        List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
 
-            List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
-            model.addAttribute("paymentList", payments);
-            model.addAttribute("pageBar", pageBar);
+        model.addAttribute("paymentList", payments);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
 
         return "mypage/ajax/payment/purchase"; }
 
     /* 환불 신청 이동 */
     @RequestMapping("/requestRefund")
-    public String myrequestrefund(Model model) { return "mypage/ajax/payment/requestrefund"; }
+    public String myrequestrefund(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        pageInfo.initialize();//set한걸 초기화
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(paymentService.searchPaymentCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
+        List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
+
+
+        model.addAttribute("paymentList", payments);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+        return "mypage/ajax/payment/requestrefund"; }
 
     /* 환불 신청 조회 이동 */
     @RequestMapping("/refund")
