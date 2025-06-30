@@ -46,4 +46,5 @@ public class Course {
 
     private String instructorName;
     private int bookmarkNo;
+    private int applyNo;
 }

@@ -26,6 +26,9 @@ public class PaymentController {
     private final PaymentService service;
     private final CourseService courseService;
 
+
+
+
     //response
     @RequestMapping("/insertPayment")
     @ResponseBody
@@ -47,9 +50,9 @@ public class PaymentController {
         //request는 결제 요청(완료)한 가격 & response는 토큰과 PK값을 보내서 가져온 결제예정금액
         if(request.getPaymentPrice()!=response.getBody().getResponse().getAmount()){
 
-            paymentCancel(request.getPaymentId(), iamportAccessToken,"금액이 달라요");
-            log.info(request.getPaymentId()+"???????");
-            log.error("Payment price not match"+ request.getPaymentPrice()+" "+ response.getBody().getResponse().getAmount());
+            paymentCancel(request.getPortoneId(), iamportAccessToken,"금액이 달라요");
+            log.info(request.getPaymentId()+"이게 요청하고있는 주문번호야 ");
+            log.error("가격이 맞지 않아 너가 요청한 금액은 :"+ request.getPaymentPrice()+" / DB에 있는 가격 : "+ response.getBody().getResponse().getAmount());
 
             return "fail";
         }
@@ -73,9 +76,9 @@ public class PaymentController {
 
     }
 
-    private void paymentCancel(String paymentId,String token,String reason) throws JsonProcessingException {
+    private void paymentCancel(String portoneId,String token,String reason) throws JsonProcessingException {
 
-        PaymentCancelRequest paymentCancelRequest = new PaymentCancelRequest(paymentId,reason);
+        PaymentCancelRequest paymentCancelRequest = new PaymentCancelRequest(portoneId,reason);
 
         String url= "https://api.iamport.kr/payments/cancel/";
         RestTemplate restTemplate = new RestTemplate();
@@ -87,10 +90,17 @@ public class PaymentController {
         String bodyJson = objectMapper.writeValueAsString(paymentCancelRequest);
         HttpEntity<String> entity = new HttpEntity<>(bodyJson, headers);
         ResponseEntity<PaymentCancelResponse> cancelResponse =  restTemplate.postForEntity(url, entity, PaymentCancelResponse.class);
+//
+//        log.info(cancelResponse.getStatusCode()+"이건 취소에 대한 결과야");
+//        if(!cancelResponse.getStatusCode().is2xxSuccessful()){
+//            log.error("Payment cancel failed = 401인가가 뜨면 이게 나올거야"+cancelResponse.getStatusCode().getReasonPhrase());
+//        }
 
-        log.info(cancelResponse.getStatusCode()+"");
-        if(!cancelResponse.getStatusCode().is2xxSuccessful()){
-            log.error("Payment cancel failed"+cancelResponse.getStatusCode().getReasonPhrase());
+        PaymentCancelResponse responseBody = cancelResponse.getBody();
+        if (!cancelResponse.getStatusCode().is2xxSuccessful() || responseBody == null || responseBody.getCode() != 0) {
+            String errorMsg = (responseBody != null) ? responseBody.getMessage() : "응답 body 없음";
+            log.error("Payment cancel failed: code=" + (responseBody != null ? responseBody.getCode() : "null") + ", message=" + errorMsg);
+            throw new IllegalStateException("결제 취소 실패: " + errorMsg);
         }
     }
 
@@ -112,7 +122,7 @@ public class PaymentController {
 
         } while (service.existsByPaymentId(merchantUid));
 
-        log.info("Merchant Uid is "+merchantUid);
+        log.info("방금 생성한 따끈따끈한 주문번호"+merchantUid);
 
         String token = getIamportAccessToken();
         //토큰 생성했고
@@ -144,7 +154,7 @@ public class PaymentController {
             }
             throw new IllegalArgumentException();
         }
-        log.info(response.getBody().getResponse().getAmount()+"!!!!!!!!!!!!!!!!!!!!!!");
+        log.info("DB에 저장된 가격이야 "+response.getBody().getResponse().getAmount());
         return merchantUid;
     }
 
@@ -178,7 +188,7 @@ public class PaymentController {
         ResponseEntity<PortOneTokenResponse> response = restTemplate.postForEntity(url, entity, PortOneTokenResponse.class);
         //요청에 대한 응답에 있는 엑세스 토큰을 가져와서 리턴
         PortOneTokenResponse.TokenData data = response.getBody().getResponse();
-        log.info(data.getAccess_token());
+        log.info(data.getAccess_token()+"이건 토큰이야");
         return data.getAccess_token();
 
     }

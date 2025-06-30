@@ -32,13 +32,13 @@
 
       const merchantUid = await merchantUidResponse.text();
 
-      console.log("야호"+merchantUid)
+      console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)
       IMP.request_pay(
               {
                 channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
                 pg:"uplus",
                 pay_method: "card",
-                merchant_uid: "a83bc9cf-55a3-4695-b82b-9eae3529d7de15400142244",
+                merchant_uid: merchantUid,
                 name: courseTitle,
                 amount: 5000,
                 buyer_email: "${sessionScope.loginUser.userEmail}",
@@ -73,10 +73,10 @@
                     tabLoad('bookmark'); // 페이지 새로고침
                   } else {
                     alert('결제에 실패하였습니다.');
-                    console.log("결제실패");
+                    console.log("결제실패 = 가격이 달라서 내가 막은거지?");
                   }
                 }else {
-                  var msg = '결제에 실패하였습니다.';
+                  var msg = '결제 고유번호가 같다는거지?.';
                   msg += '에러내용 : ' + rsp.error_msg;
                   alert(msg);
                 }
