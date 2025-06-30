@@ -28,32 +28,71 @@
         <div class="card-footer">
             <form id="chat-form" class="d-flex">
                 <input type="text" class="form-control me-2" id="chat-input" placeholder="메시지를 입력하세요..." />
-                <button type="button" class="btn btn-warning" id="send-btn" onclick="sendMessage()">전송</button>
+                <button type="button" class="btn btn-warning" id="send-btn" >전송</button>
             </form>
         </div>
     </div>
 </div>
 
 <script>
-    const courseNo = ${course.courseNo};
-    const currentUserId = '<%= currentUserId %>';
-    const socket = new WebSocket("ws://localhost:8080/chat");
+    <%--const socket = new WebSocket("ws://localhost:8080/teamstack/chat?courseNo=${course.courseNo}");--%>
 
-    // 수정된 sendMessage 함수
-    function sendMessage() {
-        const input = document.getElementById("chat-input");
-        const message = input.value.trim();
+    <%--const sendMessage =  function () {--%>
+    <%--    console.log("✅ [클릭됨] sendMessage 실행됨"); // ⬅ 이거 무조건 넣자--%>
 
-        if (message !== "" && socket.readyState === WebSocket.OPEN) {
-            // JSON 형태로 사용자 정보와 메시지를 함께 전송
-            const messageData = {
-                userId: currentUserId,
-                message: message,
-                courseNo: courseNo
-            };
+    <%--    const input = document.getElementById("chat-input");--%>
+    <%--    const message = input.value.trim();--%>
 
-            socket.send(JSON.stringify(messageData));
-            input.value = "";
-        }
-    }
+    <%--    if (message !== "" && socket.readyState == WebSocket.OPEN) {--%>
+    <%--        // JSON 형태로 사용자 정보와 메시지를 함께 전송--%>
+    <%--        const messageData = {--%>
+    <%--            userId: "<%=currentUserId%>",--%>
+    <%--            chatMsg: message,--%>
+    <%--            courseNo: ${course.courseNo}--%>
+    <%--        };--%>
+
+    <%--        socket.send(JSON.stringify(messageData));--%>
+    <%--        input.value = "";--%>
+    <%--    }--%>
+    <%--}--%>
+
+    <%--document.getElementById('send-btn').addEventListener('click', sendMessage);--%>
+
+
+    <%--// 브라우저 WebSocket 연결을 생성하는 JavaScript 객체--%>
+
+    <%--socket.onmessage = function(event){--%>
+    <%--    console.log("sendMessage 함수 호출됨!");--%>
+    <%--    // 메시지가 오면 발생--%>
+    <%--    const chat = JSON.parse(event.data);--%>
+    <%--    const chatBox = document.getElementById('chat-box');--%>
+    <%--    const $div = document.createElement('div');--%>
+    <%--    $div.classList.add("mb-2");--%>
+
+    <%--    if (chat.userId === "<%=currentUserId%>") {--%>
+    <%--        $div.innerHTML =--%>
+    <%--            '<div style="text-align: right;">' +--%>
+    <%--            '<strong class="text-primary">나</strong>' +--%>
+    <%--            '<span class="text-muted" style="font-size: 0.85em;">(' + chat.chatTime + ')</span><br>' +--%>
+    <%--            '<span>' + chat.chatMsg + '</span>' +--%>
+    <%--            '</div>';--%>
+    <%--    } else {--%>
+    <%--        $div.innerHTML =--%>
+    <%--            '<div>' +--%>
+    <%--            '<strong class="text-success">' + chat.userId + '</strong>' +--%>
+    <%--            '<span class="text-muted" style="font-size: 0.85em;">(' + chat.chatTime + ')</span><br>' +--%>
+    <%--            '<span>' + chat.chatMsg + '</span>' +--%>
+    <%--            '</div>';--%>
+    <%--    }--%>
+
+    <%--    // 5️⃣ 화면에 메시지 추가--%>
+    <%--    chatBox.appendChild($div);--%>
+    <%--    chatBox.scrollTop = chatBox.scrollHeight; // 자동 스크롤--%>
+    <%--};--%>
+    document.addEventListener('DOMContentLoaded', function() {
+        const courseNo = ${course.courseNo};
+        const currentUserId = ${currentUserId};
+        // 메인에서 정의한 함수 호출
+        initChattingSocket(courseNo, currentUserId);
+    });
 </script>

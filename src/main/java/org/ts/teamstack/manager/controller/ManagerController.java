@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
 import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.manager.service.ManagerService;
+import org.ts.teamstack.manager.model.dto.Approve;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -31,6 +33,35 @@ public class ManagerController {
     @RequestMapping("")
     public String manage(){
         return "manage/manage";
+    }
+
+    /* 승인 */
+    @RequestMapping("/authorAppr")
+    public String authorappr(Model model,
+                             @RequestParam(defaultValue = "1") int cPage){
+        pageInfo.initialize();
+        pageInfo.setCurPage(cPage);
+
+        List<Approve> approves = service.searchAppr(pageInfo);
+        model.addAttribute("approves", approves);
+        pageInfo.setTotalData(service.searchApprCount());
+        model.addAttribute("pageBar",
+                PageBarFactory.ajaxPageBuilder(pageInfo, "loadAuthorAppr"));
+
+        return "manage/ajax/authorappr";
+    }
+
+    @RequestMapping("/courseAppr")
+    public String courseappr(Model model,
+                             @RequestParam(defaultValue = "1")  int cPage){
+        pageInfo.initialize();
+        pageInfo.setCurPage(cPage);
+        List<Course> courses = service.searchCourseByAppr(pageInfo);
+        model.addAttribute("courses", courses);
+        pageInfo.setTotalData(service.searchCourseApprCount());
+        model.addAttribute("pageBar",
+                PageBarFactory.ajaxPageBuilder(pageInfo, "loadCourseAppr"));
+        return "manage/ajax/courseappr";
     }
 
     /* 공지 */

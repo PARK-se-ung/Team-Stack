@@ -5,10 +5,12 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dao.ManagerDao;
 import org.ts.teamstack.manager.model.dto.Alarm;
 import org.ts.teamstack.manager.model.dto.Inquire;
 import org.ts.teamstack.manager.model.dto.Notice;
+import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.user.model.dto.Users;
 
 import java.sql.Timestamp;
@@ -20,6 +22,27 @@ public class ManagerServiceImpl implements ManagerService{
 
     private final ManagerDao dao;
     private final SqlSession session;
+
+
+    @Override
+    public List<Approve> searchAppr(PageInfo pageInfo) {
+        return dao.searchAppr(session, pageInfo);
+    }
+
+    @Override
+    public int searchApprCount(){
+        return dao.searchApprCount(session);
+    }
+
+    @Override
+    public List<Course> searchCourseByAppr(PageInfo pageInfo){
+        return dao.searchCourseByAppr(session, pageInfo);
+    }
+
+    @Override
+    public int searchCourseApprCount(){
+        return dao.searchCourseApprCount(session);
+    }
 
     @Override
     public List<Notice> searchNotice(PageInfo pageInfo){

@@ -5,6 +5,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.classpage.model.dao.ClassPageDao1;
 import org.ts.teamstack.classpage.model.dto.Board;
+import org.ts.teamstack.classpage.model.dto.Schedule;
+import org.ts.teamstack.classpage.model.dto.Assign;
 import org.ts.teamstack.classpage.model.dto.Chat;
 import org.ts.teamstack.course.model.dto.Course;
 
@@ -33,14 +35,47 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     }
 
     @Override
+    public String checkUserType(String userId) {
+        return classDao.checkUserType(session,userId);
+    }
+
+    @Override
+    public List<Course> getmyCourses(String userId) {
+        return classDao.getmyCourses(session,userId);
+    }
+
+    @Override
+    public Course getPlanFile(int courseNo) { return classDao.getPlanFile(session, courseNo);}
+
+    @Override
+    public List<Schedule> getCalDate(int courseNo){return classDao.getCalDate(session,courseNo);}
+
+    @Override
+    public List<Schedule> getCalAssign(int courseNo) {return classDao.getCalAssign(session,courseNo);}
+
+    @Override
     public List<Board> getHomeNotice(int courseNo) {
         return classDao.getHomeNotice(session, courseNo);
     }
 
     @Override
-    public List<Board> getHomeAssign(int courseNo) {
+    public List<Assign> getHomeAssign(int courseNo) {
         return classDao.getHomeAssign(session, courseNo);
     }
+
+    @Override
+    public List<Board> getNotice(int courseNo) {
+        return classDao.getNotice(session, courseNo);
+    }
+
+    @Override
+    public List<Schedule> getWeek(int courseNo) {return classDao.getWeek(session, courseNo);}
+
+    @Override
+    public String getCourseId(int courseNo) {return classDao.getCourseId(session,courseNo);}
+
+    @Override
+    public int getWeekForInsert(int courseNo) {return classDao.getWeekForInsert(session,courseNo);}
 
     @Override
     public List<Chat> getChattingHistory(int courseNo) { return classDao.getChattingHistory(session,courseNo);}

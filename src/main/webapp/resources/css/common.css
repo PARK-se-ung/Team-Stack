@@ -1,12 +1,12 @@
 @font-face {
-        font-family: 'GmarketSansMedium';
+        font-family: 'Noto Sans KR';
         src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
         font-weight: normal;
         font-style: normal;
 }
 
 body {
-    font-family: 'GmarketSansMedium', 'Noto Sans KR', sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     color: #212529;
     min-height: 100vh;
 }
@@ -17,6 +17,10 @@ body {
     --ts-light-primary: #ffc4ae;
     --ts-primary: #ff7d4d;
     --ts-text: #ffffff;
+}
+
+.row {
+    --bs-gutter-x: 0rem; !important;
 }
 
 
@@ -32,4 +36,18 @@ body {
     background-color: var(--ts-primary);
     color:  var(--ts-text);
     border-color:  var(--ts-primary);
+}
+
+/* filled orange button */
+.btn-orange {
+    background-color: var(--ts-primary);
+    color: var(--ts-text);
+    border: 1px solid var(--ts-primary);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn-orange:hover {
+    background-color: #fff;
+    color: var(--ts-primary);
+    border-color: var(--ts-primary);
 }

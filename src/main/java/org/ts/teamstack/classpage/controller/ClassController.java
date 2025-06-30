@@ -33,7 +33,6 @@ public class ClassController {
         Users user1 = (Users) auth.getPrincipal();
         Course course = service.getCourse(courseNo);
 
-
         // 세션에 저장된 사용자 정보 (로그인 이후 저장된 경우만 해당)
             Object loginUser = session.getAttribute("loginUser");
             System.out.println("[세션 사용자] loginUser: " + loginUser);
@@ -48,7 +47,7 @@ public class ClassController {
             }
 
         // JSP에서 사용할 courseNo 전달
-        model.addAttribute("course", course);
+        session.setAttribute("courseNo", courseNo);
 
         return "classes/chatting"; // → /WEB-INF/views/classes/chatting.jsp 로 포워딩됨
     }
