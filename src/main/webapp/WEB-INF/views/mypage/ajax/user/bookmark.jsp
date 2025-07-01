@@ -4,19 +4,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
 <%
   Users loginUser = (Users)session.getAttribute("loginUser");
 %>
-<!-- 상단 탭이 존재하는 경우 -->
 <script>
+<!-- 상단 탭이 존재하는 경우 -->
+
+  <%--window.loginUserId = "${sessionScope.loginUser.userId}";--%>
+  <%--window.loginUserEmail = "${sessionScope.loginUser.userEmail}";--%>
+  <%--window.loginUserName = "${sessionScope.loginUser.name}";--%>
+  <%--window.loginUserPhone = "${sessionScope.loginUser.userPhone}";--%>
+  <%--function getContextPath() {--%>
+  <%--  return "${pageContext.request.contextPath}";--%>
+  <%--}--%>
+
     <!-- nav 전환 로직 -->
-      $(".nav-item").on('click', function() {
+      $(".nav-item").on('click', function(e) {
         let $current = $(this);
         let tabId = $current.data('nav');
         $(".nav-item").removeClass("active");
         $current.addClass("active");
         tabLoad(tabId);
+        e.stopPropagation();
       });
 
     <!-- 환불 으어어억 기능 -->
@@ -54,72 +66,82 @@
 
 
     <%--<!-- 결제 기능 -->--%>
-      IMP.init("imp02858447");
 
 
-    $(document).on('click', '.btn-apply', async function(e){
 
-      const courseNo = $(e.target).data('course-no');
-      const courseTitle = $(e.target).data('course-title');
-      const coursePrice = $(e.target).data('course-price');
-      const applyType = $(e.target).data('apply-type');
+    $(document).on('click', '.btn-apply', (()=>{
+      let execute=false;
 
-      const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
+      return async function(e){
+        if(!execute){
+          execute=true;
 
-      const merchantUid = await merchantUidResponse.text();
+          IMP.init("imp02858447");
+          const courseNo = $(e.target).data('course-no');
+          const courseTitle = $(e.target).data('course-title');
+          const coursePrice = $(e.target).data('course-price');
+          const applyType = $(e.target).data('apply-type');
 
-      console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)
-      IMP.request_pay(
-              {
-                channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
-                pg:"uplus",
-                pay_method: "card",
-                merchant_uid: merchantUid,
-                name: courseTitle,
-                amount: coursePrice,
-                buyer_email: "${sessionScope.loginUser.userEmail}",
-                buyer_name: "${sessionScope.loginUser.name}",
-                buyer_tel: "${sessionScope.loginUser.userPhone}"
-              },
-              async function (rsp) {
-              // 결제 종료 시 호출되는 콜백 함수
-              // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
-              // 결제 결과를 처리하는 로직을 작성합니다.
-                if (rsp.success) {
-                  const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
-                          {
-                            method:"POST",
-                            headers:{
-                              'Content-type':'application/json'
-                            },
-                            body:JSON.stringify({
-                              paymentId: rsp.merchant_uid,
-                              userId: "${sessionScope.loginUser.userId}",
-                              paymentPrice: rsp.paid_amount,
-                              portoneId: rsp.imp_uid,
-                              paymentDate:rsp.paid_at,
-                              courseNo: courseNo, // 실제 강의 번호 사용
-                              applyType:applyType
-                            })
-                          });
-                  const result=await response.text();
+          const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
 
-                  if (result === "success") {
-                    alert('결제가 완료되었습니다.');
-                    console.log("결제성공");
-                    tabLoad('bookmark'); // 페이지 새로고침
-                  } else {
-                    alert('결제에 실패하였습니다.');
-                    tabLoad('bookmark');
-                    console.log("결제실패 = 가격이 달라서 내가 막은거지?");
-                  }
-                }else {
-                  var msg = '결제 고유번호가 같다는거지?.';
-                  msg += '에러내용 : ' + rsp.error_msg;
-                  alert(msg);
-                }
-              });
-    });
+          const merchantUid = await merchantUidResponse.text();
+
+          console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)
+          IMP.request_pay(
+                  {
+                    channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
+                    pg:"uplus",
+                    pay_method: "card",
+                    merchant_uid: merchantUid,
+                    name: courseTitle,
+                    amount: coursePrice,
+                    buyer_email: "${sessionScope.loginUser.userEmail}",
+                    buyer_name: "${sessionScope.loginUser.name}",
+                    buyer_tel: "${sessionScope.loginUser.userPhone}"
+                  },
+                  async function (rsp) {
+                  // 결제 종료 시 호출되는 콜백 함수
+                  // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
+                  // 결제 결과를 처리하는 로직을 작성합니다.
+                    if (rsp.success) {
+                      const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
+                              {
+                                method:"POST",
+                                headers:{
+                                  'Content-type':'application/json'
+                                },
+                                body:JSON.stringify({
+                                  paymentId: rsp.merchant_uid,
+                                  userId: "${sessionScope.loginUser.userId}",
+                                  paymentPrice: rsp.paid_amount,
+                                  portoneId: rsp.imp_uid,
+                                  paymentDate:rsp.paid_at,
+                                  courseNo: courseNo, // 실제 강의 번호 사용
+                                  applyType:applyType
+                                })
+                              });
+                      const result=await response.text();
+
+                      if (result === "success") {
+                        alert('결제가 완료되었습니다.');
+                        console.log("결제성공");
+                        tabLoad('bookmark'); // 페이지 새로고침
+                      } else {
+                        alert('결제에 실패하였습니다.');
+                        tabLoad('bookmark');
+                        console.log("결제실패 = 가격이 달라서 내가 막은거지?");
+                      }
+                      execute=false;
+                    }else {
+                      var msg = rsp.error_msg;
+                      alert(msg);
+                      execute=false;
+                    }
+
+                  });
+        }
+       }
+    })());
 
     //결제 저장 기능
 
@@ -309,89 +331,3 @@
     ${pageBar}
   </div>
 </div>
-
-<style>
-  .current-container {
-    margin: 40px auto;
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  thead {
-    background: #f5f5f5;
-  }
-
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: top;
-  }
-
-  tr:hover {
-    background-color: #fafafa;
-  }
-
-  .view-toggle {
-    margin-top: 10px;
-  }
-
-  .btn-apply, .btn-bookmark-remove,.btn-refund,.btn-freeApply,.btn-reserve {
-    padding: 4px 10px;
-    font-size: 13px;
-    background: #455ba8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    min-width: 50px;
-  }
-
-  .btn-bookmark-remove {
-    background: #f44336;
-  }
-
-  .btn-apply:hover {
-    background: #3a4a8c;
-  }
-
-  .btn-bookmark-remove:hover {
-    background: #d32f2f;
-  }
-
-  .search-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
-  }
-
-  .search-form {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .search-form input[type="date"],
-  .search-form select,
-  .search-form input[type="text"] {
-    padding: 4px 8px;
-    font-size: 13px;
-  }
-
-  .search-form button {
-    padding: 4px 14px;
-    font-size: 13px;
-    background: #455ba8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-</style>

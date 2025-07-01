@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 25. 6. 20.
-  Time: 오전 10:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
@@ -56,7 +49,7 @@
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/course.js"></script>
-<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
 
 <script>
 $(document).ready(function() {
