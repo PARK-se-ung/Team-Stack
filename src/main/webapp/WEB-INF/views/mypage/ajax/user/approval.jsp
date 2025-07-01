@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
     <div class="nav-item" data-nav="info">개인 정보 수정</div>
-    <div class="nav-item active" data-nav="approval">강의 개설 자격 승인</div>
+    <c:if test="${sessionScope.loginUser.userType=='G'}">
+        <div class="nav-item active" data-nav="approval">강의 개설 자격 승인</div>
+    </c:if>
 
 </div>
 <!-- 아래 div안에서 필요한 html 코드 작성 -->

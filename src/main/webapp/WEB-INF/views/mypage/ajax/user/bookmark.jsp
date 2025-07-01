@@ -4,22 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mypage.css">
-<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
-
-<%
-  Users loginUser = (Users)session.getAttribute("loginUser");
-%>
 <script>
 <!-- 상단 탭이 존재하는 경우 -->
-
-  <%--window.loginUserId = "${sessionScope.loginUser.userId}";--%>
-  <%--window.loginUserEmail = "${sessionScope.loginUser.userEmail}";--%>
-  <%--window.loginUserName = "${sessionScope.loginUser.name}";--%>
-  <%--window.loginUserPhone = "${sessionScope.loginUser.userPhone}";--%>
-  <%--function getContextPath() {--%>
-  <%--  return "${pageContext.request.contextPath}";--%>
-  <%--}--%>
 
     <!-- nav 전환 로직 -->
       $(".nav-item").on('click', function(e) {
@@ -64,17 +50,9 @@
       });
     });
 
-
     <%--<!-- 결제 기능 -->--%>
 
-
-
-    $(document).on('click', '.btn-apply', (()=>{
-      let execute=false;
-
-      return async function(e){
-        if(!execute){
-          execute=true;
+    $('.btn-apply').on('click',async function(e){
 
           IMP.init("imp02858447");
           const courseNo = $(e.target).data('course-no');
@@ -139,13 +117,7 @@
                     }
 
                   });
-        }
-       }
-    })());
-
-    //결제 저장 기능
-
-
+    });
 
     <!-- 북마크 취소 기능 -->
     $(document).ready(function() {
@@ -170,8 +142,8 @@
 
       });
     });
-
 </script>
+
 <div class="navs">
   <div class="nav-item active" data-nav="bookmark">북마크한 강의</div>
   <div class="nav-item" data-nav="reserve">예약한 강의</div>
@@ -196,8 +168,6 @@
   <div class="view-toggle">
     <strong><a>이미지형</a></strong> | <a>리스트형</a>
   </div>
-
-
 
   <table>
     <thead>

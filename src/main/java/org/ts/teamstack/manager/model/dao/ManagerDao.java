@@ -1,6 +1,7 @@
 package org.ts.teamstack.manager.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
+import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
@@ -15,6 +16,9 @@ public interface ManagerDao {
     List<Notice> searchNotice(SqlSession session, PageInfo pageInfo);
     int searchNoticeCount(SqlSession session);
     int insertNotice(SqlSession session, Notice notice);
+    int updateNotice(SqlSession session, Notice notice);
+    int deleteNotice(SqlSession session, int noticeNo);
+    Notice searchNoticeByNo(SqlSession session, int no);
     int insertAlarm(SqlSession session, Alarm alarm);
     List<Users> searchUsersByType(SqlSession session, String type);
     int insertInquire(SqlSession session, Inquire inquire);
@@ -25,5 +29,6 @@ public interface ManagerDao {
     int searchApprCount(SqlSession session);
     List<Course> searchCourseByAppr(SqlSession session, PageInfo pageInfo);
     int searchCourseApprCount(SqlSession session);
-
+    int updateCourse(SqlSession session, String status, int courseNo);
+    int insertSchedule(SqlSession session, Schedule schedule);
 }

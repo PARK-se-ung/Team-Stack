@@ -1,17 +1,11 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: qkrtp
-  Date: 2025-06-24
-  Time: 오전 11:54
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="current-container">
     <h2> 공지 사항</h2>
     <button class="btn btn-outline-orange" onclick="manageLoad('writenotice')"> 작성 </button>
     <hr>
-    <div id="notice-container">
+    <div id="notice-container" class="me-3">
         <table>
             <thead>
             <tr>
@@ -31,15 +25,20 @@
                     <tr>
                         <td>${notice.noticeNo}</td>
                         <td>${notice.noticeTitle}</td>
-                        <td>${notice.noticeDate}</td>
-                        <td><button>수정</button></td>
-                        <td><button>삭제</button></td>
+                        <td><fmt:formatDate value="${notice.noticeDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                        <td>
+                            <button class="btn btn-outline-orange" data-no="${notice.noticeNo}" id="notice-convertor">수정</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-orange" data-no="${notice.noticeNo}" id="notice-delete">삭제</button>
+                        </td>
                     </tr>
                 </c:forEach>
             </c:if>
             </tbody>
         </table>
     </div>
+    <br>
     <div class="pageBar-container">
         ${pageBar}
     </div>

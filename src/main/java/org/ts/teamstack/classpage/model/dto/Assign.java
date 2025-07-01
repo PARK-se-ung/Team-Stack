@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Assign {
     private int assignNo;
-    private String assignTitle;
-    private String assignContent;
     private String assignOriname;
     private String assignRename;
     private int scheduleNo;
     private int scheduleWeek;
+    private int courseNo;
 }

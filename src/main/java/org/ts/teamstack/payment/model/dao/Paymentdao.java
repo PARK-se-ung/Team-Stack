@@ -9,8 +9,8 @@ import java.util.Map;
 
 public interface Paymentdao {
     int insertPayment(SqlSession session,Payment payment);
-    List<Payment> searchAllPayment(SqlSession session, String userId, PageInfo pageInfo);
-    int searchPaymentCount(SqlSession session, String userId);
+    List<Payment> searchAllPurchase(SqlSession session, String userId, PageInfo pageInfo);
+    int searchPurchaseCount(SqlSession session, String userId);
 
     boolean existsByPaymentId(SqlSession sqlSession, String merchantUid);
 
@@ -23,4 +23,8 @@ public interface Paymentdao {
     int insertRefund(SqlSession sqlSession, String paymentId);
 
     int deleteApply(SqlSession sqlSession, Map<String, Object> deleteApply);
+
+    int searchSalesCount(SqlSession sqlSession, String userId);
+
+    List<Payment> searchAllSales(SqlSession sqlSession, String userId, PageInfo pageInfo);
 }

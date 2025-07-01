@@ -45,4 +45,20 @@ public interface ClassPageDao1 {
     String getCourseId(SqlSession session, int courseNo);
 
     int getWeekForInsert(SqlSession session, int courseNo);
+
+    List<Schedule> getWeekForInsert2(SqlSession session, int courseNo);
+
+    int insertNotice(SqlSession session, Board notice);
+
+    int assignCheck(SqlSession session, Schedule schedule);
+
+    int aFileUpdate(SqlSession session, Assign assign);
+
+    int aFileInsert(SqlSession session, Assign assign);
+
+    int scheduleUpdate(SqlSession session, Schedule schedule);
+
+    List<String> getUsersByCourseId(SqlSession session, int courseNo);
+
+    List<Integer> getClassCount(SqlSession session, int courseNo);
 }

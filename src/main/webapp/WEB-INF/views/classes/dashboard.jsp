@@ -174,7 +174,7 @@
         loading("dashcontent");
         const response = await fetch("${path}/dashactive");
         const data = await response.text();
-        document.getElementById("dashcontent").innerHTML=data;
+        $('#dashcontent').html(data);
     }
 </script>
 </html>

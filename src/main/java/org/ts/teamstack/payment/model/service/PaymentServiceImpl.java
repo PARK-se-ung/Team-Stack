@@ -50,13 +50,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payment> searchAllPayment(String userId, PageInfo pageInfo) {
-        return dao.searchAllPayment(sqlSession,userId,pageInfo);
+    public List<Payment> searchAllPurchase(String userId, PageInfo pageInfo) {
+        return dao.searchAllPurchase(sqlSession,userId,pageInfo);
     }
 
     @Override
-    public int searchPaymentCount(String userId) {
-        return dao.searchPaymentCount(sqlSession,userId);
+    public int searchPurchaseCount(String userId) {
+        return dao.searchPurchaseCount(sqlSession,userId);
     }
     @Override
     public boolean existsByPaymentId(String merchantUid) {
@@ -73,5 +73,13 @@ public class PaymentServiceImpl implements PaymentService {
         return dao.getPaymentId(sqlSession,impUid);
     }
 
+    @Override
+    public int searchSalesCount(String userId) {
+        return dao.searchSalesCount(sqlSession,userId);
+    }
 
+    @Override
+    public List<Payment> searchAllSales(String userId, PageInfo pageInfo) {
+        return dao.searchAllSales(sqlSession,userId,pageInfo);
+    }
 }

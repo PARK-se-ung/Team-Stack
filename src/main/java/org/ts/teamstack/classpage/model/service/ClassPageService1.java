@@ -38,9 +38,25 @@ public interface ClassPageService1 {
 
     int getWeekForInsert(int courseNo);
 
+    List<Schedule> getWeekForInsert2(int courseNo);
+
     List<Chat> getChattingHistory (int courseNo);
 
     int setChattingHistory (Chat chat);
 
     Course getCourse(int courseNo);
+
+    int insertNotice(Board notice);
+
+    int assignCheck(Schedule schedule);
+
+    int aFileUpdate(Assign assign);
+
+    int aFileInsert(Assign assign);
+
+    int scheduleUpdate(Schedule schedule);
+
+    List<String> getUsersByCourseId(int courseNo);
+
+    List<Integer> getClassCount(int courseNo);
 }

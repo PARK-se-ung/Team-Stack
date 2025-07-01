@@ -4,8 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 import org.ts.teamstack.course.model.dto.Course;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +42,10 @@ public class FileUpload {
     }
 
     public static void saveFile(MultipartFile file, String path, String rename) throws IOException {
-        if(!file.isEmpty()){
+        if (!file.isEmpty()) {
+            if (!createPath(path)) {
+                throw new IOException("디렉토리 생성 실패: " + path);
+            }
             File newImage = new File(path, rename);
             file.transferTo(newImage);
         }
