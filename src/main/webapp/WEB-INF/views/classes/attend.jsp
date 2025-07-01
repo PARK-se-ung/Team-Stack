@@ -392,7 +392,7 @@
                 userId: name,
                 attendStatus : attend,
                 courseNo : courseNo,
-                courseCount :currentSession
+                attendRound :currentSession
             });
         });
         console.log(studentData);
@@ -407,11 +407,16 @@
             .then(response=>{
                 if(!response.ok){
                     throw new Error('서버 오류가 발생 하였습니다.');
-                    return
-                } else {
-                    throw n
+                    return response.json();
                 }
             })
+            .then(data=>{
+                alert('저장에 완료되었습니다.')
+            })
+            .catch(error=>{
+                console.log("에러 : ", error);
+            })
+
 
 
 

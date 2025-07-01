@@ -7,6 +7,7 @@ import org.ts.teamstack.classpage.model.dto.Chat;
 import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.course.model.dto.Course;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface ClassPageDao1 {
@@ -61,4 +62,6 @@ public interface ClassPageDao1 {
     List<String> getUsersByCourseId(SqlSession session, int courseNo);
 
     List<Integer> getClassCount(SqlSession session, int courseNo);
+
+    Date getStartDate(SqlSession session, int courseNo);
 }

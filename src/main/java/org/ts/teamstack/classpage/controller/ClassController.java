@@ -6,14 +6,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.ts.teamstack.classpage.model.dto.Attendence;
 import org.ts.teamstack.classpage.model.dto.Chat;
 import org.ts.teamstack.classpage.model.service.ClassPageService1;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -63,5 +68,25 @@ public class ClassController {
         System.out.println(course.getCourseTitle());
 
         return "classes/attend";
+    }
+
+    @RequestMapping("/insertattend.do")
+    @ResponseBody
+    public String insertattend(@RequestBody List<Attendence> attendences){
+
+        for (Attendence attendence : attendences) {
+            int courseNo = attendence.getCourseNo();
+            Date startDate = service.getStartDate(courseNo);
+            int round = attendence.getAttendRound();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(startDate);
+            cal.add(Calendar.DATE, (round - 1) * 7); // N-1주 후 날짜
+            Date roundDate = (Date) cal.getTime();
+            System.out.println("회차 날짜: " + roundDate);
+            attendence.setAttendDate(roundDate);
+
+//            int insertResult = service.
+        }
+        return "success";
     }
 }
