@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/manage.css">
 <!-- section -->
 <section class="page-container">
     <!-- aside -->
@@ -55,6 +55,7 @@
             let current = $current.data('tab');
             let prev = $(".menu-item.active").data('tab');
             if(current !== prev) dequeData.move('shift', prev);
+
             disableHandler(dequeData);
             $(".menu-item").removeClass("active");
             $current.addClass("active");

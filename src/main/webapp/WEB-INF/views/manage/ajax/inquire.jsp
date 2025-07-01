@@ -1,40 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: qkrtp
-  Date: 2025-06-25
-  Time: 오후 5:26
-  To change this template use File | Settings | File Templates.
---%>
-<style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  thead {
-    background: #f5f5f5;
-  }
-
-  th {
-    font-size: 16px;
-  }
-
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: top;
-    font-size : 13px;
-  }
-
-  tr:hover {
-    background-color: #fafafa;
-  }
-
-
-</style>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="java.time.LocalDateTime" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <article>
   <div>
@@ -46,6 +12,7 @@
         <option value="N" ${status == "N"? "selected" : ""}>미처리</option>
       </select>
     </div>
+    <br>
     <table>
       <thead>
         <tr>
@@ -63,7 +30,8 @@
             <td>${inquire.inquireNo}</td>
             <td>${inquire.inquireTitle}</td>
             <td>${inquire.userId}</td>
-            <td>${inquire.inquireDate}</td>
+            <td>
+              <fmt:formatDate value="${inquire.inquireDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
             <td>
               <c:if var="statusFlag" test="${inquire.inquireStatus.equals('N')}">
                 <button class="btn btn-outline-orange" onclick="alarmModal(${inquire.inquireNo})">문의 처리</button>
@@ -82,6 +50,7 @@
 
     </table>
   </div>
+  <br>
   <div>
     ${pageBar}
   </div>

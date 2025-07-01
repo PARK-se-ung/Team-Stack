@@ -10,9 +10,9 @@ import java.util.Map;
 
 public interface HomeDao {
     List<Course>  selectCoursesByCourseNos(SqlSession session, List<Integer> courseNoList);
-    List<Course> selectElementaryCourses(SqlSession session);
-    List<Course> selectMiddleCourses(SqlSession session);
-    List<Course> selectHighCourses(SqlSession session);
+    List<Course> selectElementaryCourses(SqlSession session, String keyword);
+    List<Course> selectMiddleCourses(SqlSession session, String keyword);
+    List<Course> selectHighCourses(SqlSession session, String keyword);
     Course searchCourseByNo(SqlSession session, int courseNo);
     List<Course> searchCourseByRest(SqlSession session, Map<String, Object> parsedParams, PageInfo pageInfo);
     int searchCourseCount(SqlSession session,  Map<String, Object> parsedParams);

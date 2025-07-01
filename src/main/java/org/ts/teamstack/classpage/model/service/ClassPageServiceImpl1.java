@@ -78,6 +78,9 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     public int getWeekForInsert(int courseNo) {return classDao.getWeekForInsert(session,courseNo);}
 
     @Override
+    public List<Schedule> getWeekForInsert2(int courseNo) {return classDao.getWeekForInsert2(session,courseNo);}
+
+    @Override
     public List<Chat> getChattingHistory(int courseNo) { return classDao.getChattingHistory(session,courseNo);}
 
     @Override
@@ -86,5 +89,39 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     @Override
     public Course getCourse(int courseNo) {
         return classDao.getCourse(session, courseNo);
+    }
+
+    @Override
+    public int insertNotice(Board notice) {
+        return classDao.insertNotice(session, notice);
+    }
+
+    @Override
+    public int assignCheck(Schedule schedule) {
+        return classDao.assignCheck(session, schedule);
+    }
+
+    @Override
+    public int aFileUpdate(Assign assign) {
+        return classDao.aFileUpdate(session, assign);
+    }
+
+    @Override
+    public int aFileInsert(Assign assign) {
+        return classDao.aFileInsert(session, assign);
+    }
+
+    @Override
+    public int scheduleUpdate(Schedule schedule) {
+        return classDao.scheduleUpdate(session, schedule);
+    }
+
+    @Override
+    public List<String> getUsersByCourseId(int courseNo) { return classDao.getUsersByCourseId(session,courseNo);
+    }
+
+    @Override
+    public List<Integer> getClassCount(int courseNo) {
+        return classDao.getClassCount(session,courseNo);
     }
 }

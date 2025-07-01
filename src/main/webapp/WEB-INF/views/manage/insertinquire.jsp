@@ -16,7 +16,7 @@
         <hr>
         <div class="row justify-content-between align-items-center">
             <div class="col-lg-11">
-                <input id="userId" type="text" disabled class="form-control" value="user_0001">
+                <input id="userId" type="text" disabled class="form-control" value="${sessionScope.loginUser.userId}">
                 <input id="title" type="text" class="form-control" placeholder="제목 입력">
             </div>
             <div class="col-lg-1 d-flex justify-content-end align-items-center">

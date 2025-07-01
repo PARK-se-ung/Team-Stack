@@ -29,17 +29,17 @@ public class HomeDaoImpl implements HomeDao {
     }
 
     @Override
-    public List<Course> selectElementaryCourses(SqlSession session){
-        return session.selectList("home.selectElementaryCourses", null, new RowBounds(0, 5));
+    public List<Course> selectElementaryCourses(SqlSession session, String keyword) {
+        return session.selectList("home.selectElementaryCourses", keyword, new RowBounds(0, 5));
     }
 
     @Override
-    public List<Course> selectMiddleCourses(SqlSession session) {
-        return session.selectList("home.selectMiddleCourses", null, new RowBounds(0, 5));
+    public List<Course> selectMiddleCourses(SqlSession session, String keyword) {
+        return session.selectList("home.selectMiddleCourses", keyword, new RowBounds(0, 5));
     }
     @Override
-    public List<Course> selectHighCourses(SqlSession session) {
-        return session.selectList("home.selectHighCourses", null, new RowBounds(0, 5));
+    public List<Course> selectHighCourses(SqlSession session, String keyword) {
+        return session.selectList("home.selectHighCourses", keyword, new RowBounds(0, 5));
     }
 
     @Override

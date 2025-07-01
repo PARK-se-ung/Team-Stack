@@ -3,11 +3,10 @@ package org.ts.teamstack.manager.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.common.service.FileDownloadService;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
 import org.ts.teamstack.manager.model.dto.Inquire;
@@ -15,6 +14,9 @@ import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.manager.service.ManagerService;
 import org.ts.teamstack.manager.model.dto.Approve;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class ManagerController {
 
     private final ManagerService service;
+    private final FileDownloadService fileDownloadService;
     private final PageInfo pageInfo;
 
     @RequestMapping("")
@@ -56,12 +59,32 @@ public class ManagerController {
                              @RequestParam(defaultValue = "1")  int cPage){
         pageInfo.initialize();
         pageInfo.setCurPage(cPage);
+        pageInfo.setNumPerpage(5);
         List<Course> courses = service.searchCourseByAppr(pageInfo);
         model.addAttribute("courses", courses);
         pageInfo.setTotalData(service.searchCourseApprCount());
         model.addAttribute("pageBar",
                 PageBarFactory.ajaxPageBuilder(pageInfo, "loadCourseAppr"));
         return "manage/ajax/courseappr";
+    }
+
+    @PostMapping("/updateCourse")
+    @ResponseBody
+    public int updateCourse(Model model,
+                               @RequestParam(value = "status") String status,
+                               @RequestParam(value = "courseNo") int courseNo) {
+        return service.updateCourse(status, courseNo);
+    }
+
+    /* 강의 계획서 다운로드 */
+    @GetMapping("/download")
+    public void download(Model model,
+                         @RequestParam(value = "oriname") String origin,
+                         @RequestParam(value = "rename") String rename,
+                         HttpServletRequest request,
+                         HttpServletResponse response) throws Exception {
+        String path = request.getSession().getServletContext().getRealPath("/resources/uploads");
+        fileDownloadService.downloadPdfFile(origin, rename, path, request, response);
     }
 
     /* 공지 */
@@ -86,7 +109,8 @@ public class ManagerController {
     }
 
     @RequestMapping("/insertnotice")
-    public String insertNotice(@RequestParam String title,
+    @ResponseBody
+    public int insertNotice(@RequestParam String title,
                                @RequestParam String content,
                                @RequestParam String alarm,
                                Model model){
@@ -94,24 +118,35 @@ public class ManagerController {
                             .noticeTitle(title)
                             .noticeContent(content)
                             .build();
-        model.addAttribute("result", service.insertNotice(notice, alarm));
+        return service.insertNotice(notice, alarm);
+    }
 
-        return "manage/ajax/notice";
+    @RequestMapping("/convertNotice")
+    public String convertNotice(@RequestParam(value = "noticeNo") int noticeNo, Model model){
+        model.addAttribute("notice", service.searchNoticeByNo(noticeNo));
+        return "manage/ajax/writenotice";
     }
 
     @RequestMapping("/updatenotice")
     @ResponseBody
-    public int updateNotice(@RequestParam String title,
-                               @RequestParam String content,
-                               @RequestParam String alarm,
-                               Model model){
+    public int updateNotice(@RequestParam int noticeNo,
+                           @RequestParam String title,
+                           @RequestParam String content,
+                           @RequestParam String alarm,
+                           Model model){
         Notice notice = Notice.builder()
+                .noticeNo(noticeNo)
                 .noticeTitle(title)
                 .noticeContent(content)
                 .build();
-        return service.insertNotice(notice, alarm);
+        return service.updateNotice(notice, alarm);
     }
 
+    @RequestMapping("/deleteNotice")
+    @ResponseBody
+    public int deleteNotice(@RequestParam int noticeNo, Model model){
+        return service.deleteNotice(noticeNo);
+    }
 
     /* 알람 */
     @RequestMapping("/alarm")
@@ -151,8 +186,14 @@ public class ManagerController {
     }
 
     @RequestMapping("/inquirepage")
-    public String insertInquire(){
+    public String insertInquire(HttpSession session, Model model){
+        if(session.getAttribute("loginUser") == null) {
+            model.addAttribute("msg", "로그인 후에 이용가능합니다.");
+            model.addAttribute("loc", "/user/login.do");
+            return "common/msg";
+        };
         return "manage/insertinquire";
+
     }
 
     @RequestMapping("/insertinquire")

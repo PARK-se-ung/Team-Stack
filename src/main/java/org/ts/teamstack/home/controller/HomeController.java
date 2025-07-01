@@ -25,8 +25,8 @@ public class HomeController {
     private final PageInfo pageInfo;
 
     @RequestMapping("/")
-    public String index(@CookieValue(name = "teamstackRecentView",required = false)
-                            Cookie cookie,
+    public String index(@CookieValue(name = "teamstackRecentView",required = false) Cookie cookie,
+                        @RequestParam(defaultValue = "") String keyword,
                             Model model){
 
         /* cookie 세팅 */
@@ -44,7 +44,7 @@ public class HomeController {
         }
 
         /* 초중고 데이터 저장 */
-        model.addAttribute("course" , service.homeCourses());
+        model.addAttribute("course" , service.homeCourses(keyword));
         return "index";
     }
 

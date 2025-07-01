@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: qkrtp
-  Date: 2025-06-25
-  Time: 오전 10:17
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <article class="include-container">
   <h2>알람</h2>

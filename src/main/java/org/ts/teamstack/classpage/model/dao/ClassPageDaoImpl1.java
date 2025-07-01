@@ -97,4 +97,44 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     public int getWeekForInsert(SqlSession session, int courseNo) {
         return session.selectOne("getWeekForInsert", courseNo);
     }
+
+    @Override
+    public List<Schedule> getWeekForInsert2(SqlSession session, int courseNo) {
+        return session.selectList("getWeekForInsert2", courseNo);
+    }
+
+    @Override
+    public int insertNotice(SqlSession session, Board notice) {
+        return session.insert("insertBoardNotice", notice);
+    }
+
+    @Override
+    public int assignCheck(SqlSession session, Schedule schedule) {
+        return session.selectOne("assignCheck", schedule);
+    }
+
+    @Override
+    public int aFileUpdate(SqlSession session, Assign assign) {
+        return session.update("aFileUpdate", assign);
+    }
+
+    @Override
+    public int aFileInsert(SqlSession session, Assign assign) {
+        return session.insert("aFileInsert", assign);
+    }
+
+    @Override
+    public int scheduleUpdate(SqlSession session, Schedule schedule) {
+        return session.update("scheduleUpdate", schedule);
+    }
+
+    @Override
+    public List<String> getUsersByCourseId(SqlSession session, int courseNo) {
+        return session.selectList("classes.getUsersByCourseId",courseNo);
+    }
+
+    @Override
+    public List<Integer> getClassCount(SqlSession session, int courseNo) {
+        return session.selectList("classes.getClassCount",courseNo);
+    }
 }
