@@ -3,6 +3,7 @@ package org.ts.teamstack.manager.model.dao;
 import org.apache.ibatis.session.SqlSession;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Repository;
+import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
@@ -35,6 +36,11 @@ public class ManagerDaoImpl implements ManagerDao{
     @Override
     public int searchCourseApprCount(SqlSession session){
         return session.selectOne("manager.searchCourseApprCount");
+    }
+
+    @Override
+    public int insertSchedule(SqlSession session, Schedule  schedule){
+        return session.insert("insertSchedule", schedule);
     }
 
     @Override
@@ -101,4 +107,5 @@ public class ManagerDaoImpl implements ManagerDao{
     public int updateInquire(SqlSession session, int no){
         return session.update("manager.updateInquire", no);
     }
+
 }

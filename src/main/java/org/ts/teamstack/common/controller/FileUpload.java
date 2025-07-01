@@ -42,7 +42,10 @@ public class FileUpload {
     }
 
     public static void saveFile(MultipartFile file, String path, String rename) throws IOException {
-        if(!file.isEmpty()){
+        if (!file.isEmpty()) {
+            if (!createPath(path)) {
+                throw new IOException("디렉토리 생성 실패: " + path);
+            }
             File newImage = new File(path, rename);
             file.transferTo(newImage);
         }

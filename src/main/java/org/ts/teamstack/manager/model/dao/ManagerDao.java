@@ -1,6 +1,7 @@
 package org.ts.teamstack.manager.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
+import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
@@ -29,5 +30,5 @@ public interface ManagerDao {
     List<Course> searchCourseByAppr(SqlSession session, PageInfo pageInfo);
     int searchCourseApprCount(SqlSession session);
     int updateCourse(SqlSession session, String status, int courseNo);
-
+    int insertSchedule(SqlSession session, Schedule schedule);
 }

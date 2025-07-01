@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.home.model.dao.HomeDao;
@@ -16,6 +17,7 @@ import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.user.model.dto.Users;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -63,6 +65,15 @@ public class ManagerServiceImpl implements ManagerService{
             if(flag == 0){
                 throw new RuntimeException("alarm insert fail");
             } else {
+                for(int i = 1; i <= course.getTotalWeek(); i++){
+                    Schedule schedule = Schedule.builder()
+                                    .courseNo(courseNo)
+                                    .scheduleWeek(i)
+                                    .build();
+                    if(dao.insertSchedule(session, schedule) == 0) {
+                        throw new RuntimeException("schedule insert fail");
+                    }
+                }
 
             }
         }
