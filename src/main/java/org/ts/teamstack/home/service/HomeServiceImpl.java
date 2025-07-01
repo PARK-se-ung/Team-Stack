@@ -29,11 +29,12 @@ public class HomeServiceImpl implements HomeService {
      return dao.updateAlarm(session, no);
     }
 
-    public Map<String, List<Course>> homeCourses() {
+    @Override
+    public Map<String, List<Course>> homeCourses(String keyword) {
         Map<String, List<Course>> map = new HashMap<>();
-        List<Course> elem = dao.selectElementaryCourses(session);
-        List<Course> midd = dao.selectMiddleCourses(session);
-        List<Course> high = dao.selectHighCourses(session);
+        List<Course> elem = dao.selectElementaryCourses(session, keyword);
+        List<Course> midd = dao.selectMiddleCourses(session, keyword);
+        List<Course> high = dao.selectHighCourses(session, keyword);
         map.put("elem", elem);
         map.put("midd", midd);
         map.put("high", high);

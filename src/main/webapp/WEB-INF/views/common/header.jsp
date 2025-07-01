@@ -81,6 +81,7 @@
     </div>
 </header>
 <script>
+    /* 알람 */
     $(document).ready(function() {
         $('#alarmMessages').on('click', function(e) {
             e.stopPropagation();
@@ -108,16 +109,6 @@
 
         toRemoveAlarmId = alarmId;
     }
-    // $(document).on('click','.alarm-item', function () {
-    //     alert("test");
-    //     const alarmId = $(this).data('id');
-    //     const content = $(this).data('content');
-    //
-    //     $('#alarmModalBody').text(content);
-    //     $('#alarmModal').modal('show');
-    //
-    //     toRemoveAlarmId = alarmId;
-    // });
 
     $('#alarmModal').on('hidden.bs.modal', function () {
         if (toRemoveAlarmId !== null) {
@@ -160,4 +151,14 @@
             }
         })
     }
+
+    /* 헤더 검색창 */
+    $(document).on('keyup', '#search', function(event) {
+        if (event.key === 'Enter') {
+            const keyword = $(this).val().trim();
+            if (keyword.length > 0) {
+                location.href = "${pageContext.request.contextPath}/?keyword=" + encodeURIComponent(keyword);
+            }
+        }
+    });
 </script>
