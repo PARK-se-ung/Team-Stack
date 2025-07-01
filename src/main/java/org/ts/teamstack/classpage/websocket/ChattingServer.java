@@ -40,8 +40,9 @@ public class ChattingServer extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        HttpSession httpSession = (HttpSession) RequestContextHolder.currentRequestAttributes().resolveReference(RequestAttributes.REFERENCE_SESSION);
-        Integer courseNo = (Integer)httpSession.getAttribute("course");
+
+
+        Integer courseNo = (Integer)session.getAttributes().get("courseNo");
         // WebSocket의 경우에는 request. 으로 가져올 수 없기 때문에 beforeHandShake 단계에서 courseNo를 저장 시켜서 넘겨주어야함
 
         if (courseNo != null) {
