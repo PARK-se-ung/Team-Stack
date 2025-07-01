@@ -13,6 +13,9 @@ public interface ManagerService {
     List<Notice> searchNotice(PageInfo pageInfo);
     int searchNoticeCount();
     int insertNotice(Notice notice, String alarm);
+    int updateNotice(Notice notice, String alarm);
+    int deleteNotice(int noticeNo);
+    Notice searchNoticeByNo(int no);
     int insertAlarm(Alarm alarm, String type);
     int insertInquire(Inquire inquire);
     List<Inquire> searchInquire(PageInfo pageInfo, String status);
@@ -22,4 +25,7 @@ public interface ManagerService {
     int searchApprCount();
     List<Course> searchCourseByAppr(PageInfo pageInfo);
     int searchCourseApprCount();
+    int updateCourse(String status, int courseNo);
+
+
 }

@@ -15,6 +15,9 @@ public interface ManagerDao {
     List<Notice> searchNotice(SqlSession session, PageInfo pageInfo);
     int searchNoticeCount(SqlSession session);
     int insertNotice(SqlSession session, Notice notice);
+    int updateNotice(SqlSession session, Notice notice);
+    int deleteNotice(SqlSession session, int noticeNo);
+    Notice searchNoticeByNo(SqlSession session, int no);
     int insertAlarm(SqlSession session, Alarm alarm);
     List<Users> searchUsersByType(SqlSession session, String type);
     int insertInquire(SqlSession session, Inquire inquire);
@@ -25,5 +28,6 @@ public interface ManagerDao {
     int searchApprCount(SqlSession session);
     List<Course> searchCourseByAppr(SqlSession session, PageInfo pageInfo);
     int searchCourseApprCount(SqlSession session);
+    int updateCourse(SqlSession session, String status, int courseNo);
 
 }

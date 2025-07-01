@@ -27,7 +27,7 @@
     <div class="row flex-row justify-content-between">
         <!-- logo -->
         <div class="ms-3 col-lg-3 logo-container">
-            <a href="" class="brand">
+            <a href="${path}" class="brand">
                 <i class="bi bi-person-circle fs-4"></i>
                 <span class="h4 mb-0">Team Stack</span>
             </a>

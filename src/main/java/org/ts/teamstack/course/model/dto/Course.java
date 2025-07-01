@@ -25,7 +25,7 @@ public class Course {
     private int coursePrice;
     private String courseAddress;
     private String courseContent;
-    private String courseStartDate;
+    private Date courseStartDate;
     private int totalWeek;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -39,7 +39,7 @@ public class Course {
     private String renamePlanName;
     private String courseStatus;
     private Timestamp courseDate;
-    private String courseStartTime;
+    private int courseStartTime;
     private int courseTime;
     private int personnel;
     private List<CourseAttach> files;

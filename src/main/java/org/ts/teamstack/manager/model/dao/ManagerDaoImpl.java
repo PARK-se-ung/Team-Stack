@@ -1,6 +1,7 @@
 package org.ts.teamstack.manager.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
@@ -11,6 +12,7 @@ import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.user.model.dto.Users;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ManagerDaoImpl implements ManagerDao{
@@ -36,6 +38,11 @@ public class ManagerDaoImpl implements ManagerDao{
     }
 
     @Override
+    public int updateCourse(SqlSession session, String status, int courseNo) {
+        return session.update("manager.updateCourse", Map.of("status", status, "courseNo", courseNo));
+    }
+
+    @Override
     public List<Notice> searchNotice(SqlSession session, PageInfo pageInfo){
         return session.selectList("manager.searchNotice", null, pageInfo.getRowBounds());
     }
@@ -46,8 +53,23 @@ public class ManagerDaoImpl implements ManagerDao{
     }
 
     @Override
+    public Notice searchNoticeByNo(SqlSession session, int no) {
+        return session.selectOne("manager.searchNoticeByNo", no);
+    }
+
+    @Override
     public int insertNotice(SqlSession session, Notice notice) {
         return session.insert("manager.insertNotice", notice);
+    }
+
+    @Override
+    public int updateNotice(SqlSession session, Notice notice) {
+        return session.update("manager.updateNotice", notice);
+    }
+
+    @Override
+    public int deleteNotice(SqlSession session, int no) {
+        return session.delete("manager.deleteNotice", no);
     }
 
     @Override
