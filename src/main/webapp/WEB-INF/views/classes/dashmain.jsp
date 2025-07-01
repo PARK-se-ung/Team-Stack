@@ -204,7 +204,8 @@
                 return response.text(); // JSP 결과(html)를 텍스트로 받음
             })
             .then(html => {
-                document.getElementById('tab-content').innerHTML = html;
+                // document.getElementById('tab-content').innerHTML = html;
+                $('#tab-content').html(html);
             })
             .catch(error => {
                 console.error('에러 발생:', error);
@@ -226,5 +227,6 @@
     });
 
 </script>
+<%--<script src="${pageContext.request.contextPath}/resources/js/chatting.js"></script>--%>
 </body>
 </html>
