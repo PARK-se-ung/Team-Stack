@@ -79,7 +79,7 @@ function bookmarkPaging(cPage){
     })
 }
 
-/* 결제 내역 페이징 처리 */
+/* 구매 내역 페이징 처리 */
 function purchasePaging(cPage){
     $.ajax({
         url: getContextPath() + "/mypage/purchase",
@@ -91,6 +91,21 @@ function purchasePaging(cPage){
             $(".main-content").html(data);
         },
         error: errorContent("purchase")
+    })
+}
+
+/* 판매 내역 페이징 처리 */
+function salesPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/sales",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("sales")
     })
 }
 

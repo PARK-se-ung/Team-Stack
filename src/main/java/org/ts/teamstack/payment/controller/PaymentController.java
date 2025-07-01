@@ -14,6 +14,8 @@ import org.ts.teamstack.payment.model.service.PaymentService;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -27,7 +29,46 @@ public class PaymentController {
     private final CourseService courseService;
 
 
+    @RequestMapping("/getImpUid")
+    @ResponseBody
+    public String getImpUid(@RequestParam String userId, @RequestParam int courseNo){
 
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("courseNo",courseNo);
+        String ImpUid = service.getImpUid(map);
+
+        return ImpUid;
+    }
+
+    @RequestMapping("/cancelPayment")
+    @ResponseBody
+    public String cancelPayment(@RequestBody Map<String, String> request){
+        String impUid = request.get("imp_uid");
+        String reason = request.get("reason");
+        String userId = request.get("userId");
+        String courseNo = request.get("courseNo");
+
+        Map<String,Object> deleteApply = new HashMap<>();
+        deleteApply.put("userId",userId);
+        deleteApply.put("courseNo",courseNo);
+
+        try {
+            String token = getIamportAccessToken();
+            paymentCancel(impUid, token, reason);
+            String paymentId = service.getPaymentId(impUid);
+            int result = service.insertRefund(paymentId,deleteApply);
+
+            if(result > 0) {
+                return "success";
+            } else {
+                return "fail";
+            }
+        } catch (Exception e) {
+            log.error("환불 요청 실패", e);
+            return "fail";
+        }
+    }
 
     //response
     @RequestMapping("/insertPayment")
@@ -65,10 +106,15 @@ public class PaymentController {
                 .paymentDate(new Timestamp(request.getPaymentDate() * 1000))
                 .courseNo(request.getCourseNo())
                 .build();
-        int result = service.insertPayment(payment);
+       Map<String,Object> insertApply = new HashMap<>();
+        insertApply.put("userId",request.getUserId());
+        insertApply.put("courseNo",request.getCourseNo());
+        insertApply.put("applyType",request.getApplyType());
+
+        int result = service.insertPayment(payment,insertApply);
 
         if(result > 0) {
-            //성공
+            //결제성공하면 신청 테이블에 insert
             return "success";
         }else{
             return "fail";

@@ -28,32 +28,13 @@
         <div class="card-footer">
             <form id="chat-form" class="d-flex">
                 <input type="text" class="form-control me-2" id="chat-input" placeholder="메시지를 입력하세요..." />
-                <button type="button" class="btn btn-warning" id="send-btn" onclick="sendMessage()">전송</button>
+                <button type="button" class="btn btn-warning" id="send-btn" >전송</button>
             </form>
         </div>
     </div>
 </div>
-
+<script src="${pageContext.request.contextPath}/resources/js/chatting.js"></script>
 <script>
-    const courseNo = ${course.courseNo};
-    const currentUserId = '<%= currentUserId %>';
-    const socket = new WebSocket("ws://localhost:8080/chat");
-
-    // 수정된 sendMessage 함수
-    function sendMessage() {
-        const input = document.getElementById("chat-input");
-        const message = input.value.trim();
-
-        if (message !== "" && socket.readyState === WebSocket.OPEN) {
-            // JSON 형태로 사용자 정보와 메시지를 함께 전송
-            const messageData = {
-                userId: currentUserId,
-                message: message,
-                courseNo: courseNo
-            };
-
-            socket.send(JSON.stringify(messageData));
-            input.value = "";
-        }
-    }
+    connectionChatting('<%=currentUserId%>');
 </script>
+

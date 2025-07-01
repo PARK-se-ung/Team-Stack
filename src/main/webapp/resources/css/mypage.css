@@ -1,0 +1,83 @@
+.current-container {
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+thead {
+    background: #f5f5f5;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+}
+
+tr:hover {
+    background-color: #fafafa;
+}
+
+.view-toggle {
+    margin-top: 10px;
+}
+
+.btn-apply, .btn-bookmark-remove,.btn-refund,.btn-freeApply,.btn-reserve {
+    padding: 4px 10px;
+    font-size: 13px;
+    background: #455ba8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 50px;
+}
+
+.btn-bookmark-remove {
+    background: #f44336;
+}
+
+.btn-apply:hover {
+    background: #3a4a8c;
+}
+
+.btn-bookmark-remove:hover {
+    background: #d32f2f;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.search-form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.search-form input[type="date"],
+.search-form select,
+.search-form input[type="text"] {
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
+.search-form button {
+    padding: 4px 14px;
+    font-size: 13px;
+    background: #455ba8;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

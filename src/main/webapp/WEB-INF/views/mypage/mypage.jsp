@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 25. 6. 20.
-  Time: 오전 10:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/views/common/header.jsp"/>
@@ -27,7 +20,10 @@
             <div class="menu-title">내 강의내역</div>
             <ul>
                 <li class="menu-item" data-tab="bookmark">내 활동</li>
-                <li class="menu-item" data-tab="open">개설 강의 관리</li>
+                <c:if test="${sessionScope.loginUser.userType=='I'}">
+                    <li class="menu-item" data-tab="open">개설 강의 관리</li>
+                </c:if>
+
             </ul>
         </div>
         <div class="menu-section">
@@ -40,7 +36,9 @@
             <div class="menu-title">결제</div>
             <ul>
                 <li class="menu-item" data-tab="purchase">결제내역조회</li>
+                <c:if test="${sessionScope.loginUser.userType=='I'}">
                 <li class="menu-item" data-tab="sales">환불신청조회</li>
+                </c:if>
             </ul>
         </div>
     </div>
@@ -56,6 +54,7 @@
 </div>
 <script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/course.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
 <script>

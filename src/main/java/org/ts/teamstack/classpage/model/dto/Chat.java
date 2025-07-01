@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +18,5 @@ public class Chat {
     private int courseNo;
     private String userId;
     private String chatMsg;
-    private Date chatTime;
+    private Timestamp chatTime =new Timestamp(System.currentTimeMillis());
 }

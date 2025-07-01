@@ -1,91 +1,123 @@
 <%@ page import="org.ts.teamstack.user.model.dto.Users" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%
-  Users loginUser = (Users)session.getAttribute("loginUser");
-%>
-
-<!-- 상단 탭이 존재하는 경우 -->
 <script>
+<!-- 상단 탭이 존재하는 경우 -->
+
     <!-- nav 전환 로직 -->
-      $(".nav-item").on('click', function() {
+      $(".nav-item").on('click', function(e) {
         let $current = $(this);
         let tabId = $current.data('nav');
         $(".nav-item").removeClass("active");
         $current.addClass("active");
         tabLoad(tabId);
+        e.stopPropagation();
       });
 
-    <%--<!-- 결제 기능 -->--%>
-      IMP.init("imp02858447");
-
-
-    $(document).on('click', '.btn-apply', async function(e){
-
+    <!-- 환불 으어어억 기능 -->
+    $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){
       const courseNo = $(e.target).data('course-no');
-      const courseTitle = $(e.target).data('course-title');
-      const coursePrice = $(e.target).data('course-price');
-
-      const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
-
-      const merchantUid = await merchantUidResponse.text();
-
-      console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)
-      IMP.request_pay(
-              {
-                channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
-                pg:"uplus",
-                pay_method: "card",
-                merchant_uid: merchantUid,
-                name: courseTitle,
-                amount: 5000,
-                buyer_email: "${sessionScope.loginUser.userEmail}",
-                buyer_name: "${sessionScope.loginUser.name}",
-                buyer_tel: "${sessionScope.loginUser.userPhone}"
-              },
-              async function (rsp) {
-              // 결제 종료 시 호출되는 콜백 함수
-              // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
-              // 결제 결과를 처리하는 로직을 작성합니다.
-                if (rsp.success) {
-                  const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
-                          {
-                            method:"POST",
-                            headers:{
-                              'Content-type':'application/json'
-                            },
-                            body:JSON.stringify({
-                              paymentId: rsp.merchant_uid,
-                              userId: "${sessionScope.loginUser.userId}",
-                              paymentPrice: rsp.paid_amount,
-                              portoneId: rsp.imp_uid,
-                              paymentDate:rsp.paid_at,
-                              courseNo: courseNo // 실제 강의 번호 사용
-                            })
-                          });
-                  const result=await response.text();
-
-                  if (result === "success") {
-                    alert('결제가 완료되었습니다.');
-                    console.log("결제성공");
-                    tabLoad('bookmark'); // 페이지 새로고침
-                  } else {
-                    alert('결제에 실패하였습니다.');
-                    console.log("결제실패 = 가격이 달라서 내가 막은거지?");
-                  }
-                }else {
-                  var msg = '결제 고유번호가 같다는거지?.';
-                  msg += '에러내용 : ' + rsp.error_msg;
-                  alert(msg);
-                }
-              });
+      const userId = "${sessionScope.loginUser.userId}";
+      const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
+      const impUid = await impUidResponse.text();
+      $.ajax({
+        url:"${pageContext.request.contextPath}/payment/cancelPayment",
+        type:"POST",
+        contentType:"application/json",
+        data:JSON.stringify({
+          "imp_uid": impUid,
+          "reason": "사용자 요청 환불",
+          "userId":userId,
+          "courseNo":courseNo
+        }),
+        dataType:"text",
+        success: function(result) {
+          if(result === "success") {
+            alert("환불이 정상적으로 처리되었습니다.");
+            tabLoad('bookmark'); // 페이지 새로고침
+          } else {
+            alert("환불 처리에 실패했습니다.");
+            tabLoad('bookmark');
+          }
+        },
+        error: function() {
+          alert("서버 오류로 환불 요청에 실패했습니다.");
+          tabLoad('bookmark');
+        }
+      });
     });
 
-    //결제 저장 기능
+    <%--<!-- 결제 기능 -->--%>
 
+    $('.btn-apply').on('click',async function(e){
 
+          IMP.init("imp02858447");
+          const courseNo = $(e.target).data('course-no');
+          const courseTitle = $(e.target).data('course-title');
+          const coursePrice = $(e.target).data('course-price');
+          const applyType = $(e.target).data('apply-type');
+
+          const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
+
+          const merchantUid = await merchantUidResponse.text();
+
+          console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)
+          IMP.request_pay(
+                  {
+                    channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
+                    pg:"uplus",
+                    pay_method: "card",
+                    merchant_uid: merchantUid,
+                    name: courseTitle,
+                    amount: coursePrice,
+                    buyer_email: "${sessionScope.loginUser.userEmail}",
+                    buyer_name: "${sessionScope.loginUser.name}",
+                    buyer_tel: "${sessionScope.loginUser.userPhone}"
+                  },
+                  async function (rsp) {
+                  // 결제 종료 시 호출되는 콜백 함수
+                  // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
+                  // 결제 결과를 처리하는 로직을 작성합니다.
+                    if (rsp.success) {
+                      const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
+                              {
+                                method:"POST",
+                                headers:{
+                                  'Content-type':'application/json'
+                                },
+                                body:JSON.stringify({
+                                  paymentId: rsp.merchant_uid,
+                                  userId: "${sessionScope.loginUser.userId}",
+                                  paymentPrice: rsp.paid_amount,
+                                  portoneId: rsp.imp_uid,
+                                  paymentDate:rsp.paid_at,
+                                  courseNo: courseNo, // 실제 강의 번호 사용
+                                  applyType:applyType
+                                })
+                              });
+                      const result=await response.text();
+
+                      if (result === "success") {
+                        alert('결제가 완료되었습니다.');
+                        console.log("결제성공");
+                        tabLoad('bookmark'); // 페이지 새로고침
+                      } else {
+                        alert('결제에 실패하였습니다.');
+                        tabLoad('bookmark');
+                        console.log("결제실패 = 가격이 달라서 내가 막은거지?");
+                      }
+                      execute=false;
+                    }else {
+                      var msg = rsp.error_msg;
+                      alert(msg);
+                      execute=false;
+                    }
+
+                  });
+    });
 
     <!-- 북마크 취소 기능 -->
     $(document).ready(function() {
@@ -104,13 +136,14 @@
           },
           error: function () {
             alert("북마크 취소가 안됩니당 :(");
+            tabLoad('bookmark');
           }
         });
 
       });
     });
-
 </script>
+
 <div class="navs">
   <div class="nav-item active" data-nav="bookmark">북마크한 강의</div>
   <div class="nav-item" data-nav="reserve">예약한 강의</div>
@@ -154,6 +187,15 @@
     <tbody>
     <c:if test="${not empty bookmarks}">
       <c:forEach var="b" items="${bookmarks}">
+        <%-- 모집 시작일 Date 객체로 변환 --%>
+        <fmt:parseDate value="${b.recruitDate}" pattern="yyyy-MM-dd" var="recruitDateObj"/>
+        <%-- 모집 종료일 = 모집 시작일 + 7일(밀리초) --%>
+        <c:set var="millisIn7Days" value="${7 * 24 * 60 * 60 * 1000}" />
+        <c:set var="recruitEndDateMillis" value="${recruitDateObj.time + millisIn7Days}" />
+        <%-- 오늘 날짜 --%>
+        <c:set var="now" value="<%= new java.util.Date() %>" />
+        <c:set var="nowMillis" value="${now.time}" />
+
         <tr>
           <td>
             <button class="btn-bookmark-remove" data-bookmark-no="${b.bookmarkNo}">★</button>
@@ -174,10 +216,74 @@
           <td><fmt:formatDate value="${b.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${b.coursePrice}" type="number"/>원</td>
           <td>
-            <button class="btn-apply"
-                    data-course-no="${b.courseNo}"
-                    data-course-title="${b.courseTitle}"
-                    data-course-price="${b.coursePrice}">신청</button>
+            <c:choose>
+              <%-- 1. 무료 강의 --%>
+              <c:when test="${b.coursePrice == 0}">
+                <c:choose>
+                  <%-- 모집 종료 --%>
+                  <c:when test="${nowMillis > recruitEndDateMillis}">
+                    <span style="color:#888;">모집 종료</span>
+                  </c:when>
+                  <%-- 모집 시작 전: 예약 --%>
+                  <c:when test="${nowMillis < recruitDateObj.time}">
+                    <button class="btn-freeApply"
+                            data-course-no="${b.courseNo}"
+                            data-course-title="${b.courseTitle}"
+                            data-apply-type="RESERVE">예약</button>
+                  </c:when>
+                  <%-- 모집 시작~종료: 신청 --%>
+                  <c:otherwise>
+                    <button class="btn-freeApply"
+                            data-course-no="${b.courseNo}"
+                            data-course-title="${b.courseTitle}"
+                            data-apply-type="APPLY">신청</button>
+                  </c:otherwise>
+                </c:choose>
+              </c:when>
+              <%-- 2. 유료 강의 --%>
+              <c:otherwise>
+                <c:choose>
+                  <%-- 신청 이력 없음 --%>
+                  <c:when test="${empty b.applyNo}">
+                    <c:choose>
+                      <c:when test="${nowMillis > recruitEndDateMillis}">
+                        <span style="color:#888;">모집 종료</span>
+                      </c:when>
+                      <c:when test="${nowMillis < recruitDateObj.time}">
+                        <button class="btn-apply"
+                                data-course-no="${b.courseNo}"
+                                data-course-title="${b.courseTitle}"
+                                data-course-price="${b.coursePrice}"
+                                data-apply-type="RESERVE">예약</button>
+                      </c:when>
+                      <c:otherwise>
+                        <button class="btn-apply"
+                                data-course-no="${b.courseNo}"
+                                data-course-title="${b.courseTitle}"
+                                data-course-price="${b.coursePrice}"
+                                data-apply-type="APPLY">신청/결제</button>
+                      </c:otherwise>
+                    </c:choose>
+                  </c:when>
+                  <%-- 신청 이력 있음 --%>
+                  <c:otherwise>
+                    <c:choose>
+                      <c:when test="${b.applyType == 'APPLY' || b.applyType == 'RESERVE'}">
+                        <button class="btn-refund"
+                                data-apply-no="${b.applyNo}"
+                                data-course-no="${b.courseNo}">환불신청</button>
+                      </c:when>
+                      <c:when test="${b.applyType == 'TAKE' || b.applyType == 'COMPLETE'}">
+                        <span style="color:#888;">수강중/완료</span>
+                      </c:when>
+                      <c:otherwise>
+                        <!-- 기타 상태 처리 -->
+                      </c:otherwise>
+                    </c:choose>
+                  </c:otherwise>
+                </c:choose>
+              </c:otherwise>
+            </c:choose>
           </td>
         </tr>
       </c:forEach>
@@ -195,89 +301,3 @@
     ${pageBar}
   </div>
 </div>
-
-<style>
-  .current-container {
-    margin: 40px auto;
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  thead {
-    background: #f5f5f5;
-  }
-
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: top;
-  }
-
-  tr:hover {
-    background-color: #fafafa;
-  }
-
-  .view-toggle {
-    margin-top: 10px;
-  }
-
-  .btn-apply, .btn-bookmark-remove {
-    padding: 4px 10px;
-    font-size: 13px;
-    background: #455ba8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    min-width: 50px;
-  }
-
-  .btn-bookmark-remove {
-    background: #f44336;
-  }
-
-  .btn-apply:hover {
-    background: #3a4a8c;
-  }
-
-  .btn-bookmark-remove:hover {
-    background: #d32f2f;
-  }
-
-  .search-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
-  }
-
-  .search-form {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .search-form input[type="date"],
-  .search-form select,
-  .search-form input[type="text"] {
-    padding: 4px 8px;
-    font-size: 13px;
-  }
-
-  .search-form button {
-    padding: 4px 14px;
-    font-size: 13px;
-    background: #455ba8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-</style>

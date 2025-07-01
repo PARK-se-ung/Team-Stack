@@ -1,34 +1,27 @@
 package org.ts.teamstack.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
-import org.ts.teamstack.course.model.dto.Apply;
-import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.mypage.service.MypageService;
 import org.ts.teamstack.payment.model.dto.Payment;
+import org.ts.teamstack.payment.model.dto.Refund;
 import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static org.ts.teamstack.user.model.dto.UserType.G;
-import static org.ts.teamstack.user.model.dto.UserType.I;
-
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/mypage")
 public class MypageController {
-
 
     private final PaymentService paymentService;
     private final PageInfo pageInfo;
@@ -36,7 +29,9 @@ public class MypageController {
 
     /* 마이페이지 메인화면 이동*/
     @RequestMapping("")
-    public String mypage(){
+    public String mypage(Model model, HttpSession session){
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        model.addAttribute("loginUser", loginUser);
         return "mypage/mypage";
     }
 
@@ -49,14 +44,6 @@ public class MypageController {
     /* 북마크 화면 이동 */
     @PostMapping("/bookmark")
     public String mybookmark(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
-        /*임시 로그인 멤버생성*/
-//        Users tempUser = Users.builder()
-//                .userId("user_0004")
-//                .userName("유저0004")
-//                .userType(I)
-//                .userEmail("user0005@user0006.com")
-//                .userPhone("010-1111-0003")
-//                .build();
 
         Users loginUser = (Users) session.getAttribute("loginUser");
         pageInfo.initialize();//set한걸 초기화
@@ -168,23 +155,16 @@ public class MypageController {
     @PostMapping("/purchase")
     public String mypurchase(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
 
-//        Users tempUser = Users.builder()
-//                .userId("user_0004")
-//                .userName("유저0004")
-//                .userType(I)
-//                .userEmail("user0005@user0006.com")
-//                .userPhone("010-1111-0003")
-//                .build();
         Users loginUser = (Users) session.getAttribute("loginUser");
         pageInfo.initialize();//set한걸 초기화
         pageInfo.setCurPage(cPage);
-        pageInfo.setTotalData(paymentService.searchPaymentCount(loginUser.getUserId()));
+        pageInfo.setTotalData(paymentService.searchPurchaseCount(loginUser.getUserId()));
         pageInfo.setNumPerpage(10);
 
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
-        List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
+        List<Payment> purchase = paymentService.searchAllPurchase(loginUser.getUserId(),pageInfo);
 
-        model.addAttribute("paymentList", payments);
+        model.addAttribute("purchase", purchase);
         model.addAttribute("loginUser", loginUser);
         model.addAttribute("pageBar", pageBar);
 
@@ -194,28 +174,61 @@ public class MypageController {
     @RequestMapping("/requestRefund")
     public String myrequestrefund(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
-        pageInfo.initialize();//set한걸 초기화
-        pageInfo.setCurPage(cPage);
-        pageInfo.setTotalData(paymentService.searchPaymentCount(loginUser.getUserId()));
-        pageInfo.setNumPerpage(10);
-
-        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "purchasePaging");
-        List<Payment> payments = paymentService.searchAllPayment(loginUser.getUserId(),pageInfo);
-
-
-        model.addAttribute("paymentList", payments);
-        model.addAttribute("loginUser", loginUser);
-        model.addAttribute("pageBar", pageBar);
+//        Users loginUser = (Users) session.getAttribute("loginUser");
+//        pageInfo.initialize();//set한걸 초기화
+//        pageInfo.setCurPage(cPage);
+//        pageInfo.setTotalData(paymentService.searchRequestRefundCount(loginUser.getUserId()));
+//        pageInfo.setNumPerpage(10);
+//
+//        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "requestRefundPaging");
+//        List<Refund> requestRefund = paymentService.searchAllrequestRefund(loginUser.getUserId(),pageInfo);
+//
+//
+//        model.addAttribute("requestRefund", requestRefund);
+//        model.addAttribute("loginUser", loginUser);
+//        model.addAttribute("pageBar", pageBar);
         return "mypage/ajax/payment/requestrefund"; }
 
     /* 환불 신청 조회 이동 */
     @RequestMapping("/refund")
-    public String myrefund(Model model) { return "mypage/ajax/payment/refund"; }
+    public String myrefund(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
+        Users loginUser = (Users) session.getAttribute("loginUser");
+
+//        pageInfo.initialize();//set한걸 초기화
+//        pageInfo.setCurPage(cPage);
+//        pageInfo.setTotalData(paymentService.searchRefundCount(loginUser.getUserId()));
+//        pageInfo.setNumPerpage(10);
+//
+//        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "refundPaging");
+//        List<Refund> refunds = paymentService.searchAllRefund(loginUser.getUserId(),pageInfo);
+//
+//
+//        model.addAttribute("refunds", refunds);
+//        model.addAttribute("loginUser", loginUser);
+//        model.addAttribute("pageBar", pageBar);
+
+        return "mypage/ajax/payment/refund"; }
 
     /* 강의 판매 내역 이동 */
     @RequestMapping("/sales")
-    public String mysales(Model model) { return "mypage/ajax/payment/sales"; }
+    public String mysales(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+
+        pageInfo.initialize();//set한걸 초기화
+        pageInfo.setCurPage(cPage);
+        pageInfo.setTotalData(paymentService.searchSalesCount(loginUser.getUserId()));
+        pageInfo.setNumPerpage(10);
+
+        StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "salesPaging");
+        List<Payment> sales = paymentService.searchAllSales(loginUser.getUserId(),pageInfo);
+
+
+        model.addAttribute("sales", sales);
+        model.addAttribute("loginUser", loginUser);
+        model.addAttribute("pageBar", pageBar);
+
+        return "mypage/ajax/payment/sales"; }
 
 
     @RequestMapping("/open")

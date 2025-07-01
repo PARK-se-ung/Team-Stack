@@ -12,5 +12,6 @@ public class PaymentRequest {
     private  String portoneId;
     private  Long paymentDate;
     private  int courseNo;
+    private String applyType;
 }
 

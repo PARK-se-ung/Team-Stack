@@ -1,16 +1,22 @@
 package org.ts.teamstack.payment.model.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dao.CourseDao;
+import org.ts.teamstack.course.service.CourseService;
 import org.ts.teamstack.payment.model.dao.Paymentdao;
 import org.ts.teamstack.payment.model.dto.Payment;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
 
@@ -18,23 +24,62 @@ public class PaymentServiceImpl implements PaymentService {
     private final SqlSession sqlSession;
 
     @Override
-    public int insertPayment(Payment payment) {
+    @Transactional
+    public int insertPayment(Payment payment,Map<String,Object> param) {
 
-        return dao.insertPayment(sqlSession, payment);
+
+        int result = dao.insertPayment(sqlSession, payment);
+        if(result > 0){
+            result = dao.insertApply(sqlSession,param);
+        }
+        return result;
+
+    }
+    @Override
+    public int insertRefund(String paymentId, Map<String,Object> deleteApply) {
+
+
+        log.info("deleteApply param: {}", deleteApply);
+        int result = dao.insertRefund(sqlSession,paymentId);
+        if(result > 0){
+        log.info("deleteApply result: {}", result);
+            result = dao.deleteApply(sqlSession,deleteApply);
+        }
+        return result;
+
     }
 
     @Override
-    public List<Payment> searchAllPayment(String userId, PageInfo pageInfo) {
-        return dao.searchAllPayment(sqlSession,userId,pageInfo);
+    public List<Payment> searchAllPurchase(String userId, PageInfo pageInfo) {
+        return dao.searchAllPurchase(sqlSession,userId,pageInfo);
     }
 
     @Override
-    public int searchPaymentCount(String userId) {
-        return dao.searchPaymentCount(sqlSession,userId);
+    public int searchPurchaseCount(String userId) {
+        return dao.searchPurchaseCount(sqlSession,userId);
     }
     @Override
     public boolean existsByPaymentId(String merchantUid) {
         return dao.existsByPaymentId(sqlSession,merchantUid);
     }
 
+    @Override
+    public String getImpUid(Map<String,Object> map) {
+        return dao.getImpUid(sqlSession,map);
+    }
+
+    @Override
+    public String getPaymentId(String impUid) {
+        return dao.getPaymentId(sqlSession,impUid);
+    }
+
+    @Override
+    public int searchSalesCount(String userId) {
+        return dao.searchSalesCount(sqlSession,userId);
+    }
+
+    @Override
+    public List<Payment> searchAllSales(String userId, PageInfo pageInfo) {
+        return dao.searchAllSales(sqlSession,userId,pageInfo);
+    }
 }

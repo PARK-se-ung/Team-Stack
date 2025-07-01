@@ -1,15 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 25. 6. 20.
-  Time: 오후 4:11
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
   <div class="nav-item" data-nav="bookmark">북마크한 강의</div>
@@ -54,25 +46,25 @@
     </thead>
     <tbody>
     <c:if test="${not empty reserve}">
-      <c:forEach var="a" items="${reserve}">
+      <c:forEach var="r" items="${reserve}">
         <tr>
-          <td>${a.courseTitle}</td>
-          <td>${a.instructorName}</td>
+          <td>${r.courseTitle}</td>
+          <td>${r.instructorName}</td>
           <td>
             <c:choose>
-              <c:when test="${a.gradeType == 'E'}">초등</c:when>
-              <c:when test="${a.gradeType == 'M'}">중등</c:when>
-              <c:when test="${a.gradeType == 'H'}">고등</c:when>
+              <c:when test="${r.gradeType == 'E'}">초등</c:when>
+              <c:when test="${r.gradeType == 'M'}">중등</c:when>
+              <c:when test="${r.gradeType == 'H'}">고등</c:when>
               <c:otherwise>기타</c:otherwise>
             </c:choose>
           </td>
-          <td>${a.subject}</td>
-          <td>${a.region}</td>
-          <td><fmt:formatDate value="${a.recruitDate}" pattern="yyyy-MM-dd"/></td>
-          <td><fmt:formatDate value="${a.courseStartDate}" pattern="yyyy-MM-dd"/></td>
-          <td><fmt:formatNumber value="${a.coursePrice}" type="number"/>원</td>
+          <td>${r.subject}</td>
+          <td>${r.region}</td>
+          <td><fmt:formatDate value="${r.recruitDate}" pattern="yyyy-MM-dd"/></td>
+          <td><fmt:formatDate value="${r.courseStartDate}" pattern="yyyy-MM-dd"/></td>
+          <td><fmt:formatNumber value="${r.coursePrice}" type="number"/>원</td>
           <td>
-            <button class="btn-refund" data-apply-no="${a.applyNo}" data-course-no="${a.courseNo}">환불신청</button>
+            <button class="btn-refund" data-apply-no="${r.applyNo}" data-course-no="${r.courseNo}">환불신청</button>
           </td>
             <%-- <td><fmt:formatDate value="${a.applyDate}" pattern="yyyy-MM-dd"/></td> --%>
         </tr>
@@ -92,76 +84,6 @@
 
 </div>
 
-<style>
-
-  .current-container {
-    margin: 40px auto;
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  thead {
-    background: #f5f5f5;
-  }
-
-  th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    vertical-align: top;
-  }
-
-  tr:hover {
-    background-color: #fafafa;
-  }
-  .view-toggle {
-    margin-top: 10px;
-  }
-  .btn-manage {
-    padding: 4px 10px;
-    font-size: 13px;
-    background: #f44336;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    min-width: 70px;
-    max-width: 90px;
-    white-space: nowrap;
-  }
-  .search-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
-  }
-  .search-form {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .search-form input[type="date"],
-  .search-form select,
-  .search-form input[type="text"] {
-    padding: 4px 8px;
-    font-size: 13px;
-  }
-  .search-form button {
-    padding: 4px 14px;
-    font-size: 13px;
-    background: #455ba8;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-</style>
 
 <!-- nav 전환 로직 -->
 <script>
@@ -171,6 +93,39 @@
     $(".nav-item").removeClass("active");
     $current.addClass("active");
     tabLoad(tabId);
+  });
+
+  <!-- 환불 으어어억 기능 -->
+  $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){
+    const courseNo = $(e.target).data('course-no');
+    const userId = "${sessionScope.loginUser.userId}";
+    const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
+    const impUid = await impUidResponse.text();
+    $.ajax({
+      url:"${pageContext.request.contextPath}/payment/cancelPayment",
+      type:"POST",
+      contentType:"application/json",
+      data:JSON.stringify({
+        "imp_uid": impUid,
+        "reason": "사용자 요청 환불",
+        "userId":userId,
+        "courseNo":courseNo
+      }),
+      dataType:"text",
+      success: function(result) {
+        if(result === "success") {
+          alert("환불이 정상적으로 처리되었습니다.");
+          tabLoad('bookmark'); // 페이지 새로고침
+        } else {
+          alert("환불 처리에 실패했습니다.");
+          tabLoad('bookmark');
+        }
+      },
+      error: function() {
+        alert("서버 오류로 환불 요청에 실패했습니다.");
+        tabLoad('bookmark');
+      }
+    });
   });
 
 </script>
