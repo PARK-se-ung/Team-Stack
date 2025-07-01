@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
@@ -16,11 +16,6 @@
             <input type="date" name="startDate" value="">
             <input type="date" name="endDate" value="">
             <select name="status">
-                <option value="">전체</option>
-                <option value="결제완료">결제완료</option>
-                <option value="환불신청중">환불신청중</option>
-                <option value="환불완료">환불완료</option>
-                <option value="OR">OR</option>
                 <option value="강사명">강사명</option>
                 <option value="강의명">강의명</option>
             </select>
@@ -32,38 +27,61 @@
     <table class="payment-table">
         <thead>
         <tr>
-            <th style="width: 120px;">결제일</th>
-            <th style="width: 200px;">강의명</th>
-            <th style="width: 120px;">강사명</th>
-            <th style="width: 100px;">금액</th>
-            <th style="width: 90px;">관리</th>
+            <th>결제번호</th>
+            <th>강의명</th>
+            <th>구매자명</th>
+            <th>결제일</th>
+            <th>금액</th>
+            <th>환불 신청</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>2025-05-12</td>
-            <td>웹 프로그래밍</td>
-            <td>홍길동</td>
-            <td>50,000원</td>
-            <td>
-                <button class="btn-manage">승인</button>
-                <button class="btn-manage">반려</button>
-            </td>
-        </tr>
-        <tr>
-            <td>2025-05-24</td>
-            <td>파이썬 마스터하기</td>
-            <td>홍길동</td>
-            <td>50,000원</td>
-            <td>
-                <button class="btn-manage">승인</button>
-                <button class="btn-manage">반려</button>
-            </td>
-        </tr>
+        <c:if test="${not empty refund}">
+            <c:forEach var="r" items="${refund}">
+                <tr>
+                    <td>${r.paymentId}</td>
+                    <td>${r.courseTitle}</td>
+                    <td>${r.userName}</td>
+                    <td style="text-align: center;">
+                        <fmt:formatDate value="${r.paymentDate}" pattern="yyyy-MM-dd"/><br>
+                        <fmt:formatDate value="${r.paymentDate}" pattern="HH:mm:ss"/>
+                    </td>
+                    <td>${r.paymentPrice}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${r.refundStatus == 'S'}">
+                                <button class="btn-approveRefund"
+                                        data-course-no="${r.courseNo}"
+                                        data-imp-uid="${r.portoneId}"
+                                        data-user-id="${r.userId}">
+                                    환불 승인
+                                </button>
+                                <button class="btn-rejectRefund"
+                                        data-course-no="${r.courseNo}"
+                                        data-imp-uid="${r.portoneId}"
+                                        data-user-id="${r.userId}">
+                                    반려</button>
+                            </c:when>
+                            <c:when test="${r.refundStatus == 'A'}">
+                                <span style="color:green;">승인 완료</span>
+                            </c:when>
+                            <c:when test="${r.refundStatus == 'D'}">
+                                <span style="color:red;">반려됨</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span style="color:#888;">-</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </c:forEach>
+        </c:if>
         <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
         </tbody>
     </table>
-
+    <div id="pageBar">
+        ${pageBar}
+    </div>
 
 </div>
 
@@ -76,4 +94,69 @@
         $current.addClass("active");
         tabLoad(tabId);
     });
+
+    $(document).off('click', '.btn-approveRefund').on('click','.btn-approveRefund',function (e){
+        if(!confirm("환불 승인하시겠습니까?")) return;
+
+        const courseNo = $(e.target).data('course-no');
+        const impUid = $(e.target).data('imp-uid');
+        const userId = $(e.target).data('user-id');
+
+    $.ajax({
+        url: "${pageContext.request.contextPath}/payment/cancelPayment",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "imp_uid": impUid,
+            "reason": "사용자 요청 환불 강사 승인",
+            "userId":userId,
+            "courseNo":courseNo
+        }),
+        dataType: "text",
+        success: function(result) {
+            if(result === "success") {
+                alert("환불이 승인되었습니다.");
+                tabLoad('refund');
+            } else {
+                alert("환불 승인에 실패했습니다.");
+            }
+        },
+        error: function() {
+            alert("서버 오류로 환불 승인에 실패했습니다.");
+        }
+    });
+    });
+
+    $(document).off('click', '.btn-rejectRefund').on('click','.btn-rejectRefund',function (e){
+        if(!confirm("환불 반려하시겠습니까?")) return;
+
+        const courseNo = $(e.target).data('course-no');
+        const impUid = $(e.target).data('imp-uid');
+        const userId = $(e.target).data('user-id');
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/payment/denyRefund",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "imp_uid": impUid,
+                "userId":userId,
+                "courseNo":courseNo
+            }),
+            dataType: "text",
+            success: function(result) {
+                if(result === "success") {
+                    alert("환불이 반려되었습니다.");
+                    tabLoad('refund');
+                } else {
+                    alert("환불 반려에 실패했습니다.");
+                }
+            },
+            error: function() {
+                alert("서버 오류로 환불 반려에 실패했습니다.");
+            }
+        });
+    });
+
+
 </script>

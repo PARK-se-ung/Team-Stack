@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.payment.model.dto.Payment;
+import org.ts.teamstack.payment.model.dto.Refund;
 
 import java.util.List;
 import java.util.Map;
@@ -52,11 +53,6 @@ public class PaymentdaoImpl implements Paymentdao {
     }
 
     @Override
-    public int insertRefund(SqlSession sqlSession, String paymentId) {
-        return sqlSession.insert("payment.insertRefund",paymentId);
-    }
-
-    @Override
     public int deleteApply(SqlSession sqlSession, Map<String, Object> deleteApply) {
         return sqlSession.delete("payment.deleteApply",deleteApply);
     }
@@ -69,5 +65,30 @@ public class PaymentdaoImpl implements Paymentdao {
     @Override
     public List<Payment> searchAllSales(SqlSession sqlSession, String userId, PageInfo pageInfo) {
         return sqlSession.selectList("payment.searchAllSales",userId,pageInfo.getRowBounds());
+    }
+
+    @Override
+    public int insertRefundRequest(SqlSession sqlSession, String paymentId) {
+        return sqlSession.insert("payment.insertRefundRequest",paymentId);
+    }
+
+    @Override
+    public List<Refund> searchAllRefund(SqlSession sqlSession, String userId, PageInfo pageInfo) {
+        return sqlSession.selectList("payment.searchAllRefund",userId,pageInfo.getRowBounds());
+    }
+
+    @Override
+    public int searchRefundCount(SqlSession sqlSession, String userId) {
+        return sqlSession.selectOne("payment.searchRefundCount",userId);
+    }
+
+    @Override
+    public int updateRefundStatus(SqlSession sqlSession, String paymentId) {
+        return sqlSession.update("payment.updateRefundStatus",paymentId);
+    }
+
+    @Override
+    public int denyRefundStatus(SqlSession sqlSession, String paymentId) {
+        return sqlSession.update("payment.denyRefundStatus",paymentId);
     }
 }
