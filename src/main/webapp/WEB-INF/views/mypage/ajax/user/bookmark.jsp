@@ -40,12 +40,10 @@
             tabLoad('bookmark'); // 페이지 새로고침
           } else {
             alert("환불 처리에 실패했습니다.");
-            tabLoad('bookmark');
           }
         },
         error: function() {
           alert("서버 오류로 환불 요청에 실패했습니다.");
-          tabLoad('bookmark');
         }
       });
     });

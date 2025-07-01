@@ -2,6 +2,7 @@ package org.ts.teamstack.payment.model.service;
 
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.payment.model.dto.Payment;
+import org.ts.teamstack.payment.model.dto.Refund;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -17,9 +18,17 @@ public interface PaymentService {
 
     String getPaymentId(String impUid);
 
-    int insertRefund(String paymentId,Map<String,Object> deleteApply);
-
     int searchSalesCount(String userId);
 
     List<Payment> searchAllSales(String userId, PageInfo pageInfo);
+
+    int insertRefundRequest(String paymentId);
+
+    int searchRefundCount(String userId);
+
+    List<Refund> searchAllRefund(String userId, PageInfo pageInfo);
+
+    int updateRefundStatus(String paymentId, Map<String, Object> deleteApply);
+
+    int denyRefundStatus(String paymentId);
 }

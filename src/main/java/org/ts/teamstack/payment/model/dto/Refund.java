@@ -16,4 +16,12 @@ public class Refund {
     private String paymentId;
     private RefundStatus refundStatus;
     private Timestamp refundDate;
+
+    private String userId;         // 구매자 ID
+    private String userName;       // 구매자명
+    private Timestamp paymentDate; // 결제일
+    private int paymentPrice;      // 결제금액
+    private String portoneId;      // imp_uid
+    private int courseNo;          // 강의번호
+    private String courseTitle;    // 강의명
 }

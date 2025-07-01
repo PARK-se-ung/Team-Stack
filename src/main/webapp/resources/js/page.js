@@ -94,6 +94,21 @@ function purchasePaging(cPage){
     })
 }
 
+/* 환불 요청 페이징 처리 */
+function requestrefundPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/requestrefund",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("requestrefund")
+    })
+}
+
 /* 판매 내역 페이징 처리 */
 function salesPaging(cPage){
     $.ajax({
