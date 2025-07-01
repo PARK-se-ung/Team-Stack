@@ -1,9 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mypage.css">
-
-<%--<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>--%>
 
 <div class="navs">
     <div class="nav-item" data-nav="bookmark">북마크한 강의</div>
@@ -78,13 +75,10 @@
         </tbody>
     </table>
 
-
     <div id="pageBar">
         ${pageBar}
     </div>
 </div>
-
-
 
 <!-- nav 전환 로직 -->
 <script>
@@ -95,7 +89,6 @@
         $current.addClass("active");
         tabLoad(tabId);
     });
-
 
     <!-- 환불 으어어억 기능 -->
     $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){

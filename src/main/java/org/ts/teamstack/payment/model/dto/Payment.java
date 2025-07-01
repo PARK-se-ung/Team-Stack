@@ -23,4 +23,6 @@ public class Payment {
 
     private String courseTitle;      // 강의명
     private String instructorName;   // 강사명
+    private String userName; //유저명
+    private RefundStatus refundStatus; //환불 상태
 }

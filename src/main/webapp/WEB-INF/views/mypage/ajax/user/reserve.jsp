@@ -1,9 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 
-<%--<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>--%>
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
   <div class="nav-item" data-nav="bookmark">북마크한 강의</div>

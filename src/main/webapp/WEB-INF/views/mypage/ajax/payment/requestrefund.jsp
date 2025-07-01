@@ -15,11 +15,6 @@
             <input type="date" name="startDate" value="">
             <input type="date" name="endDate" value="">
             <select name="status">
-                <option value="">전체</option>
-                <option value="결제완료">결제완료</option>
-                <option value="환불신청중">환불신청중</option>
-                <option value="환불완료">환불완료</option>
-                <option value="OR">OR</option>
                 <option value="강사명">강사명</option>
                 <option value="강의명">강의명</option>
             </select>
@@ -27,7 +22,6 @@
             <button type="submit">검색</button>
         </form>
     </div>
-    환불신청이야!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     <table class="payment-table">
         <thead>
         <tr>

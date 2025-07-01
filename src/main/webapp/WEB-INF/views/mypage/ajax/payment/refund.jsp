@@ -1,15 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
+
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
     <div class="nav-item" data-nav="sales">강의 판매 내역</div>
     <div class="nav-item active" data-nav="refund">환불 신청 조회</div>
-
 </div>
-
-
 
 <!-- 결제 관리 탭 -->
 <div class="current-container">
@@ -67,65 +64,7 @@
         </tbody>
     </table>
 
-    <style>
-        .search-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 16px;
-        }
-        .search-form {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .search-form input[type="date"],
-        .search-form select,
-        .search-form input[type="text"] {
-            padding: 4px 8px;
-            font-size: 13px;
-        }
-        .search-form button {
-            padding: 4px 14px;
-            font-size: 13px;
-            background: #455ba8;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
 
-        .payment-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            table-layout: fixed;
-        }
-        .payment-table th, .payment-table td {
-            padding: 10px 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            vertical-align: middle;
-            word-break: break-all;
-        }
-        .payment-table th {
-            background: #f5f5f5;
-        }
-        .payment-table tr:hover {
-            background-color: #fafafa;
-        }
-        .btn-manage {
-            padding: 4px 10px;
-            font-size: 13px;
-            background: #f44336;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            min-width: 70px;
-            max-width: 90px;
-            white-space: nowrap;
-        }
-    </style>
 </div>
 
 <!-- nav 전환 로직 -->
