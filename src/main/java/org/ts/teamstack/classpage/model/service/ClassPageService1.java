@@ -1,12 +1,11 @@
 package org.ts.teamstack.classpage.model.service;
 
-import org.ts.teamstack.classpage.model.dto.Assign;
-import org.ts.teamstack.classpage.model.dto.Board;
-import org.ts.teamstack.classpage.model.dto.Schedule;
-import org.ts.teamstack.classpage.model.dto.Chat;
+import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ClassPageService1 {
 
@@ -34,13 +33,49 @@ public interface ClassPageService1 {
 
     List<Schedule> getWeek(int courseNo);
 
+    List<Schedule> getStuAssigns(int courseNo);
+
+    Completion checkCompletion(Course course);
+
     String getCourseId(int courseNo);
 
     int getWeekForInsert(int courseNo);
+
+    List<Schedule> getWeekForInsert2(int courseNo);
 
     List<Chat> getChattingHistory (int courseNo);
 
     int setChattingHistory (Chat chat);
 
     Course getCourse(int courseNo);
+
+    int insertNotice(Board notice);
+
+    int assignCheck(Schedule schedule);
+
+    int aFileUpdate(Assign assign);
+
+    int aFileInsert(Assign assign);
+
+    int scheduleUpdate(Schedule schedule);
+
+    List<String> getUsersByCourseId(int courseNo);
+
+    List<Integer> getClassCount(int courseNo);
+
+    Date getStartDate(int courseNo);
+
+    int getAssignNo(Assign assign);
+
+    int stuAssignCheck(StudentAssign studentAssign);
+
+    int stuFileUpdate(StudentAssign studentAssign);
+
+    int stuFileInsert(StudentAssign studentAssign);
+
+    int insertAttend(Attend attend);
+
+    Map<Integer, Integer> getAttendCountByRound(int courseNo);
+
+    List<Attend> getAttend(String userId, int attendNo);
 }

@@ -2,13 +2,13 @@ package org.ts.teamstack.classpage.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import org.ts.teamstack.classpage.model.dto.Board;
-import org.ts.teamstack.classpage.model.dto.Chat;
-import org.ts.teamstack.classpage.model.dto.Schedule;
+import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
-import org.ts.teamstack.classpage.model.dto.Assign;
 
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ClassPageDaoImpl1 implements ClassPageDao1{
@@ -89,6 +89,16 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     }
 
     @Override
+    public List<Schedule> getStuAssigns(SqlSession session, int courseNo) {
+        return session.selectList("getStuAssigns", courseNo);
+    }
+
+    @Override
+    public Completion checkCompletion(SqlSession session, Course course) {
+        return session.selectOne("checkCompletion", course);
+    }
+
+    @Override
     public String getCourseId(SqlSession session, int courseNo) {
         return session.selectOne("getCourseId", courseNo);
     }
@@ -96,5 +106,87 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     @Override
     public int getWeekForInsert(SqlSession session, int courseNo) {
         return session.selectOne("getWeekForInsert", courseNo);
+    }
+
+    @Override
+    public List<Schedule> getWeekForInsert2(SqlSession session, int courseNo) {
+        return session.selectList("getWeekForInsert2", courseNo);
+    }
+
+    @Override
+    public int insertNotice(SqlSession session, Board notice) {
+        return session.insert("insertBoardNotice", notice);
+    }
+
+    @Override
+    public int assignCheck(SqlSession session, Schedule schedule) {
+        return session.selectOne("assignCheck", schedule);
+    }
+
+    @Override
+    public int aFileUpdate(SqlSession session, Assign assign) {
+        return session.update("aFileUpdate", assign);
+    }
+
+    @Override
+    public int aFileInsert(SqlSession session, Assign assign) {
+        return session.insert("aFileInsert", assign);
+    }
+
+    @Override
+    public int scheduleUpdate(SqlSession session, Schedule schedule) {
+        return session.update("scheduleUpdate", schedule);
+    }
+
+    @Override
+    public List<String> getUsersByCourseId(SqlSession session, int courseNo) {
+        return session.selectList("classes.getUsersByCourseId",courseNo);
+    }
+
+    @Override
+    public List<Integer> getClassCount(SqlSession session, int courseNo) {
+        return session.selectList("classes.getClassCount",courseNo);
+    }
+
+    @Override
+    public Date getStartDate(SqlSession session, int courseNo) {
+        return session.selectOne("classes.getStartDate",courseNo);
+    }
+
+    @Override
+    public int getAssignNo(SqlSession session, Assign assign) {
+        return session.selectOne("getAssignNo",assign);
+    }
+
+    @Override
+    public int stuAssignCheck(SqlSession session, StudentAssign studentAssign) {
+        return session.selectOne("stuAssignCheck", studentAssign);
+    }
+
+    @Override
+    public int stuAssignUpdate(SqlSession session, StudentAssign studentAssign) {
+        return session.update("stuAssignUpdate", studentAssign);
+    }
+
+    @Override
+    public int stuAssignInsert(SqlSession session, StudentAssign studentAssign) {
+        return session.insert("stuAssignInsert", studentAssign);
+    }
+
+    @Override
+    public List<Attend> getAttend(SqlSession session, String userId, int courseNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("courseNo", courseNo);
+        return session.selectList("classes.getAttend", param);
+    }
+
+    @Override
+    public int insertAttend(SqlSession session, Attend attend) {
+        return session.insert("classes.insertAttend", attend);
+    }
+    @Override
+    public List<Attend> getAttendListByCourse(SqlSession session, int courseNo) {
+        return session.selectList("classes.getAttendListByCourse", courseNo);
     }
 }

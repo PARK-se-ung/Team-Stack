@@ -5,8 +5,10 @@ import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.manager.model.dto.Approve;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MypageDao {
     List<Course> selectBookmarkAll(SqlSession sqlSession, String userId, PageInfo pageInfo);
@@ -25,4 +27,8 @@ public interface MypageDao {
     int selectCompleteCount(SqlSession session, String userId);
 
     List<Course> selectCompleteAll(SqlSession session, String userId, PageInfo pageInfo);
+
+    int insertApprove(SqlSession session, Approve approve);
+
+    String selectApprove(SqlSession session, String userId);
 }

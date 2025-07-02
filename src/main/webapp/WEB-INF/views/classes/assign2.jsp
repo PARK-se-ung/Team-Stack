@@ -3,13 +3,15 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/classes.css">
+
 <div class="class-notice-box">
     <div class="class-box-title">
-        <i class="bi bi-megaphone-fill"></i>
-        공지
+        <i class="bi bi-clipboard-check"></i>
+        과제
     </div>
     <div class="accordion" id="accordionExample">
-        <c:forEach var="n" items="${notice}" varStatus="st">
+        <c:forEach var="ss" items="${schedules}" varStatus="st">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading${st.index}">
                     <button
@@ -19,8 +21,7 @@
                             data-bs-target="#collapse${st.index}"
                             aria-expanded="false"
                             aria-controls="collapse${st.index}">
-                        <span class="home-title">${n.boardTitle}</span>
-                        <span class="home-date ms-2">${n.boardDate}</span>
+                            ${ss.scheduleWeek}주차
                     </button>
                 </h2>
                 <div
@@ -29,16 +30,41 @@
                         aria-labelledby="heading${st.index}"
                         data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                            ${n.boardContent}
+                        <div>
+                            <c:forEach var="sa" items="${ss.studentAssigns}">
+                                <c:if test="${not empty sa.userId}">
+                                    <div class="assigns d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                                ${sa.userName}(${sa.userId})
+                                        </div>
+                                        <div>
+                                            <a href="${pageContext.request.contextPath}/resources/upload/student/${sa.stuAssignRename}"
+                                               download="${sa.stuAssignOriname}"
+                                               class="btn pdf-down witem float-end">
+                                                <i class="bi bi-download"></i>
+                                                과제파일 다운로드
+                                            </a>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <c:if test="${empty sa.userId}">
+                                    과제를 제출한 학생이 없습니다.
+                                </c:if>
+                            </c:forEach>
+                        </div>
                     </div>
                 </div>
             </div>
         </c:forEach>
     </div>
-
 </div>
-    <style>
-        /* 전체 박스 배경 */
+<script>
+    $(document).ready(function (){
+
+    })
+</script>
+<style>
+    /* 전체 박스 배경 */
     .class-notice-box {
         background-color: #ff7d4d;
         border-radius: 0.5rem;
@@ -80,5 +106,9 @@
     .class-notice-box .accordion-body {
         background-color: #ffe4d8; /* 연한 #ff7d4d 톤 */
         color: #333;
+    }
+
+    .assigns{
+        height: 7vh;
     }
 </style>

@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<script src="${pageContext.request.contextPath}/resources/js/page.js"></script>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="navs">
     <div class="nav-item" data-nav="purchase">강의 구매 내역</div>
@@ -25,112 +24,68 @@
     <table class="payment-table">
         <thead>
         <tr>
+            <th>결제번호</th>
             <th>강의명</th>
             <th>강사명</th>
             <th>결제일</th>
             <th>금액</th>
             <th>환불 신청</th>
-
         </tr>
         </thead>
         <tbody>
-        <c:if test="${not empty paymentList}">
-            <c:forEach var="pay" items="${paymentList}">
+        <c:if test="${not empty purchase}">
+            <c:forEach var="rf" items="${purchase}">
                 <tr>
-                    <td>${pay.courseTitle}</td>
-                    <td>${pay.instructorName}</td>
-                    <td>${pay.paymentDate}</td>
-                    <td>${pay.paymentPrice}</td>
-                    <td>  <button class="btn-apply"
-                                  data-course-no="${b.courseNo}"
-                                  data-course-title="${b.courseTitle}"
-                                  data-course-price="${b.coursePrice}">신청</button></td>
-
+                    <td>${rf.paymentId}</td>
+                    <td>${rf.courseTitle}</td>
+                    <td>${rf.instructorName}</td>
+                    <td style="text-align: center;">
+                        <fmt:formatDate value="${rf.paymentDate}" pattern="yyyy-MM-dd"/><br>
+                        <fmt:formatDate value="${rf.paymentDate}" pattern="HH:mm:ss"/>
+                    </td>
+                    <td>
+                        <fmt:formatNumber value="${rf.paymentPrice}" type="number"/>원
+                    </td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${empty rf.refundStatus}">
+                                <!-- 환불 미신청: 환불신청 버튼 노출 -->
+                                <button class="btn-applyRefund"
+                                        data-course-no="${rf.courseNo}"
+                                        data-payment-id="${rf.paymentId}">
+                                    환불신청
+                                </button>
+                            </c:when>
+                            <c:when test="${rf.refundStatus == 'S'}">
+                                <span style="color:#888;">환불 승인 대기</span>
+                            </c:when>
+                            <c:when test="${rf.refundStatus == 'A'}">
+                                <span style="color:green;">환불 승인</span>
+                            </c:when>
+                            <c:when test="${rf.refundStatus == 'D'}">
+                                <span style="color:red;">환불 반려</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span style="color:#888;">알 수 없음</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                 </tr>
             </c:forEach>
         </c:if>
-        <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
-        </tbody>
-
-        <c:if test="${empty paymentList}">
+        <c:if test="${empty purchase}">
             <tr>
-                결제한게 없네용!ㅋㅋ
+                <td colspan="5" style="text-align: center;">환불 신청 가능한 강의가 없습니다!</td>
             </tr>
         </c:if>
+        </tbody>
     </table>
-
 
     <div id="pageBar">
         ${pageBar}
     </div>
 
 </div>
-
-<script>
-
-
-
-</script>
-
-<style>
-    .search-bar {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 16px;
-    }
-    .search-form {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-    }
-    .search-form input[type="date"],
-    .search-form select,
-    .search-form input[type="text"] {
-        padding: 4px 8px;
-        font-size: 13px;
-    }
-    .search-form button {
-        padding: 4px 14px;
-        font-size: 13px;
-        background: #455ba8;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .payment-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-        table-layout: fixed;
-    }
-    .payment-table th, .payment-table td {
-        padding: 10px 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-        vertical-align: middle;
-        word-break: break-all;
-    }
-    .payment-table th {
-        background: #f5f5f5;
-    }
-    .payment-table tr:hover {
-        background-color: #fafafa;
-    }
-    .btn-manage {
-        padding: 4px 10px;
-        font-size: 13px;
-        background: #f44336;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        min-width: 70px;
-        max-width: 90px;
-        white-space: nowrap;
-    }
-</style>
 
 <!-- nav 전환 로직 -->
 <script>
@@ -141,6 +96,32 @@
         $current.addClass("active");
         tabLoad(tabId);
     });
+
+    $(document).on('click','.btn-applyRefund', async function(e){
+        if(!confirm('환불 요청 하시겠습니까?')) return;
+        const paymentId = $(e.target).data('payment-id');
+        console.log(paymentId);
+        $.ajax({
+            url: "${pageContext.request.contextPath}/payment/requestrefund",
+            type: "POST",
+            data: {
+                paymentId: paymentId
+            },
+            dataType: "text",
+            success: function(result) {
+                if(result === "success") {
+                    alert("환불 요청이 접수되었습니다.");
+                    tabLoad('requestrefund');
+                } else {
+                    alert("환불 요청에 실패했습니다.");
+                }
+            },
+            error: function() {
+                alert("서버 오류로 환불 요청에 실패했습니다.");
+            }
+        });
+    });
+
 </script>
 
 

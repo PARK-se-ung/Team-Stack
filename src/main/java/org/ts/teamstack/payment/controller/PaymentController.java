@@ -28,6 +28,31 @@ public class PaymentController {
     private final PaymentService service;
     private final CourseService courseService;
 
+    @RequestMapping("/requestrefund")
+    @ResponseBody
+    public String requestrefund(String paymentId){
+        int result = service.insertRefundRequest(paymentId);
+        if(result>0){
+            return "success";
+        }else {
+            return "fail";
+        }
+    }
+
+    @RequestMapping("/denyRefund")
+    @ResponseBody
+    public String denyRefund(@RequestBody Map<String, String> request){
+
+        String impUid = request.get("imp_uid");
+        String paymentId = service.getPaymentId(impUid);
+
+        int result = service.denyRefundStatus(paymentId);
+        if(result>0){
+            return "success";
+        }else {
+            return "fail";
+        }
+    }
 
     @RequestMapping("/getImpUid")
     @ResponseBody
@@ -57,7 +82,7 @@ public class PaymentController {
             String token = getIamportAccessToken();
             paymentCancel(impUid, token, reason);
             String paymentId = service.getPaymentId(impUid);
-            int result = service.insertRefund(paymentId,deleteApply);
+            int result = service.updateRefundStatus(paymentId,deleteApply);
 
             if(result > 0) {
                 return "success";
@@ -136,11 +161,6 @@ public class PaymentController {
         String bodyJson = objectMapper.writeValueAsString(paymentCancelRequest);
         HttpEntity<String> entity = new HttpEntity<>(bodyJson, headers);
         ResponseEntity<PaymentCancelResponse> cancelResponse =  restTemplate.postForEntity(url, entity, PaymentCancelResponse.class);
-//
-//        log.info(cancelResponse.getStatusCode()+"이건 취소에 대한 결과야");
-//        if(!cancelResponse.getStatusCode().is2xxSuccessful()){
-//            log.error("Payment cancel failed = 401인가가 뜨면 이게 나올거야"+cancelResponse.getStatusCode().getReasonPhrase());
-//        }
 
         PaymentCancelResponse responseBody = cancelResponse.getBody();
         if (!cancelResponse.getStatusCode().is2xxSuccessful() || responseBody == null || responseBody.getCode() != 0) {

@@ -28,20 +28,12 @@
             <input type="hidden" name="courseNo" value="${courseNo}" />
             <div class="mb-3">
                 <label for="assignScheduleNo" class="form-label">주차 선택</label>
-                <select id="assignScheduleNo" name="scheduleNo" class="form-select" required>
+                <select id="assignScheduleNo" name="scheduleWeek" class="form-select" required>
                     <option value="">주차를 선택해주세요</option>
-                    <c:forEach var="i" begin="1" end="${scheduleweek}">
+                    <c:forEach var="i" begin="1" end="${scheduleWeek}">
                         <option value="${i}">${i}주차</option>
                     </c:forEach>
                 </select>
-            </div>
-            <div class="mb-3">
-                <label for="assignTitle" class="form-label">과제 제목</label>
-                <input type="text" class="form-control" id="assignTitle" name="assignTitle" required>
-            </div>
-            <div class="mb-3">
-                <label for="assignContent" class="form-label">내용</label>
-                <textarea class="form-control" id="assignContent" name="assignContent" rows="5" required></textarea>
             </div>
             <div class="mb-3">
                 <label for="assignFile" class="form-label">파일 업로드</label>
@@ -55,9 +47,9 @@
             <input type="hidden" name="courseNo" value="${courseNo}" />
             <div class="mb-3">
                 <label for="materialScheduleNo" class="form-label">주차 선택</label>
-                <select id="materialScheduleNo" name="scheduleNo" class="form-select" required>
+                <select id="materialScheduleNo" name="scheduleWeek" class="form-select" required>
                     <option value="">주차를 선택해주세요</option>
-                    <c:forEach var="i" begin="1" end="${scheduleweek}">
+                    <c:forEach var="i" begin="1" end="${scheduleWeek}">
                         <option value="${i}">${i}주차</option>
                     </c:forEach>
                 </select>

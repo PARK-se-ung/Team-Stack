@@ -1,12 +1,10 @@
 package org.ts.teamstack.classpage.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
-import org.ts.teamstack.classpage.model.dto.Assign;
-import org.ts.teamstack.classpage.model.dto.Board;
-import org.ts.teamstack.classpage.model.dto.Chat;
-import org.ts.teamstack.classpage.model.dto.Schedule;
+import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface ClassPageDao1 {
@@ -42,7 +40,43 @@ public interface ClassPageDao1 {
 
     List<Schedule> getWeek(SqlSession session, int courseNo);
 
+    List<Schedule> getStuAssigns(SqlSession session, int courseNo);
+
+    Completion checkCompletion(SqlSession session, Course course);
+
     String getCourseId(SqlSession session, int courseNo);
 
     int getWeekForInsert(SqlSession session, int courseNo);
+
+    List<Schedule> getWeekForInsert2(SqlSession session, int courseNo);
+
+    int insertNotice(SqlSession session, Board notice);
+
+    int assignCheck(SqlSession session, Schedule schedule);
+
+    int aFileUpdate(SqlSession session, Assign assign);
+
+    int aFileInsert(SqlSession session, Assign assign);
+
+    int scheduleUpdate(SqlSession session, Schedule schedule);
+
+    List<String> getUsersByCourseId(SqlSession session, int courseNo);
+
+    List<Integer> getClassCount(SqlSession session, int courseNo);
+
+    Date getStartDate(SqlSession session, int courseNo);
+
+    int getAssignNo(SqlSession session, Assign assign);
+
+    int stuAssignCheck(SqlSession session, StudentAssign studentAssign);
+
+    int stuAssignUpdate(SqlSession session, StudentAssign studentAssign);
+
+    int stuAssignInsert(SqlSession session, StudentAssign studentAssign);
+
+    int insertAttend(SqlSession session, Attend attend);
+
+    List<Attend> getAttendListByCourse(SqlSession session, int courseNo);
+
+    List<Attend> getAttend(SqlSession session, String userId, int attendNo);
 }

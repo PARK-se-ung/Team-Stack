@@ -3,13 +3,19 @@ package org.ts.teamstack.mypage.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.mypage.model.dao.MypageDao;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -68,5 +74,24 @@ public class MypageServiceImpl implements MypageService {
     @Override
     public List<Course> selectCompleteAll(String userId, PageInfo pageInfo) {
         return mypageDao.selectCompleteAll(session,userId,pageInfo);
+    }
+
+    @Override
+    @Transactional
+    public int insertApprove(Approve approve, MultipartFile multipartFile,String path ) {
+       int result =  mypageDao.insertApprove(session,approve);
+        if(result > 0){
+            try{
+                FileUpload.saveFile(multipartFile,path,approve.getApproveRename());
+            }catch (IOException e){
+                    throw new RuntimeException("파일저장실패");
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String selectApprove(String userId) {
+        return mypageDao.selectApprove(session,userId);
     }
 }
