@@ -167,4 +167,9 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     public List<Attend> getAttend(String userId, int attendNo) {
         return classDao.getAttend(session,userId,attendNo);
     }
+
+    @Override
+    public int isUserEnrolled(Course course) {
+        return classDao.isUserEnrolled(session,course);
+    }
 }

@@ -78,4 +78,6 @@ public interface ClassPageService1 {
     Map<Integer, Integer> getAttendCountByRound(int courseNo);
 
     List<Attend> getAttend(String userId, int attendNo);
+
+    int isUserEnrolled(Course course);
 }

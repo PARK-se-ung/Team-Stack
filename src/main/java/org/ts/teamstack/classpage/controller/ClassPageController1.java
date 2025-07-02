@@ -2,10 +2,12 @@ package org.ts.teamstack.classpage.controller;
 
 import lombok.RequiredArgsConstructor;
 import oracle.jdbc.proxy.annotation.Post;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.ts.teamstack.classpage.model.dto.Board;
 import org.ts.teamstack.classpage.model.dto.Schedule;
@@ -17,8 +19,10 @@ import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.user.model.dto.Users;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 
 @Controller
@@ -29,7 +33,11 @@ public class ClassPageController1 {
     private final ClassPageService1 service;
 
     @RequestMapping("/dashboard")
-    private String dashboard(@SessionAttribute("loginUser") Users loginUser, Model model) {
+    public String dashboard(HttpSession session, HttpServletResponse response, @SessionAttribute(name="loginUser", required=false) Users loginUser, Model model)throws IOException {
+        if (loginUser == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "로그인이 필요합니다");
+            return null;
+        }
         String userId = loginUser.getUserId();
         model.addAttribute("ongoing", service.getOngoingCourses(userId));
         model.addAttribute("complete", service.getCompletedCourses(userId));
@@ -40,7 +48,18 @@ public class ClassPageController1 {
     }
 
     @RequestMapping("/dashmain")
-    private String dashmain(@SessionAttribute("loginUser") Users loginUser, @RequestParam("courseNo")int courseNo, Model model) {
+    public String dashmain(HttpSession session, HttpServletResponse response, @SessionAttribute(name="loginUser", required=false) Users loginUser, @RequestParam("courseNo")int courseNo, Model model)throws IOException {
+        if (loginUser == null) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "로그인이 필요합니다");
+            return null;
+        }
+        Course userCourse = new Course();
+        userCourse.setCourseNo(courseNo);
+        userCourse.setUserId(loginUser.getUserId());
+        int enrolled = service.isUserEnrolled(userCourse);
+        if(enrolled<1) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"접근권한이 없습니다.");
+        }
         String userId = loginUser.getUserId();
         Course course = new Course();
         course.setUserId(userId);

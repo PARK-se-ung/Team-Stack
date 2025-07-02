@@ -189,4 +189,9 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     public List<Attend> getAttendListByCourse(SqlSession session, int courseNo) {
         return session.selectList("classes.getAttendListByCourse", courseNo);
     }
+
+    @Override
+    public int isUserEnrolled(SqlSession session, Course course) {
+        return session.selectOne("isUserEnrolled", course);
+    }
 }

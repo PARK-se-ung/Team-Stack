@@ -79,4 +79,6 @@ public interface ClassPageDao1 {
     List<Attend> getAttendListByCourse(SqlSession session, int courseNo);
 
     List<Attend> getAttend(SqlSession session, String userId, int attendNo);
+
+    int isUserEnrolled(SqlSession session, Course course);
 }
