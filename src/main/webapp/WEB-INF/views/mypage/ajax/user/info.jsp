@@ -4,9 +4,7 @@
 <!-- 상단 탭이 존재하는 경우 -->
 <div class="navs">
     <div class="nav-item active" data-nav="info">개인 정보 수정</div>
-    <c:if test="${sessionScope.loginUser.userType=='G'}">
-        <div class="nav-item" data-nav="approval">강의 개설 자격 승인</div>
-    </c:if>
+    <div class="nav-item" data-nav="approval">강의 개설 자격 승인</div>
 </div>
 <!-- 아래 div안에서 필요한 html 코드 작성 -->
 <div class="current-container">
