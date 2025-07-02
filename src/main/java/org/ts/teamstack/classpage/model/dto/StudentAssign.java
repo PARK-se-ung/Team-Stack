@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
-public class Attendence {
-
-    private int attendNo;
-    private Date attendDate;
+public class StudentAssign {
+    private int stuAssignNo;
+    private String stuAssignOriname;
+    private String stuAssignRename;
+    private int AssignNo;
     private String userId;
-    private AttendStatus attendStatus;
-    private int courseNo;
-    private int attendRound;
+    private String scheduleWeek;
+    private String userName;
 }

@@ -54,6 +54,30 @@ function loadAuthorAppr(cPage) {
     })
 }
 
+$(document).on('click', '.authorAppr', function () {
+    const apprNo = $(this).data("no");
+    const status = $(this).data("status");
+    const userId = $(this).data("user");
+    $.ajax({
+        url: getContextPath() + "/manage/updateauthorAppr",
+        method: "POST",
+        data: {
+            apprNo: apprNo,
+            status: status,
+            userId: userId
+        },
+        success: function (data) {
+            if(data > 0) {
+                if(status === 'A') alert('강사 권한을 승인하였습니다.');
+                else if(status === 'D') alert('강사 권한을 반려하였습니다.')
+            } else {
+                alert('강사 권한 설정에 실패하였습니다.');
+            }
+            manageLoad('authorAppr');
+        }
+    })
+})
+
 /* 강의 승인 */
 function loadCourseAppr(cPage) {
     $.ajax({
@@ -188,6 +212,20 @@ $(document).on('click', '#notice-delete', function() {
         })
     }
 })
+
+/* 공지 상세 내역 */
+$(document).on('click', '.notice-title', function() {
+    const no = $(this).data("no");
+    $.ajax({
+        url: getContextPath() + "/manage/noticedetail",
+        method: "POST",
+        data: {noticeNo:no},
+        success: function (data) {
+            $(".main-content").html(data);
+        }
+    })
+})
+
 /* 알람 전송 */
 function insertAlarm(tabId) {
     let type = $("#alarmTarget").val();
@@ -274,6 +312,19 @@ function insertInquire() {
         error: errorContent('alarm')
     })
 }
+
+/* 문의 상세 내역 */
+$(document).on('click', '.inquire-title', function() {
+    const no = $(this).data("no");
+    $.ajax({
+        url: getContextPath() + "/manage/inquiredetail",
+        method: "POST",
+        data: {inquireNo:no},
+        success: function (data) {
+            $(".main-content").html(data);
+        }
+    })
+})
 
 /* 문의 상태 select  */
 function inquireHandler()  {

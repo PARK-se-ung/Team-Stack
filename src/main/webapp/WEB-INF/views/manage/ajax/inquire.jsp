@@ -28,7 +28,11 @@
         <c:forEach var="inquire" items="${inquires}">
           <tr>
             <td>${inquire.inquireNo}</td>
-            <td>${inquire.inquireTitle}</td>
+            <td>
+              <a class="text-decoration-none inquire-title" href="#" data-no="${inquire.inquireNo}">
+                ${inquire.inquireTitle}
+              </a>
+            </td>
             <td>${inquire.userId}</td>
             <td>
               <fmt:formatDate value="${inquire.inquireDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>

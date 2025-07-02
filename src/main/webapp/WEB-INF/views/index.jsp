@@ -21,7 +21,10 @@
                     <c:forEach var="course" items="${recentCourses}">
                         <div class="card" style="width: 18rem;">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
-                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
+                                     class="card-img-top"
+                                     alt="썸네일"
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
                                 <div class="card-body">
                                         ${course.courseTitle}
                                 </div>
@@ -43,7 +46,10 @@
                     <c:forEach var="course" items="${course.get('elem')}">
                         <div class="card" style="width: 18rem;">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
-                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
+                                     class="card-img-top"
+                                     alt="썸네일"
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
                                 <div class="card-body">
                                         ${course.courseTitle}
                                 </div>
@@ -65,7 +71,10 @@
                     <c:forEach var="course" items="${course.get('midd')}">
                         <div class="card" style="width: 18rem;">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
-                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
+                                     class="card-img-top"
+                                     alt="썸네일"
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
                                 <div class="card-body">
                                         ${course.courseTitle}
                                 </div>
@@ -87,7 +96,10 @@
                     <c:forEach var="course" items="${course.get('high')}">
                         <div class="card" style="width: 18rem;">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
-                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
+                                     class="card-img-top"
+                                     alt="썸네일"
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
                                 <div class="card-body">
                                         ${course.courseTitle}
                                 </div>

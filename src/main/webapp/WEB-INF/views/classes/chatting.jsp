@@ -9,7 +9,7 @@
     String currentUserId = currentUser.getUserId();
 %>
 
-<div class="container mt-3">
+<div class="container mt-3" style="height:90vh">
     <div class="card">
         <h2>${course.courseTitle}</h2>
         <div class="card-header bg-warning text-white">

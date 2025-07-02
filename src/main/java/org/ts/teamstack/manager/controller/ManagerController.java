@@ -54,6 +54,19 @@ public class ManagerController {
         return "manage/ajax/authorappr";
     }
 
+    @RequestMapping("/updateauthorAppr")
+    @ResponseBody
+    public int updateauthorappr(Model model,
+                                   @RequestParam Map<String,Object> params){
+        params.put("apprNo", Integer.parseInt((String) params.get("apprNo")));
+        System.out.println(params);
+        try{
+           return service.updateApply(params);
+        } catch (Exception e){
+            return 0;
+        }
+    }
+
     @RequestMapping("/courseAppr")
     public String courseappr(Model model,
                              @RequestParam(defaultValue = "1")  int cPage){
@@ -148,6 +161,12 @@ public class ManagerController {
         return service.deleteNotice(noticeNo);
     }
 
+    @RequestMapping("/noticedetail")
+    public String noticedetail(@RequestParam int noticeNo, Model model){
+        model.addAttribute("notice", service.searchNoticeByNo(noticeNo));
+        return "manage/ajax/noticedetail";
+    }
+
     /* 알람 */
     @RequestMapping("/alarm")
     public String alarm(){
@@ -220,6 +239,12 @@ public class ManagerController {
         model.addAttribute("inquires", inquires);
         model.addAttribute("status", status);
         return  "manage/ajax/inquire";
+    }
+
+    @RequestMapping("/inquiredetail")
+    public String inquiredetail(Model model, int inquireNo) {
+        model.addAttribute("inquire", service.searchInquireByNo(inquireNo));
+        return "manage/ajax/inquiredetail";
     }
 
 }

@@ -11,6 +11,9 @@ public interface HomeService {
     Map<String, List<Course>> homeCourses(String keyword);
     List<Course> selectCoursesByCourseNos(List<Integer> courseNoList);
     Course searchCourseByNo(int courseNo);
+    int searchCountBookmark(String userId, int courseNo);
+    int convertBookmark(String status, int courseNo, String userId);
+    List<Course> searchCoursesByInstructor(String userId);
     List<Course> searchCourseByRest(Map<String, Object> parsedParams, PageInfo pageInfo);
     int searchCourseCount(Map<String, Object> parsedParams);
     List<Alarm> searchAlarm(String userId);

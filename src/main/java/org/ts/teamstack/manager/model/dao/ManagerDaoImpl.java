@@ -34,6 +34,16 @@ public class ManagerDaoImpl implements ManagerDao{
     }
 
     @Override
+    public int updateApprove(SqlSession session, Map<String, Object> map){
+        return session.update("manager.updateApprove", map);
+    }
+
+    @Override
+    public int updateUser(SqlSession session, String userId){
+        return session.update("manager.updateUser", userId);
+    }
+
+    @Override
     public int searchCourseApprCount(SqlSession session){
         return session.selectOne("manager.searchCourseApprCount");
     }
@@ -108,4 +118,8 @@ public class ManagerDaoImpl implements ManagerDao{
         return session.update("manager.updateInquire", no);
     }
 
+    @Override
+    public Inquire searchInquireByNo(SqlSession session, int no) {
+        return session.selectOne("manager.searchInquireByNo", no);
+    }
 }

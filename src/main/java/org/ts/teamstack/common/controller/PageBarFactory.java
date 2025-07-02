@@ -28,10 +28,10 @@ public class PageBarFactory {
         }
         for(int i = pageNo; i <= pageEnd; i++) {
             if(i == pageInfo.getCurPage()) {
-                pageBar.append("<li class='page-item disabled'>");
-                pageBar.append("<a class='page-link' href='#'>"+ i + "</a>");
+                pageBar.append("<li class='page-item disabled selected-page' data-no='" + i + "'>");
+                pageBar.append("<a class='page-link'  href='#'>"+ i + "</a>");
             } else {
-                pageBar.append("<li class='page-item'>");
+                pageBar.append("<li class='page-item' data-no='" + i + "'>");
                 pageBar.append("<a class='page-link' href=\"javascript:" + functionName + "(" + i + ")\"> " + i + " </a>");
             }
             pageBar.append("</li>");

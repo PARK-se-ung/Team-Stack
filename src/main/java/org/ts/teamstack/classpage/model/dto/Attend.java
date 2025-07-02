@@ -5,17 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
+import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Assign {
-    private int assignNo;
-    private String assignOriname;
-    private String assignRename;
-    private int scheduleNo;
-    private int scheduleWeek;
+
+public class Attend {
+
+    private int attendNo;
+    private String userId;
+    private String attendStatus;
     private int courseNo;
+    private int attendRound;
+    private int courseRound;
 }

@@ -8,6 +8,7 @@ import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.manager.model.dto.Approve;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ManagerService {
     List<Notice> searchNotice(PageInfo pageInfo);
@@ -21,8 +22,10 @@ public interface ManagerService {
     List<Inquire> searchInquire(PageInfo pageInfo, String status);
     int searchInquireCount(String status);
     int updateInquire(Alarm alarm, String type, int no);
+    Inquire searchInquireByNo(int no);
     List<Approve> searchAppr(PageInfo pageInfo);
     int searchApprCount();
+    int updateApply(Map<String, Object> map);
     List<Course> searchCourseByAppr(PageInfo pageInfo);
     int searchCourseApprCount();
     int updateCourse(String status, int courseNo);
