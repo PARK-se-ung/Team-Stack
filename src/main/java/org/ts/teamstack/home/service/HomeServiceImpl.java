@@ -51,6 +51,23 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
+    public int searchCountBookmark(String userId, int courseNo) {
+        return dao.searchCountBookmark(session, userId, courseNo);
+    }
+
+    @Override
+    public int convertBookmark(String status, int courseNo, String userId) {
+        if(status.equals("I")) return dao.insertBookmark(session, courseNo, userId);
+        else if(status.equals("D")) return dao.deleteBookmark(session, courseNo, userId);
+        return 0;
+    }
+
+    @Override
+    public List<Course> searchCoursesByInstructor(String userId){
+        return dao.searchCoursesByInstructor(session, userId);
+    }
+
+    @Override
     public List<Course> selectCoursesByCourseNos(List<Integer> courseNoList) {
         return dao.selectCoursesByCourseNos(session, courseNoList);
     }

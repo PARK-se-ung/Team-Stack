@@ -35,10 +35,10 @@
                         ${approve.userId}
                     </td>
                     <td>
-                        <button class="btn btn-outline-orange authorAppr" data-no="${approve.approveNo}" data-status="A">승인</button>
+                        <button class="btn btn-outline-orange authorAppr" data-user="${approve.userId}" data-no="${approve.approveNo}" data-status="A">승인</button>
                     </td>
                     <td>
-                        <button class="btn btn-outline-orange authorAppr" data-no="${approve.approveNo}" data-status="D">반려</button>
+                        <button class="btn btn-outline-orange authorAppr" data-user="${approve.userId}" data-no="${approve.approveNo}" data-status="D">반려</button>
                     </td>
                 </tr>
             </c:forEach>
