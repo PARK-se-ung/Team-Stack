@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.classpage.model.dao.ClassPageDao1;
-import org.ts.teamstack.classpage.model.dto.Board;
-import org.ts.teamstack.classpage.model.dto.Schedule;
-import org.ts.teamstack.classpage.model.dto.Assign;
-import org.ts.teamstack.classpage.model.dto.Chat;
+import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +72,12 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     public List<Schedule> getWeek(int courseNo) {return classDao.getWeek(session, courseNo);}
 
     @Override
+    public List<Schedule> getStuAssigns(int courseNo) {return classDao.getStuAssigns(session, courseNo);}
+
+    @Override
+    public Completion checkCompletion(Course course) {return classDao.checkCompletion(session, course);}
+
+    @Override
     public String getCourseId(int courseNo) {return classDao.getCourseId(session,courseNo);}
 
     @Override
@@ -127,7 +132,39 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     }
 
     @Override
-    public Date getStartDate(int courseNo) {
-        return classDao.getStartDate(session,courseNo);
+    public Date getStartDate(int courseNo) { return classDao.getStartDate(session,courseNo); }
+
+    @Override
+    public int getAssignNo(Assign assign) { return classDao.getAssignNo(session,assign); }
+
+    @Override
+    public int stuAssignCheck(StudentAssign studentAssign) { return  classDao.stuAssignCheck(session,studentAssign);}
+
+    @Override
+    public int stuFileUpdate(StudentAssign studentAssign) { return classDao.stuAssignUpdate(session,studentAssign); }
+
+    @Override
+    public int stuFileInsert(StudentAssign studentAssign) { return classDao.stuAssignInsert(session, studentAssign);}
+
+    @Override
+    public int insertAttend(Attend attend) {
+        return classDao.insertAttend(session,attend);
+    }
+
+    @Override
+    public Map<Integer, Integer> getAttendCountByRound(int courseNo) {
+        List<Attend> attendList = classDao.getAttendListByCourse(session, courseNo);
+        Map<Integer, Integer> attendCount = new HashMap<>();
+
+        for (Attend a : attendList) {
+            int round = a.getCourseRound();
+            attendCount.put(round, attendCount.getOrDefault(round, 0) + 1);
+        }
+        return attendCount;
+    }
+
+    @Override
+    public List<Attend> getAttend(String userId, int attendNo) {
+        return classDao.getAttend(session,userId,attendNo);
     }
 }
