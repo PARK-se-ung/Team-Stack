@@ -7,8 +7,10 @@ import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.manager.model.dto.Approve;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class MypageDaoImpl implements MypageDao {
@@ -63,5 +65,15 @@ public class MypageDaoImpl implements MypageDao {
     @Override
     public List<Course> selectCompleteAll(SqlSession session, String userId, PageInfo pageInfo) {
         return session.selectList("apply.selectCompleteAll",userId,pageInfo.getRowBounds());
+    }
+
+    @Override
+    public int insertApprove(SqlSession session, Approve approve) {
+        return session.insert("manager.insertApprove",approve);
+    }
+
+    @Override
+    public String selectApprove(SqlSession session, String userId) {
+        return session.selectOne("manager.selectApprove",userId);
     }
 }

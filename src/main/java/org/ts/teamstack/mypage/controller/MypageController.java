@@ -1,14 +1,18 @@
 package org.ts.teamstack.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.mypage.service.MypageService;
 import org.ts.teamstack.payment.model.dto.Payment;
 import org.ts.teamstack.payment.model.dto.Refund;
@@ -16,11 +20,13 @@ import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/mypage")
+@Slf4j
 public class MypageController {
 
     private final PaymentService paymentService;
@@ -107,7 +113,55 @@ public class MypageController {
 
     /* 강의 개설 자격 승인 이동 */
     @RequestMapping("/approval")
-    public String myapproval(Model model) { return "mypage/ajax/user/approval"; }
+    public String myapproval(Model model,HttpSession session) {
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        String approveStatus = mypageService.selectApprove(loginUser.getUserId());
+
+        model.addAttribute("approveStatus", approveStatus);
+
+        model.addAttribute("loginUser", loginUser);
+
+        return "mypage/ajax/user/approval"; }
+
+    /* 강사 자격 승인 신청 */
+    @RequestMapping("/requestapprove")
+    @ResponseBody
+    public String myrequestapprove(Model model, HttpSession session, @RequestParam("approveFile")MultipartFile multipartFile) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+
+        String path = session.getServletContext().getRealPath("/recourse/upload/course");
+
+        File dir = new File(path);
+
+        if(!dir.exists()){
+            boolean flag = dir.mkdirs();
+            if(!flag) log.error("create fail");
+        }
+
+        if(!multipartFile.isEmpty()){
+            String fileOriName = multipartFile.getOriginalFilename();
+            System.out.println(fileOriName);
+
+            String rename = FileUpload.renameFile(multipartFile);
+            System.out.println(rename);
+            Approve approve = Approve.builder().userId(loginUser.getUserId()).approveOrigin(fileOriName).approveRename(rename).build();
+
+            try {
+                int result = mypageService.insertApprove(approve, multipartFile, path);
+                if(result > 0){
+                    return "success";
+                }
+            }catch (RuntimeException e){
+                e.printStackTrace();
+            }
+            //0이면 insert실패
+            //throw면 파일저장실패
+            //result가 1일때 반환
+            return "fail";
+        }
+            return "fail";
+      }
 
     /* 수강중인 강의 */
     @RequestMapping("/take")

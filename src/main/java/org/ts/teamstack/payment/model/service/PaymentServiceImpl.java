@@ -34,6 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
         return result;
     }
     @Override
+    @Transactional
     public int updateRefundStatus(String paymentId,Map<String,Object> deleteApply) {
         int result = dao.updateRefundStatus(sqlSession,paymentId);
         if(result > 0){
