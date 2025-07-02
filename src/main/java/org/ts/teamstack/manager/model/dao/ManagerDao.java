@@ -11,6 +11,7 @@ import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.user.model.dto.Users;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ManagerDao {
     List<Notice> searchNotice(SqlSession session, PageInfo pageInfo);
@@ -25,8 +26,11 @@ public interface ManagerDao {
     List<Inquire> searchInquire(SqlSession session, PageInfo pageInfo, String status);
     int searchInquireCount(SqlSession session, String status);
     int updateInquire(SqlSession session, int no);
+    Inquire searchInquireByNo(SqlSession session, int no);
     List<Approve> searchAppr(SqlSession session, PageInfo pageInfo);
     int searchApprCount(SqlSession session);
+    int updateApprove(SqlSession session, Map<String, Object> map);
+    int updateUser(SqlSession session, String userId);
     List<Course> searchCourseByAppr(SqlSession session, PageInfo pageInfo);
     int searchCourseApprCount(SqlSession session);
     int updateCourse(SqlSession session, String status, int courseNo);

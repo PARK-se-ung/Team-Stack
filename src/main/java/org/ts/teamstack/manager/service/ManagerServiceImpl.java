@@ -19,6 +19,7 @@ import org.ts.teamstack.user.model.dto.Users;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,20 @@ public class ManagerServiceImpl implements ManagerService{
     @Override
     public List<Approve> searchAppr(PageInfo pageInfo) {
         return dao.searchAppr(session, pageInfo);
+    }
+
+    @Override
+    @Transactional
+    public int updateApply(Map<String, Object> map) {
+        int result = dao.updateApprove(session, map);
+        System.out.println(result);
+        if(result > 0) {
+            if(map.get("status").equals("A")) {
+                int flag = dao.updateUser(session, (String) map.get("userId"));
+                if (flag == 0) throw new RuntimeException("update authorAppr fail");
+            }
+        }
+        return result;
     }
 
     @Override
@@ -170,6 +185,11 @@ public class ManagerServiceImpl implements ManagerService{
     @Override
     public int insertInquire(Inquire inquire) {
         return dao.insertInquire(session, inquire);
+    }
+
+    @Override
+    public Inquire searchInquireByNo(int no) {
+        return dao.searchInquireByNo(session, no);
     }
 
     @Override

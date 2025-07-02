@@ -14,6 +14,10 @@ public interface HomeDao {
     List<Course> selectMiddleCourses(SqlSession session, String keyword);
     List<Course> selectHighCourses(SqlSession session, String keyword);
     Course searchCourseByNo(SqlSession session, int courseNo);
+    int searchCountBookmark(SqlSession session, String userId, int  courseNo);
+    int insertBookmark(SqlSession session, int courseNo, String userId);
+    int deleteBookmark(SqlSession session, int courseNo, String userId);
+    List<Course> searchCoursesByInstructor(SqlSession session, String userId);
     List<Course> searchCourseByRest(SqlSession session, Map<String, Object> parsedParams, PageInfo pageInfo);
     int searchCourseCount(SqlSession session,  Map<String, Object> parsedParams);
     List<Alarm> searchAlarm(SqlSession session, String userId);

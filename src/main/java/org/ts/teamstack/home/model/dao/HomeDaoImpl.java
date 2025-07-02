@@ -48,6 +48,26 @@ public class HomeDaoImpl implements HomeDao {
     }
 
     @Override
+    public int searchCountBookmark(SqlSession session, String userId, int courseNo) {
+        return session.selectOne("home.searchCountBookmark", Map.of("userId",  userId, "courseNo", courseNo));
+    }
+
+    @Override
+    public int insertBookmark(SqlSession session, int courseNo, String userId) {
+        return session.insert("home.insertBookmark", Map.of("userId",  userId, "courseNo", courseNo));
+    }
+
+    @Override
+    public int deleteBookmark(SqlSession session, int courseNo, String userId) {
+        return session.delete("home.deleteBookmark", Map.of("userId",  userId, "courseNo", courseNo));
+    }
+
+    @Override
+    public List<Course> searchCoursesByInstructor(SqlSession session, String userId) {
+        return session.selectList("home.searchCoursesByInstructor", userId, new RowBounds(0, 5));
+    }
+
+    @Override
     public List<Course> searchCourseByRest(SqlSession session, Map<String, Object> parsedParams, PageInfo pageInfo) {
         return session.selectList("home.searchCourseByRest", parsedParams, pageInfo.getRowBounds());
     }

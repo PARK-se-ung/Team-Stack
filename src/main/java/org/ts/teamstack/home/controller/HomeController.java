@@ -68,6 +68,7 @@ public class HomeController {
         pageInfo.setNumPerpage(10);
         pageInfo.setCurPage(1);
         List<Course> courses = service.searchCourseByRest(Map.of("category", category), pageInfo);
+        model.addAttribute("category", category);
         model.addAttribute("courses", courses);
         model.addAttribute("pageBar", PageBarFactory.ajaxPageBuilder(pageInfo, "loadCourse"));
         return "course/course";
@@ -75,6 +76,7 @@ public class HomeController {
 
     @RequestMapping("/home/searchcoursebyrest")
     public String searchcoursebyrest(@RequestParam(defaultValue = "1") int cPage,
+                                    @RequestParam(defaultValue = "img") String type,
                                     @RequestParam Map<String, String> params,
                                      Model model){
         Map<String, Object> parsedParams = new HashMap<>(params);
@@ -94,14 +96,15 @@ public class HomeController {
         List<Course> courses = service.searchCourseByRest(parsedParams, pageInfo);
         model.addAttribute("courses", courses);
         model.addAttribute("pageBar", PageBarFactory.ajaxPageBuilder(pageInfo, "loadCourse"));
-        return "course/courseinner";
+        return type.equals("img")? "course/courseinnerimg":"course/courseinnerlist";
     }
 
     @RequestMapping("/home/searchcoursebyno")
     public String searchcoursebyno(@RequestParam int courseNo,
                                    @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
                                    HttpServletResponse response,
-                                   Model model){
+                                   Model model,
+                                   HttpSession session){
 
         /* cookie 저장 */
         Set<Integer> courseNos = getIntegers(courseNo, recentView);
@@ -116,10 +119,45 @@ public class HomeController {
 
         /* course search */
         Course course = service.searchCourseByNo(courseNo);
-        System.out.println(course);
         model.addAttribute("course", course);
 
+        /* instructor search */
+        List<Course> courses = service.searchCoursesByInstructor(course.getUserId());
+        model.addAttribute("courses", courses);
+
+        /* cookie search */
+        List<Integer> courseNoList = new ArrayList<>();
+        if (newCookie != null && !newCookie.getValue().isEmpty()) {
+            for (String no : newCookie.getValue().split("\\|")) {
+                try {
+                    courseNoList.add(Integer.parseInt(no));
+                } catch (NumberFormatException ignore) {}
+            }
+        }
+        if (!courseNoList.isEmpty()) {
+            List<Course> recentCourses = service.selectCoursesByCourseNos(courseNoList);
+            model.addAttribute("recentCourses", recentCourses);
+        }
+
+        /* bookmark search */
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        if(loginUser != null){
+            int cnt = service.searchCountBookmark(loginUser.getUserId(), courseNo);
+            if(cnt > 0){
+                model.addAttribute("bookmark", cnt);
+            }
+        }
         return "course/coursedetail";
+    }
+
+    @RequestMapping("/home/convertbookmark")
+    @ResponseBody
+    public int convertbookmark(@RequestParam String status, @RequestParam int courseNo, HttpSession session) {
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        if(loginUser == null) {
+            return -1;
+        }
+        return service.convertBookmark(status, courseNo, loginUser.getUserId());
     }
 
     private static Set<Integer> getIntegers(int courseNo, Cookie recentView) {
