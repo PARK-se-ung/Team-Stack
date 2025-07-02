@@ -43,7 +43,9 @@ public class MypageController {
 
     /* 개인정보화면 이동 */
     @RequestMapping("/info")
-    public String myinfo() {
+    public String myinfo(HttpSession session,Model model) {
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        model.addAttribute("loginUser", loginUser);
         return "mypage/ajax/user/info";
     }
 

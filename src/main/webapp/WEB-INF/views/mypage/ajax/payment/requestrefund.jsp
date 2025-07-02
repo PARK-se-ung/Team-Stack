@@ -97,7 +97,7 @@
         tabLoad(tabId);
     });
 
-    $(document).on('click','.btn-applyRefund', async function(e){
+    $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
         if(!confirm('환불 요청 하시겠습니까?')) return;
         const paymentId = $(e.target).data('payment-id');
         console.log(paymentId);

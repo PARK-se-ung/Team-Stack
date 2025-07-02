@@ -9,6 +9,20 @@
 <!-- 결제 관리 탭 -->
 <div class="current-container">
     <!-- 검색/필터 영역 -->
+    <div class="search-bar">
+        <form method="get" action="" class="search-form">
+            <input type="date" name="startDate" value="">
+            <input type="date" name="endDate" value="">
+            <select name="status">
+                <option value="">전체</option>
+                <option value="강사명">강사명</option>
+                <option value="강의명">강의명</option>
+            </select>
+            <input type="text" name="lectureTitle" placeholder="강의명or강사명" value="">
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
     <table class="payment-table">
         <thead>
         <tr>
@@ -41,20 +55,6 @@
         </c:if>
         </tbody>
     </table>
-
-    <div class="search-bar">
-        <form method="get" action="" class="search-form">
-            <input type="date" name="startDate" value="">
-            <input type="date" name="endDate" value="">
-            <select name="status">
-                <option value="">전체</option>
-                <option value="강사명">강사명</option>
-                <option value="강의명">강의명</option>
-            </select>
-            <input type="text" name="lectureTitle" placeholder="강의명or강사명" value="">
-            <button type="submit">검색</button>
-        </form>
-    </div>
 
     <div id="pageBar">
         ${pageBar}

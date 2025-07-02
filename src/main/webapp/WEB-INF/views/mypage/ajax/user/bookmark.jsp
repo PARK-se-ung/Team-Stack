@@ -17,36 +17,33 @@
         e.stopPropagation();
       });
 
-    <!-- 환불 으어어억 기능 -->
-    $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){
-      const courseNo = $(e.target).data('course-no');
-      const userId = "${sessionScope.loginUser.userId}";
-      const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
-      const impUid = await impUidResponse.text();
-      $.ajax({
-        url:"${pageContext.request.contextPath}/payment/cancelPayment",
-        type:"POST",
-        contentType:"application/json",
-        data:JSON.stringify({
-          "imp_uid": impUid,
-          "reason": "사용자 요청 환불",
-          "userId":userId,
-          "courseNo":courseNo
-        }),
-        dataType:"text",
-        success: function(result) {
-          if(result === "success") {
-            alert("환불이 정상적으로 처리되었습니다.");
-            tabLoad('bookmark'); // 페이지 새로고침
-          } else {
-            alert("환불 처리에 실패했습니다.");
-          }
-        },
-        error: function() {
-          alert("서버 오류로 환불 요청에 실패했습니다.");
-        }
-      });
-    });
+$(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
+  if(!confirm('환불 요청 하시겠습니까?')) return;
+  const courseNo = $(e.target).data('course-no');
+  const userId = "${sessionScope.loginUser.userId}";
+  const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
+  const impUid = await impUidResponse.text();
+
+  $.ajax({
+    url: "${pageContext.request.contextPath}/payment/requestrefund2",
+    type: "POST",
+    data: {
+      imp_uid: impUid,
+    },
+    dataType: "text",
+    success: function(result) {
+      if(result === "success") {
+        alert("환불 요청이 접수되었습니다.");
+        tabLoad('bookmark');
+      } else {
+        alert("환불 요청에 실패했습니다.");
+      }
+    },
+    error: function() {
+      alert("서버 오류로 환불 요청에 실패했습니다.");
+    }
+  });
+});
 
     <%--<!-- 결제 기능 -->--%>
 
@@ -215,67 +212,77 @@
           <td><fmt:formatNumber value="${b.coursePrice}" type="number"/>원</td>
           <td>
             <c:choose>
-              <%-- 1. 무료 강의 --%>
-              <c:when test="${b.coursePrice == 0}">
+              <c:when test="${not empty b.applyNo}">
                 <c:choose>
-                  <%-- 모집 종료 --%>
-                  <c:when test="${nowMillis > recruitEndDateMillis}">
-                    <span style="color:#888;">모집 종료</span>
+                  <c:when test="${}">
+
                   </c:when>
-                  <%-- 모집 시작 전: 예약 --%>
-                  <c:when test="${nowMillis < recruitDateObj.time}">
-                    <button class="btn-freeApply"
-                            data-course-no="${b.courseNo}"
-                            data-course-title="${b.courseTitle}"
-                            data-apply-type="RESERVE">예약</button>
-                  </c:when>
-                  <%-- 모집 시작~종료: 신청 --%>
-                  <c:otherwise>
-                    <button class="btn-freeApply"
-                            data-course-no="${b.courseNo}"
-                            data-course-title="${b.courseTitle}"
-                            data-apply-type="APPLY">신청</button>
-                  </c:otherwise>
+
                 </c:choose>
+                <span style="color:orange;">환불 대기</span>
               </c:when>
-              <%-- 2. 유료 강의 --%>
               <c:otherwise>
+                <%--여기는 apply가 없으니까 신청이 가능해야해 모집일과--%>
+                <%-- 아래는 기존 신청/결제/환불 버튼 로직 --%>
                 <c:choose>
-                  <%-- 신청 이력 없음 --%>
-                  <c:when test="${empty b.applyNo}">
+                  <%-- 1. 무료 강의 --%>
+                  <c:when test="${b.coursePrice == 0}">
                     <c:choose>
                       <c:when test="${nowMillis > recruitEndDateMillis}">
                         <span style="color:#888;">모집 종료</span>
                       </c:when>
                       <c:when test="${nowMillis < recruitDateObj.time}">
-                        <button class="btn-apply"
+                        <button class="btn-freeApply"
                                 data-course-no="${b.courseNo}"
                                 data-course-title="${b.courseTitle}"
-                                data-course-price="${b.coursePrice}"
                                 data-apply-type="RESERVE">예약</button>
                       </c:when>
                       <c:otherwise>
-                        <button class="btn-apply"
+                        <button class="btn-freeApply"
                                 data-course-no="${b.courseNo}"
                                 data-course-title="${b.courseTitle}"
-                                data-course-price="${b.coursePrice}"
-                                data-apply-type="APPLY">신청/결제</button>
+                                data-apply-type="APPLY">신청</button>
                       </c:otherwise>
                     </c:choose>
                   </c:when>
-                  <%-- 신청 이력 있음 --%>
+                  <%-- 2. 유료 강의 --%>
                   <c:otherwise>
                     <c:choose>
-                      <c:when test="${b.applyType == 'APPLY' || b.applyType == 'RESERVE'}">
-                        <button class="btn-refund"
-                                data-apply-no="${b.applyNo}"
-                                data-course-no="${b.courseNo}">환불신청</button>
-                      </c:when>
-                      <c:when test="${b.applyType == 'TAKE' || b.applyType == 'COMPLETE'}">
-                        <span style="color:#888;">수강중/완료</span>
+                      <c:when test="${empty b.applyNo}">
+                        <c:choose>
+                          <c:when test="${nowMillis > recruitEndDateMillis}">
+                            <span style="color:#888;">모집 종료</span>
+                          </c:when>
+                          <c:when test="${nowMillis < recruitDateObj.time}">
+                            <button class="btn-apply"
+                                    data-course-no="${b.courseNo}"
+                                    data-course-title="${b.courseTitle}"
+                                    data-course-price="${b.coursePrice}"
+                                    data-apply-type="RESERVE">예약</button>
+                          </c:when>
+                          <c:otherwise>
+                            <button class="btn-apply"
+                                    data-course-no="${b.courseNo}"
+                                    data-course-title="${b.courseTitle}"
+                                    data-course-price="${b.coursePrice}"
+                                    data-apply-type="APPLY">결제</button>
+                          </c:otherwise>
+                        </c:choose>
                       </c:when>
                       <c:otherwise>
-                        <!-- 기타 상태 처리 -->
+                        <c:choose>
+                          <c:when test="${b.applyType == 'APPLY' || b.applyType == 'RESERVE'}">
+                            <button class="btn-applyRefund"
+                                    data-apply-no="${b.applyNo}"
+                                    data-course-no="${b.courseNo}">환불</button>
+                          </c:when>
+                          <c:when test="${b.applyType == 'TAKE' || b.applyType == 'COMPLETE'}">
+                            <span style="color:#888;">수강중/완료</span>
+                          </c:when>
+                          <c:otherwise>
+                            <!-- 기타 상태 처리 -->
+                          </c:otherwise>
+                        </c:choose>
                       </c:otherwise>
                     </c:choose>
                   </c:otherwise>
@@ -283,6 +290,7 @@
               </c:otherwise>
             </c:choose>
           </td>
+
         </tr>
       </c:forEach>
     </c:if>
