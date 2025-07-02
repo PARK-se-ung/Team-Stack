@@ -12,7 +12,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff8c42, #ffa726);
+            background: white;
             min-height: 100vh;
             padding: 20px;
         }
@@ -297,14 +297,16 @@
     <div class="content">
         <div class="session-list">
             <c:forEach var="c" items="${classweeks}">
+                <c:set var="attend" value="${attendCount[c] != null ? attendCount[c] : 0}" />
+                <c:set var="absent" value="${totalStudentCount - attend}" />
                 <div class="session-item" data-session="${c}">
                     <div class="session-header">
                         <div class="session-title">${c}회차</div>
                     </div>
                     <div class="session-stats">
                         <div class="stat-item">총 ${students.size()}명</div>
-                        <div class="stat-item">출석 0명</div>
-                        <div class="stat-item">결석 0명</div>
+                        <div class="stat-item">출석${attend} 명</div>
+                        <div class="stat-item">결석${absent} 명</div>
                     </div>
                 </div>
             </c:forEach>
@@ -331,8 +333,8 @@
                             <div class="student-info">
                                 <div class="student-name">${s}</div>
                                 <select name="attendanceStatus" class="attendance-select">
-                                    <option value="present">출석</option>
-                                    <option value="absent">결석</option>
+                                    <option value="ATTEND">출석</option>
+                                    <option value="ABSENT">결석</option>
                                 </select>
                             </div>
                         </div>
@@ -392,12 +394,12 @@
                 userId: name,
                 attendStatus : attend,
                 courseNo : courseNo,
-                attendRound :currentSession
+                courseRound :currentSession
             });
         });
         console.log(studentData);
 
-        fetch("/class/insertattend.do",{
+        fetch("${pageContext.request.contextPath}/class/insertattend.do",{
             method:"post",
             headers : {
                 "content-type" : "application/json"

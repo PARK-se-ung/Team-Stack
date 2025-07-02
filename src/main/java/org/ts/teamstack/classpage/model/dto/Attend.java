@@ -5,18 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 
-public class Attendence {
+public class Attend {
 
     private int attendNo;
-    private Date attendDate;
     private String userId;
-    private AttendStatus attendStatus;
+    private String attendStatus;
     private int courseNo;
     private int attendRound;
+    private int courseRound;
 }
