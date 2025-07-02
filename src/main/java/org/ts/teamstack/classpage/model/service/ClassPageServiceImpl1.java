@@ -10,6 +10,7 @@ import org.ts.teamstack.classpage.model.dto.Assign;
 import org.ts.teamstack.classpage.model.dto.Chat;
 import org.ts.teamstack.course.model.dto.Course;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -123,5 +124,10 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     @Override
     public List<Integer> getClassCount(int courseNo) {
         return classDao.getClassCount(session,courseNo);
+    }
+
+    @Override
+    public Date getStartDate(int courseNo) {
+        return classDao.getStartDate(session,courseNo);
     }
 }

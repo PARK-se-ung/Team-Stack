@@ -8,6 +8,7 @@ import org.ts.teamstack.classpage.model.dto.Schedule;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.classpage.model.dto.Assign;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -136,5 +137,10 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     @Override
     public List<Integer> getClassCount(SqlSession session, int courseNo) {
         return session.selectList("classes.getClassCount",courseNo);
+    }
+
+    @Override
+    public Date getStartDate(SqlSession session, int courseNo) {
+        return session.selectOne("classes.getStartDate",courseNo);
     }
 }
