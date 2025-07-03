@@ -83,6 +83,19 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
+    public int insertRefundRequest2(String paymentId,Map<String,Object> deleteApply) {
+
+        int result = dao.insertRefundRequest2(sqlSession,paymentId);
+        if(result > 0){
+            log.info("deleteApply result: {}", result);
+            result = dao.deleteApply(sqlSession,deleteApply);
+        }
+
+        return result;
+    }
+
+    @Override
     public int searchRefundCount(String userId) {
         return dao.searchRefundCount(sqlSession,userId);
     }

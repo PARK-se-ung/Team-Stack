@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -401,29 +404,82 @@
           <th style="width: 80px;">기말고사<br>(30%)</th>
           <th style="width: 80px;">과제1<br>(10%)</th>
           <th style="width: 80px;">과제2<br>(10%)</th>
-          <th style="width: 80px;">프로젝트<br>(15%)</th>
-          <th style="width: 80px;">출석<br>(5%)</th>
+          <th style="width: 80px;">과제3<br>(15%)</th>
           <th style="width: 80px;">총점</th>
           <th style="width: 60px;">등급</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>1</td>
-          <td class="student-name">김민수</td>
-          <td><input type="number" class="grade-input" value="85" min="0" max="100"></td>
-          <td><input type="number" class="grade-input" value="88" min="0" max="100"></td>
-          <td><input type="number" class="grade-input" value="90" min="0" max="100"></td>
-          <td><input type="number" class="grade-input" value="87" min="0" max="100"></td>
-          <td><input type="number" class="grade-input" value="92" min="0" max="100"></td>
-          <td><input type="number" class="grade-input" value="95" min="0" max="100"></td>
-          <td class="grade-total">88.2</td>
-          <td><span class="grade-letter grade-a">A</span></td>
-        </tr>
+        <c:forEach var="student" items="${students}" varStatus="loop">
+          <tr>
+            <td>${loop.count}</td>
+            <td class="student-name">${student.userId}</td>
+            <td>
+              <c:set var="found" value="false"/>
+              <c:forEach var="s" items="${scores}">
+                <c:if test="${s.userId == student.userId && s.scoreType == 'EXAM1'}">
+                  <input type="number" class="grade-input" data-type="EXAM1" value="${s.score}" />
+                  <c:set var="found" value="true"/>
+                </c:if>
+              </c:forEach>
+              <c:if test="${!found}">
+                <input type="number" class="grade-input" data-type="EXAM1" value="0" />
+              </c:if>
+            </td>
+            <td>
+              <c:set var="found" value="false"/>
+              <c:forEach var="s" items="${scores}">
+                <c:if test="${s.userId == student.userId && s.scoreType == 'EXAM2'}">
+                  <input type="number" class="grade-input" data-type="EXAM2" value="${s.score}" />
+                  <c:set var="found" value="true"/>
+                </c:if>
+              </c:forEach>
+              <c:if test="${!found}">
+                <input type="number"class="grade-input" data-type="EXAM2" value="0" />
+              </c:if>
+            </td>
+            <td>
+              <c:set var="found" value="false"/>
+              <c:forEach var="s" items="${scores}">
+                <c:if test="${s.userId == student.userId && s.scoreType == 'TASK1'}">
+                  <input type="number" class="grade-input" data-type="TASK1" value="${s.score}" />
+                  <c:set var="found" value="true"/>
+                </c:if>
+              </c:forEach>
+              <c:if test="${!found}">
+                <input type="number"class="grade-input" data-type="TASK1" value="0" />
+              </c:if>
+            </td><td>
+            <c:set var="found" value="false"/>
+            <c:forEach var="s" items="${scores}">
+              <c:if test="${s.userId == student.userId && s.scoreType == 'TASK2'}">
+                <input type="number" class="grade-input" data-type="TASK2" value="${s.score}" />
+                <c:set var="found" value="true"/>
+              </c:if>
+            </c:forEach>
+            <c:if test="${!found}">
+              <input type="number" class="grade-input" data-type="TASK2" value="0" />
+            </c:if>
+          </td><td>
+            <c:set var="found" value="false"/>
+            <c:forEach var="s" items="${scores}">
+              <c:if test="${s.userId == student.userId && s.scoreType == 'TASK3'}">
+                <input type="number" class="grade-input"  data-type="TASK3" value="${s.score}" />
+                <c:set var="found" value="true"/>
+              </c:if>
+            </c:forEach>
+            <c:if test="${!found}">
+              <input type="number" class="grade-input" data-type="TASK3" value="0" />
+            </c:if>
+          </td>
+            <td class="grade-total"></td>
+            <td><span class="grade-letter"></span></td>
+          </tr>
+        </c:forEach>
 
         </tbody>
       </table>
-
+      <input type="hidden" id="courseNo" value="${course.courseNo}">
       <div class="save-section">
         <div class="save-info">
           💡 성적을 수정한 후 저장 버튼을 클릭하세요
@@ -435,117 +491,93 @@
 </div>
 
 <script>
-  function calculateGrades() {
-    const rows = document.querySelector('.grade-table tbody').children;
+    function calculateGrades() {
+    const rows = document.querySelectorAll(".grade-table tbody tr");
+    rows.forEach(row => {
+    const inputs = row.querySelectorAll(".grade-input");
+    let total = 0;
+    inputs.forEach(input => {
+    const type = input.dataset.type;
+    const value = parseFloat(input.value) || 0;
+    switch (type) {
+    case "EXAM1": case "EXAM2": total += value * 0.3; break;
+    case "TASK1": case "TASK2": total += value * 0.1; break;
+    case "TASK3": total += value * 0.15; break;
+  }
+  });
+    const totalCell = row.querySelector(".grade-total");
+    const gradeCell = row.querySelector(".grade-letter");
+    totalCell.textContent = total.toFixed(1);
+    let grade = "F", gradeClass = "";
+    if (total >= 90) grade = "A", gradeClass = "grade-a";
+    else if (total >= 80) grade = "B", gradeClass = "grade-b";
+    else if (total >= 70) grade = "C", gradeClass = "grade-c";
+    else if (total >= 60) grade = "D", gradeClass = "grade-d";
+    gradeCell.textContent = grade;
+    gradeCell.className = `grade-letter ${gradeClass}`;
+  });
+  }
 
-    for (let row of rows) {
-      const inputs = row.querySelectorAll('.grade-input');
-      if (inputs.length === 6) {
-        const midterm = parseFloat(inputs[0].value) || 0;
-        const final = parseFloat(inputs[1].value) || 0;
-        const assignment1 = parseFloat(inputs[2].value) || 0;
-        const assignment2 = parseFloat(inputs[3].value) || 0;
-        const project = parseFloat(inputs[4].value) || 0;
-        const attendance = parseFloat(inputs[5].value) || 0;
+    function saveGrades() {
+      const rows = document.querySelectorAll(".grade-table tbody tr");
+      const scoreList = [];
 
-        // 가중평균 계산
-        const total = (midterm * 0.3) + (final * 0.3) + (assignment1 * 0.1) +
-                (assignment2 * 0.1) + (project * 0.15) + (attendance * 0.05);
+      rows.forEach(row => {
+        const userId = row.querySelector(".student-name").textContent.trim();
+        const courseNo = document.getElementById("courseNo").value;
 
-        const totalCell = row.querySelector('.grade-total');
-        const gradeCell = row.querySelector('.grade-letter');
+        const inputs = row.querySelectorAll(".grade-input");
+        inputs.forEach(input => {
+          const scoreType = input.dataset.type;
+          const score = parseFloat(input.value) || 0;
 
-        totalCell.textContent = total.toFixed(1);
+          scoreList.push({
+            userId: userId,
+            courseNo: parseInt(courseNo),
+            scoreType: scoreType,
+            score: score
+          });
+        });
+      });
 
-        // 등급 계산
-        let grade, gradeClass;
-        if (total >= 90) {
-          grade = 'A';
-          gradeClass = 'grade-a';
-        } else if (total >= 80) {
-          grade = 'B';
-          gradeClass = 'grade-b';
-        } else if (total >= 70) {
-          grade = 'C';
-          gradeClass = 'grade-c';
-        } else {
-          grade = 'D';
-          gradeClass = 'grade-d';
-        }
-
-        gradeCell.textContent = grade;
-        gradeCell.className = `grade-letter ${gradeClass}`;
-      }
+      fetch("${pageContext.request.contextPath}/class/saveGrades.do", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(scoreList)
+      })
+              .then(response => {
+                if (!response.ok) throw new Error("서버 오류");
+                return response.text();
+              })
+              .then(data => {
+              })
+              .catch(error => {
+                console.error("저장 실패:", error);
+                alert("성적 저장 중 오류가 발생했습니다.");
+              });
     }
 
-    alert('성적이 계산되었습니다!');
+
+    function exportGrades() {
+    alert("엑셀 파일로 내보내기 기능을 구현해주세요!");
   }
 
-  function saveGrades() {
-    // 실제로는 서버에 데이터를 전송
-    alert('성적이 저장되었습니다!');
-  }
-
-  function exportGrades() {
-    alert('엑셀 파일로 내보내기 기능을 구현해주세요!');
-  }
-
-  // 검색 기능
-  document.getElementById('searchStudent').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll('.grade-table tbody tr');
-
-    rows.forEach(row => {
-      const studentName = row.querySelector('.student-name').textContent.toLowerCase();
-      if (studentName.includes(searchTerm)) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
+    document.getElementById("searchStudent").addEventListener("input", function(e) {
+    const keyword = e.target.value.toLowerCase();
+    document.querySelectorAll(".grade-table tbody tr").forEach(row => {
+    const name = row.querySelector(".student-name").textContent.toLowerCase();
+    row.style.display = name.includes(keyword) ? "" : "none";
+  });
   });
 
-  // 성적 입력 시 실시간 계산
-  document.addEventListener('input', function(e) {
-    if (e.target.classList.contains('grade-input')) {
-      const row = e.target.closest('tr');
-      const inputs = row.querySelectorAll('.grade-input');
+    // 실시간 성적 계산 반영
 
-      if (inputs.length === 6) {
-        const midterm = parseFloat(inputs[0].value) || 0;
-        const final = parseFloat(inputs[1].value) || 0;
-        const assignment1 = parseFloat(inputs[2].value) || 0;
-        const assignment2 = parseFloat(inputs[3].value) || 0;
-        const project = parseFloat(inputs[4].value) || 0;
-        const attendance = parseFloat(inputs[5].value) || 0;
-
-        const total = (midterm * 0.3) + (final * 0.3) + (assignment1 * 0.1) +
-                (assignment2 * 0.1) + (project * 0.15) + (attendance * 0.05);
-
-        const totalCell = row.querySelector('.grade-total');
-        const gradeCell = row.querySelector('.grade-letter');
-
-        totalCell.textContent = total.toFixed(1);
-
-        let grade, gradeClass;
-        if (total >= 90) {
-          grade = 'A';
-          gradeClass = 'grade-a';
-        } else if (total >= 80) {
-          grade = 'B';
-          gradeClass = 'grade-b';
-        } else if (total >= 70) {
-          grade = 'C';
-          gradeClass = 'grade-c';
-        } else {
-          grade = 'D';
-          gradeClass = 'grade-d';
-        }
-
-        gradeCell.textContent = grade;
-        gradeCell.className = `grade-letter ${gradeClass}`;
-      }
-    }
+    document.addEventListener("input", function(e) {
+    if (e.target.classList.contains("grade-input")) {
+    calculateGrades();
+  }
   });
 </script>
 </body>

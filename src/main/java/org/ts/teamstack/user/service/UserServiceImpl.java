@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.ts.teamstack.user.model.dao.UserDaoImpl;
 import org.ts.teamstack.user.model.dto.Users;
 
+import java.util.Map;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -32,5 +34,16 @@ public class UserServiceImpl implements UserService {
         String pwd = passwordEncoder.encode(user.getPassword());
         user.setUserPwd(pwd);
         return dao.insertUser(user,session);
+    }
+    @Override
+    public int updateUsers(Users loginUser) {
+        return dao.updateUsers(session,loginUser);
+    }
+
+    @Override
+    public int updatePassword(Map<String, Object> user) {
+        String pwd = passwordEncoder.encode(user.get("password").toString());
+        user.put("password",pwd);
+        return dao.updatePassword(session,user);
     }
 }

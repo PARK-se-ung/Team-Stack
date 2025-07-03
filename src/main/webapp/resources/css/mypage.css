@@ -30,7 +30,7 @@ tr:hover {
     margin-top: 10px;
 }
 
-.btn-apply, .btn-bookmark-remove,.btn-refund,.btn-freeApply,.btn-reserve,.btn-applyRefund,.btn-approveRefund,.btn-rejectRefund {
+.btn-apply, .btn-bookmark-remove,.btn-refund,.btn-freeApply,.btn-reserve,.btn-applyRefund,.btn-approveRefund,.btn-rejectRefund,.btn-reserveRefund {
     padding: 4px 10px;
     font-size: 13px;
     background: #455ba8;

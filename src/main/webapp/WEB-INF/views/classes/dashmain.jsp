@@ -8,7 +8,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <%
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -163,8 +162,13 @@
 <!-- 알림 영역 -->
 <div class="class-side-content" id="dashcontent">
     알림
-    <c:if test="${completion.attendanceRate >= 10}">
-
+    <c:if test="${completion.attendanceRate >= 0}">
+        <div>
+            <a href="${pageContext.request.contextPath}/class/certificate?courseNo=${completion.courseNo}"
+               class="btn btn-success">
+                수료증 출력
+            </a>
+        </div>
     </c:if>
 </div>
 <script src="${path}/resources/js/pdf/build/pdf.mjs" type="module"></script>

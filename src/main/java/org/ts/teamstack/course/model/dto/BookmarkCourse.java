@@ -38,7 +38,4 @@ import java.util.List;
 
         private String instructorName;
         private int bookmarkNo;
-        private Integer applyNo;
-        private ApplyType applyType;
-        private RefundStatus refundStatus;
 }

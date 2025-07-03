@@ -2,6 +2,8 @@ package org.ts.teamstack.mypage.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,14 +38,18 @@ public class MypageController {
     /* 마이페이지 메인화면 이동*/
     @RequestMapping("")
     public String mypage(Model model, HttpSession session){
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         model.addAttribute("loginUser", loginUser);
         return "mypage/mypage";
     }
 
     /* 개인정보화면 이동 */
     @RequestMapping("/info")
-    public String myinfo() {
+    public String myinfo(HttpSession session,Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
+        model.addAttribute("loginUser", loginUser);
         return "mypage/ajax/user/info";
     }
 
@@ -51,7 +57,8 @@ public class MypageController {
     @RequestMapping("/bookmark")
     public String mybookmark(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
 
         pageInfo.setCurPage(cPage);
@@ -71,7 +78,8 @@ public class MypageController {
     @RequestMapping("/reserve")
     public String myreserve(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
 
         pageInfo.setCurPage(cPage);
@@ -93,7 +101,8 @@ public class MypageController {
     @RequestMapping("/apply")
     public String myapply(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
 
         pageInfo.setCurPage(cPage);
@@ -114,7 +123,8 @@ public class MypageController {
     /* 강의 개설 자격 승인 이동 */
     @RequestMapping("/approval")
     public String myapproval(Model model,HttpSession session) {
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         String approveStatus = mypageService.selectApprove(loginUser.getUserId());
 
         model.addAttribute("approveStatus", approveStatus);
@@ -128,7 +138,8 @@ public class MypageController {
     @ResponseBody
     public String myrequestapprove(Model model, HttpSession session, @RequestParam("approveFile")MultipartFile multipartFile) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
 
         String path = session.getServletContext().getRealPath("/recourse/upload/course");
 
@@ -167,7 +178,8 @@ public class MypageController {
     @RequestMapping("/take")
     public String mytake(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
 
         pageInfo.setCurPage(cPage);
@@ -188,7 +200,8 @@ public class MypageController {
     /* 수강 완료한 강의 */
     @RequestMapping("/complete")
     public String mycomplete(Model model, @RequestParam(defaultValue = "1") int cPage , HttpSession session) {
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
 
         pageInfo.setCurPage(cPage);
@@ -209,7 +222,8 @@ public class MypageController {
     @RequestMapping("/purchase")
     public String mypurchase(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
         pageInfo.setCurPage(cPage);
         pageInfo.setTotalData(paymentService.searchPurchaseCount(loginUser.getUserId()));
@@ -229,7 +243,8 @@ public class MypageController {
     @RequestMapping("/requestrefund")
     public String myrequestrefund(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
         pageInfo.initialize();//set한걸 초기화
         pageInfo.setCurPage(cPage);
         pageInfo.setTotalData(paymentService.searchPurchaseCount(loginUser.getUserId()));
@@ -247,7 +262,8 @@ public class MypageController {
     /* 환불 신청 조회 이동 */
     @RequestMapping("/refund")
     public String myrefund(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
 
         pageInfo.initialize();//set한걸 초기화
         pageInfo.setCurPage(cPage);
@@ -268,7 +284,8 @@ public class MypageController {
     @RequestMapping("/sales")
     public String mysales(Model model, @RequestParam(defaultValue = "1") int cPage ,HttpSession session) {
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
 
         pageInfo.initialize();//set한걸 초기화
         pageInfo.setCurPage(cPage);
