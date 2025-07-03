@@ -76,10 +76,16 @@
 }
 
 .class-side-content {
-    width: 15%;
+    position: fixed;   /* 뷰포트에 고정 */
+    top: 0;            /* 상단 0px */
+    right: 0;          /* 우측 0px */
+    width: 15%;        /* 원하는 너비 */
+    height: 100vh;     /* 화면 전체 높이 */
     padding: 10px;
-    background-color: #ffe4d6; /* 연한 베이지로 보조 */
+    background-color: #ffe4d6;
     border-left: 1px solid #f0c0a0;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .class-to-mypage{

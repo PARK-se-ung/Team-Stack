@@ -72,7 +72,7 @@ $(document).ready(function() {
 })
 
 function openClass(){
-    window.open("${pageContext.request.contextPath}/class/dashboard");
+    location.assign("${pageContext.request.contextPath}/class/dashboard");
 }
 
 </script>

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,4 +22,6 @@ public class Schedule {
     private Date scheduleEnddate;
     private String AssignOriname;
     private String AssignRename;
+    private List<StudentAssign> studentAssigns;
+
 }

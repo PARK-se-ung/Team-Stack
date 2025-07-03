@@ -24,7 +24,11 @@
                 <c:forEach var="notice" items="${notices}">
                     <tr>
                         <td>${notice.noticeNo}</td>
-                        <td>${notice.noticeTitle}</td>
+                        <td>
+                            <a class="text-decoration-none notice-title" href="#" data-no="${notice.noticeNo}">
+                                ${notice.noticeTitle}
+                            </a>
+                        </td>
                         <td><fmt:formatDate value="${notice.noticeDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
                             <button class="btn btn-outline-orange" data-no="${notice.noticeNo}" id="notice-convertor">수정</button>

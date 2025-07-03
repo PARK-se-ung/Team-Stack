@@ -39,6 +39,21 @@ public class PaymentController {
         }
     }
 
+    @RequestMapping("/requestrefund2")
+    @ResponseBody
+    public String requestrefund2(String imp_uid){
+
+        String paymentId = service.getPaymentId(imp_uid);
+
+        int result = service.insertRefundRequest(paymentId);
+
+        if(result>0){
+            return "success";
+        }else {
+            return "fail";
+        }
+    }
+
     @RequestMapping("/denyRefund")
     @ResponseBody
     public String denyRefund(@RequestBody Map<String, String> request){

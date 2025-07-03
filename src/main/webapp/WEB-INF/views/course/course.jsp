@@ -69,8 +69,8 @@
         </table>
     </div>
     <div class="d-flex justify-content-end align-items-center">
-        <button class="btn btn-outline-orange btn-orange me-4">이미지</button>
-        <button class="btn btn-outline-orange">리스트</button>
+        <button data-form="img" class="form-convertor btn btn-orange me-4">이미지</button>
+        <button data-form="list" class="form-convertor btn btn-outline-orange">리스트</button>
     </div>
     <div id="course-container" class="main-content">
         <div class="container">
@@ -80,7 +80,10 @@
                         <div class="col-6 col-md-4 col-lg-2 m-3">
                             <div class="card h-100">
                                 <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
-                                    <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}" class="card-img-top" alt="썸네일">
+                                    <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
+                                         class="card-img-top"
+                                         alt="썸네일"
+                                         onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
                                     <div class="card-body">
                                             ${course.courseTitle}
                                     </div>
@@ -100,4 +103,16 @@
         </div>
     </div>
 </section>
+
+<script>
+    $(document).ready(function() {
+        const categoryValue = '${category}';
+
+        $("#category option").each(function() {
+            if ($(this).val().trim() === categoryValue.trim()) {
+                $(this).prop('selected', true);
+            }
+        });
+    });
+</script>
 <%@include file="/WEB-INF/views/common/footer.jsp"%>

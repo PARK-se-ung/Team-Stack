@@ -106,9 +106,16 @@
             <div class="sort-tab" data-side="week">
                 <span class="handle">☰</span> 주차학습
             </div>
-            <div class="sort-tab" data-side="assign">
-                <span class="handle">☰</span> 과제게시판
-            </div>
+            <c:if test="${loginUser.userId eq courseid}">
+                <div class="sort-tab" data-side="assign2">
+                    <span class="handle">☰</span> 과제게시판
+                </div>
+            </c:if>
+            <c:if test="${loginUser.userId ne courseid}">
+                <div class="sort-tab" data-side="assign">
+                    <span class="handle">☰</span> 과제게시판
+                </div>
+            </c:if>
             <div class="sort-tab" data-side="chatting">
                 <span class="handle">☰</span> 채팅
             </div>
@@ -154,7 +161,12 @@
 
 </style>
 <!-- 알림 영역 -->
-<div class="class-side-content" id="dashcontent">알림</div>
+<div class="class-side-content" id="dashcontent">
+    알림
+    <c:if test="${completion.attendanceRate >= 10}">
+
+    </c:if>
+</div>
 <script src="${path}/resources/js/pdf/build/pdf.mjs" type="module"></script>
 <script type="module">
     let pdfDoc = null;
@@ -242,6 +254,7 @@
             plan: '${path}/class/plan',
             week: '${path}/class/week',
             assign: '${path}/class/assign',
+            assign2: '${path}/class/assign2',
             file: '${path}/class/file',
             chatting: '${path}/class/chatting',
             attend: '${path}/class/attend',

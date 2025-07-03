@@ -39,4 +39,5 @@ import java.util.List;
         private int bookmarkNo;
         private Integer applyNo;
         private ApplyType applyType;
+        private String refundStatus;
 }
