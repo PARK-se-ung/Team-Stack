@@ -4,8 +4,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ClassPageDao1 {
 
@@ -81,4 +82,17 @@ public interface ClassPageDao1 {
     List<Attend> getAttend(SqlSession session, String userId, int attendNo);
 
     int isUserEnrolled(SqlSession session, Course course);
+
+    // 듣는 수강생 이름 가지고 오기
+    List<String> getUserNameByCourseId(SqlSession session, int courseNo);
+
+    List<Score> getAllScores(SqlSession session, int courseNo);
+
+    Score scoreExist(SqlSession session, Score score);
+
+    int updateScore(SqlSession session, Score score);
+
+    int insertScore(SqlSession session, Score score);
+
+    List<Score> searchUserScore (SqlSession session, String userId, int courseNo);
 }
