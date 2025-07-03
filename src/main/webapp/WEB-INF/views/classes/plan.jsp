@@ -48,4 +48,16 @@
         font-weight: bold;
         color: #333;
     }
+
+
+    .pdf-down{
+        padding: 8px 16px;
+        font-size: 14px;
+        background-color: #ff944d;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 </style>
