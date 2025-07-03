@@ -5,5 +5,4 @@ public enum ApplyType {
     APPLY,   // 신청
     TAKE,    // 수강중
     COMPLETE,  // 수강완료
-    DENY     // 거절
 }

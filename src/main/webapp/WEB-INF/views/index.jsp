@@ -19,15 +19,12 @@
             <div class="image-container">
                 <c:if var="cookieFlag" test="${not empty recentCourses}">
                     <c:forEach var="course" items="${recentCourses}">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
                                 <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
-                                     class="card-img-top"
-                                     alt="썸네일"
-                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
-                                <div class="card-body">
-                                        ${course.courseTitle}
-                                </div>
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'"
+                                     alt="썸네일">
+                                <div class="card-body">${course.courseTitle}</div>
                             </a>
                         </div>
                     </c:forEach>
@@ -44,15 +41,12 @@
             <div class="image-container">
                 <c:if var="elemFlag" test="${not empty course.get('elem')}">
                     <c:forEach var="course" items="${course.get('elem')}">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
                                 <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
-                                     class="card-img-top"
-                                     alt="썸네일"
-                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
-                                <div class="card-body">
-                                        ${course.courseTitle}
-                                </div>
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'"
+                                     alt="썸네일">
+                                <div class="card-body">${course.courseTitle}</div>
                             </a>
                         </div>
                     </c:forEach>
@@ -69,15 +63,12 @@
             <div class="image-container">
                 <c:if var="elemFlag" test="${not empty course.get('midd')}">
                     <c:forEach var="course" items="${course.get('midd')}">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
                                 <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
-                                     class="card-img-top"
-                                     alt="썸네일"
-                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
-                                <div class="card-body">
-                                        ${course.courseTitle}
-                                </div>
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'"
+                                     alt="썸네일">
+                                <div class="card-body">${course.courseTitle}</div>
                             </a>
                         </div>
                     </c:forEach>
@@ -94,15 +85,12 @@
             <div class="image-container">
                 <c:if var="elemFlag" test="${not empty course.get('high')}">
                     <c:forEach var="course" items="${course.get('high')}">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card">
                             <a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${course.courseNo}">
                                 <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
-                                     class="card-img-top"
-                                     alt="썸네일"
-                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'">
-                                <div class="card-body">
-                                        ${course.courseTitle}
-                                </div>
+                                     onerror="this.src='${pageContext.request.contextPath}/resources/images/default-thumbnail.png'"
+                                     alt="썸네일">
+                                <div class="card-body">${course.courseTitle}</div>
                             </a>
                         </div>
                     </c:forEach>

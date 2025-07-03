@@ -17,102 +17,102 @@
         e.stopPropagation();
       });
 
-$(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
-  if(!confirm('환불 요청 하시겠습니까?')) return;
-  const courseNo = $(e.target).data('course-no');
-  const userId = "${sessionScope.loginUser.userId}";
-  const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
-  const impUid = await impUidResponse.text();
+<%--$(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {--%>
+<%--  if(!confirm('환불 요청 하시겠습니까?')) return;--%>
+<%--  const courseNo = $(e.target).data('course-no');--%>
+<%--  const userId = "${sessionScope.loginUser.userId}";--%>
+<%--  const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);--%>
+<%--  const impUid = await impUidResponse.text();--%>
 
-  $.ajax({
-    url: "${pageContext.request.contextPath}/payment/requestrefund2",
-    type: "POST",
-    data: {
-      imp_uid: impUid,
-    },
-    dataType: "text",
-    success: function(result) {
-      if(result === "success") {
-        alert("환불 요청이 접수되었습니다.");
-        tabLoad('bookmark');
-      } else {
-        alert("환불 요청에 실패했습니다.");
-      }
-    },
-    error: function() {
-      alert("서버 오류로 환불 요청에 실패했습니다.");
-    }
-  });
-});
+<%--  $.ajax({--%>
+<%--    url: "${pageContext.request.contextPath}/payment/requestrefund2",--%>
+<%--    type: "POST",--%>
+<%--    data: {--%>
+<%--      imp_uid: impUid,--%>
+<%--    },--%>
+<%--    dataType: "text",--%>
+<%--    success: function(result) {--%>
+<%--      if(result === "success") {--%>
+<%--        alert("환불 요청이 접수되었습니다.");--%>
+<%--        tabLoad('bookmark');--%>
+<%--      } else {--%>
+<%--        alert("환불 요청에 실패했습니다.");--%>
+<%--      }--%>
+<%--    },--%>
+<%--    error: function() {--%>
+<%--      alert("서버 오류로 환불 요청에 실패했습니다.");--%>
+<%--    }--%>
+<%--  });--%>
+<%--});--%>
 
-    <%--<!-- 결제 기능 -->--%>
+<%--    &lt;%&ndash;<!-- 결제 기능 -->&ndash;%&gt;--%>
 
-    $('.btn-apply').on('click',async function(e){
+<%--    $('.btn-apply').on('click',async function(e){--%>
 
-          IMP.init("imp02858447");
-          const courseNo = $(e.target).data('course-no');
-          const courseTitle = $(e.target).data('course-title');
-          const coursePrice = $(e.target).data('course-price');
-          const applyType = $(e.target).data('apply-type');
+<%--          IMP.init("imp02858447");--%>
+<%--          const courseNo = $(e.target).data('course-no');--%>
+<%--          const courseTitle = $(e.target).data('course-title');--%>
+<%--          const coursePrice = $(e.target).data('course-price');--%>
+<%--          const applyType = $(e.target).data('apply-type');--%>
 
-          const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);
+<%--          const merchantUidResponse = await fetch('${pageContext.request.contextPath}/payment/generatePaymentPk?courseNo='+courseNo);--%>
 
-          const merchantUid = await merchantUidResponse.text();
+<%--          const merchantUid = await merchantUidResponse.text();--%>
 
-          console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)
-          IMP.request_pay(
-                  {
-                    channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
-                    pg:"uplus",
-                    pay_method: "card",
-                    merchant_uid: merchantUid,
-                    name: courseTitle,
-                    amount: coursePrice,
-                    buyer_email: "${sessionScope.loginUser.userEmail}",
-                    buyer_name: "${sessionScope.loginUser.name}",
-                    buyer_tel: "${sessionScope.loginUser.userPhone}"
-                  },
-                  async function (rsp) {
-                  // 결제 종료 시 호출되는 콜백 함수
-                  // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,
-                  // 결제 결과를 처리하는 로직을 작성합니다.
-                    if (rsp.success) {
-                      const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',
-                              {
-                                method:"POST",
-                                headers:{
-                                  'Content-type':'application/json'
-                                },
-                                body:JSON.stringify({
-                                  paymentId: rsp.merchant_uid,
-                                  userId: "${sessionScope.loginUser.userId}",
-                                  paymentPrice: rsp.paid_amount,
-                                  portoneId: rsp.imp_uid,
-                                  paymentDate:rsp.paid_at,
-                                  courseNo: courseNo, // 실제 강의 번호 사용
-                                  applyType:applyType
-                                })
-                              });
-                      const result=await response.text();
+<%--          console.log("이건 결제사전등록하면서 생성한 PK야"+merchantUid)--%>
+<%--          IMP.request_pay(--%>
+<%--                  {--%>
+<%--                    channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",--%>
+<%--                    pg:"uplus",--%>
+<%--                    pay_method: "card",--%>
+<%--                    merchant_uid: merchantUid,--%>
+<%--                    name: courseTitle,--%>
+<%--                    amount: coursePrice,--%>
+<%--                    buyer_email: "${sessionScope.loginUser.userEmail}",--%>
+<%--                    buyer_name: "${sessionScope.loginUser.name}",--%>
+<%--                    buyer_tel: "${sessionScope.loginUser.userPhone}"--%>
+<%--                  },--%>
+<%--                  async function (rsp) {--%>
+<%--                  // 결제 종료 시 호출되는 콜백 함수--%>
+<%--                  // response.imp_uid 값으로 결제 단건조회 API를 호출하여 결제 결과를 확인하고,--%>
+<%--                  // 결제 결과를 처리하는 로직을 작성합니다.--%>
+<%--                    if (rsp.success) {--%>
+<%--                      const response=await fetch('${pageContext.request.contextPath}/payment/insertPayment',--%>
+<%--                              {--%>
+<%--                                method:"POST",--%>
+<%--                                headers:{--%>
+<%--                                  'Content-type':'application/json'--%>
+<%--                                },--%>
+<%--                                body:JSON.stringify({--%>
+<%--                                  paymentId: rsp.merchant_uid,--%>
+<%--                                  userId: "${sessionScope.loginUser.userId}",--%>
+<%--                                  paymentPrice: rsp.paid_amount,--%>
+<%--                                  portoneId: rsp.imp_uid,--%>
+<%--                                  paymentDate:rsp.paid_at,--%>
+<%--                                  courseNo: courseNo, // 실제 강의 번호 사용--%>
+<%--                                  applyType:applyType--%>
+<%--                                })--%>
+<%--                              });--%>
+<%--                      const result=await response.text();--%>
 
-                      if (result === "success") {
-                        alert('결제가 완료되었습니다.');
-                        console.log("결제성공");
-                        tabLoad('bookmark'); // 페이지 새로고침
-                      } else {
-                        alert('결제에 실패하였습니다.');
-                        tabLoad('bookmark');
-                        console.log("결제실패 = 가격이 달라서 내가 막은거지?");
-                      }
-                      execute=false;
-                    }else {
-                      var msg = rsp.error_msg;
-                      alert(msg);
-                      execute=false;
-                    }
+<%--                      if (result === "success") {--%>
+<%--                        alert('결제가 완료되었습니다.');--%>
+<%--                        console.log("결제성공");--%>
+<%--                        tabLoad('bookmark'); // 페이지 새로고침--%>
+<%--                      } else {--%>
+<%--                        alert('결제에 실패하였습니다.');--%>
+<%--                        tabLoad('bookmark');--%>
+<%--                        console.log("결제실패 = 가격이 달라서 내가 막은거지?");--%>
+<%--                      }--%>
+<%--                      execute=false;--%>
+<%--                    }else {--%>
+<%--                      var msg = rsp.error_msg;--%>
+<%--                      alert(msg);--%>
+<%--                      execute=false;--%>
+<%--                    }--%>
 
-                  });
-    });
+<%--                  });--%>
+<%--    });--%>
 
     <!-- 북마크 취소 기능 -->
     $(document).ready(function() {
@@ -160,10 +160,6 @@ $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', asy
     </form>
   </div>
 
-  <div class="view-toggle">
-    <strong><a>이미지형</a></strong> | <a>리스트형</a>
-  </div>
-
   <table>
     <thead>
     <tr>
@@ -176,7 +172,7 @@ $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', asy
       <th>모집 시작일</th>
       <th>강의 시작일</th>
       <th>금액</th>
-      <th>신청</th>
+<%--      <th>신청</th>--%>
     </tr>
     </thead>
     <tbody>
@@ -210,86 +206,86 @@ $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', asy
           <td><fmt:formatDate value="${b.recruitDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatDate value="${b.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${b.coursePrice}" type="number"/>원</td>
-          <td>
-            <c:choose>
-              <c:when test="${not empty b.applyNo}">
-                <c:choose>
-                  <c:when test="${}">
+<%--          <td>--%>
+<%--            <c:choose>--%>
+<%--              <c:when test="${not empty b.applyNo}">--%>
+<%--                <c:choose>--%>
+<%--                  <c:when test="${}">--%>
 
-                  </c:when>
+<%--                  </c:when>--%>
 
-                </c:choose>
-                <span style="color:orange;">환불 대기</span>
-              </c:when>
-              <c:otherwise>
-                <%--여기는 apply가 없으니까 신청이 가능해야해 모집일과--%>
-                <%-- 아래는 기존 신청/결제/환불 버튼 로직 --%>
-                <c:choose>
-                  <%-- 1. 무료 강의 --%>
-                  <c:when test="${b.coursePrice == 0}">
-                    <c:choose>
-                      <c:when test="${nowMillis > recruitEndDateMillis}">
-                        <span style="color:#888;">모집 종료</span>
-                      </c:when>
-                      <c:when test="${nowMillis < recruitDateObj.time}">
-                        <button class="btn-freeApply"
-                                data-course-no="${b.courseNo}"
-                                data-course-title="${b.courseTitle}"
-                                data-apply-type="RESERVE">예약</button>
-                      </c:when>
-                      <c:otherwise>
-                        <button class="btn-freeApply"
-                                data-course-no="${b.courseNo}"
-                                data-course-title="${b.courseTitle}"
-                                data-apply-type="APPLY">신청</button>
-                      </c:otherwise>
-                    </c:choose>
-                  </c:when>
-                  <%-- 2. 유료 강의 --%>
-                  <c:otherwise>
-                    <c:choose>
-                      <c:when test="${empty b.applyNo}">
-                        <c:choose>
-                          <c:when test="${nowMillis > recruitEndDateMillis}">
-                            <span style="color:#888;">모집 종료</span>
-                          </c:when>
-                          <c:when test="${nowMillis < recruitDateObj.time}">
-                            <button class="btn-apply"
-                                    data-course-no="${b.courseNo}"
-                                    data-course-title="${b.courseTitle}"
-                                    data-course-price="${b.coursePrice}"
-                                    data-apply-type="RESERVE">예약</button>
-                          </c:when>
-                          <c:otherwise>
-                            <button class="btn-apply"
-                                    data-course-no="${b.courseNo}"
-                                    data-course-title="${b.courseTitle}"
-                                    data-course-price="${b.coursePrice}"
-                                    data-apply-type="APPLY">결제</button>
-                          </c:otherwise>
-                        </c:choose>
-                      </c:when>
-                      <c:otherwise>
-                        <c:choose>
-                          <c:when test="${b.applyType == 'APPLY' || b.applyType == 'RESERVE'}">
-                            <button class="btn-applyRefund"
-                                    data-apply-no="${b.applyNo}"
-                                    data-course-no="${b.courseNo}">환불</button>
-                          </c:when>
-                          <c:when test="${b.applyType == 'TAKE' || b.applyType == 'COMPLETE'}">
-                            <span style="color:#888;">수강중/완료</span>
-                          </c:when>
-                          <c:otherwise>
-                            <!-- 기타 상태 처리 -->
-                          </c:otherwise>
-                        </c:choose>
-                      </c:otherwise>
-                    </c:choose>
-                  </c:otherwise>
-                </c:choose>
-              </c:otherwise>
-            </c:choose>
-          </td>
+<%--                </c:choose>--%>
+<%--                <span style="color:orange;">환불 대기</span>--%>
+<%--              </c:when>--%>
+<%--              <c:otherwise>--%>
+<%--                &lt;%&ndash;여기는 apply가 없으니까 신청이 가능해야해 모집일과&ndash;%&gt;--%>
+<%--                &lt;%&ndash; 아래는 기존 신청/결제/환불 버튼 로직 &ndash;%&gt;--%>
+<%--                <c:choose>--%>
+<%--                  &lt;%&ndash; 1. 무료 강의 &ndash;%&gt;--%>
+<%--                  <c:when test="${b.coursePrice == 0}">--%>
+<%--                    <c:choose>--%>
+<%--                      <c:when test="${nowMillis > recruitEndDateMillis}">--%>
+<%--                        <span style="color:#888;">모집 종료</span>--%>
+<%--                      </c:when>--%>
+<%--                      <c:when test="${nowMillis < recruitDateObj.time}">--%>
+<%--                        <button class="btn-freeApply"--%>
+<%--                                data-course-no="${b.courseNo}"--%>
+<%--                                data-course-title="${b.courseTitle}"--%>
+<%--                                data-apply-type="RESERVE">예약</button>--%>
+<%--                      </c:when>--%>
+<%--                      <c:otherwise>--%>
+<%--                        <button class="btn-freeApply"--%>
+<%--                                data-course-no="${b.courseNo}"--%>
+<%--                                data-course-title="${b.courseTitle}"--%>
+<%--                                data-apply-type="APPLY">신청</button>--%>
+<%--                      </c:otherwise>--%>
+<%--                    </c:choose>--%>
+<%--                  </c:when>--%>
+<%--                  &lt;%&ndash; 2. 유료 강의 &ndash;%&gt;--%>
+<%--                  <c:otherwise>--%>
+<%--                    <c:choose>--%>
+<%--                      <c:when test="${empty b.applyNo}">--%>
+<%--                        <c:choose>--%>
+<%--                          <c:when test="${nowMillis > recruitEndDateMillis}">--%>
+<%--                            <span style="color:#888;">모집 종료</span>--%>
+<%--                          </c:when>--%>
+<%--                          <c:when test="${nowMillis < recruitDateObj.time}">--%>
+<%--                            <button class="btn-apply"--%>
+<%--                                    data-course-no="${b.courseNo}"--%>
+<%--                                    data-course-title="${b.courseTitle}"--%>
+<%--                                    data-course-price="${b.coursePrice}"--%>
+<%--                                    data-apply-type="RESERVE">예약</button>--%>
+<%--                          </c:when>--%>
+<%--                          <c:otherwise>--%>
+<%--                            <button class="btn-apply"--%>
+<%--                                    data-course-no="${b.courseNo}"--%>
+<%--                                    data-course-title="${b.courseTitle}"--%>
+<%--                                    data-course-price="${b.coursePrice}"--%>
+<%--                                    data-apply-type="APPLY">결제</button>--%>
+<%--                          </c:otherwise>--%>
+<%--                        </c:choose>--%>
+<%--                      </c:when>--%>
+<%--                      <c:otherwise>--%>
+<%--                        <c:choose>--%>
+<%--                          <c:when test="${b.applyType == 'APPLY' || b.applyType == 'RESERVE'}">--%>
+<%--                            <button class="btn-applyRefund"--%>
+<%--                                    data-apply-no="${b.applyNo}"--%>
+<%--                                    data-course-no="${b.courseNo}">환불</button>--%>
+<%--                          </c:when>--%>
+<%--                          <c:when test="${b.applyType == 'TAKE' || b.applyType == 'COMPLETE'}">--%>
+<%--                            <span style="color:#888;">수강중/완료</span>--%>
+<%--                          </c:when>--%>
+<%--                          <c:otherwise>--%>
+<%--                            <!-- 기타 상태 처리 -->--%>
+<%--                          </c:otherwise>--%>
+<%--                        </c:choose>--%>
+<%--                      </c:otherwise>--%>
+<%--                    </c:choose>--%>
+<%--                  </c:otherwise>--%>
+<%--                </c:choose>--%>
+<%--              </c:otherwise>--%>
+<%--            </c:choose>--%>
+<%--          </td>--%>
 
         </tr>
       </c:forEach>

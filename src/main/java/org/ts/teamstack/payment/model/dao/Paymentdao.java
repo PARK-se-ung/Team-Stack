@@ -31,6 +31,8 @@ public interface Paymentdao {
 
     int insertRefundRequest(SqlSession sqlSession, String paymentId);
 
+    int insertRefundRequest2(SqlSession sqlSession, String paymentId);
+
     List<Refund> searchAllRefund(SqlSession sqlSession, String userId, PageInfo pageInfo);
 
     int searchRefundCount(SqlSession sqlSession, String userId);

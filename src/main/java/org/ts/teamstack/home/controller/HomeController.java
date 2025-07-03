@@ -9,9 +9,12 @@ import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.home.service.HomeService;
 import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.manager.model.dto.Notice;
+import org.ts.teamstack.manager.service.ManagerService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -23,6 +26,7 @@ public class HomeController {
 
     private final HomeService service;
     private final PageInfo pageInfo;
+    private final ManagerService managerService;
 
     @RequestMapping("/")
     public String index(@CookieValue(name = "teamstackRecentView",required = false) Cookie cookie,
@@ -147,6 +151,15 @@ public class HomeController {
                 model.addAttribute("bookmark", cnt);
             }
         }
+
+        /* apply test */
+        if(loginUser != null){
+            int flag = service.searchApply(loginUser.getUserId(), courseNo);
+            if(flag > 0){
+                model.addAttribute("apply", flag);
+            }
+        }
+
         return "course/coursedetail";
     }
 
@@ -177,4 +190,20 @@ public class HomeController {
         return courseNos;
     }
 
+    @RequestMapping("/home/noticelist")
+    public String noticelist(Model model, HttpServletRequest request, @RequestParam(defaultValue = "1") int cPage) {
+        pageInfo.initialize();
+        pageInfo.setCurPage(cPage);
+        pageInfo.setNumPerpage(10);
+        model.addAttribute("notices", managerService.searchNotice(pageInfo));
+        pageInfo.setTotalData(managerService.searchNoticeCount());
+        model.addAttribute("pageBar", PageBarFactory.dispatcherPageBuilder(pageInfo, request, "/home/noticelist"));
+        return "manage/noticelist";
+    }
+
+    @RequestMapping("/home/noticelocal")
+    public String noticelocal(Model model, @RequestParam("noticeNo") int noticeNo) {
+        model.addAttribute("notice", managerService.searchNoticeByNo(noticeNo));
+        return "manage/noticelocal";
+    }
 }

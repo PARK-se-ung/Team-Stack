@@ -77,4 +77,9 @@ public class HomeDaoImpl implements HomeDao {
         return session.selectOne("home.searchCourseCount", parsedParams);
     }
 
+    @Override
+    public int searchApply(SqlSession session, String userId, int courseNo) {
+        return session.selectOne("home.searchApply", Map.of("userId",  userId, "courseNo", courseNo));
+    }
+
 }
