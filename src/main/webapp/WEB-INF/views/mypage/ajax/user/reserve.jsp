@@ -48,7 +48,7 @@
     <c:if test="${not empty reserve}">
       <c:forEach var="r" items="${reserve}">
         <tr>
-          <td>${r.courseTitle}</td>
+          <td><a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${b.courseNo}">${r.courseTitle}</a></td>
           <td>${r.instructorName}</td>
           <td>
             <c:choose>
