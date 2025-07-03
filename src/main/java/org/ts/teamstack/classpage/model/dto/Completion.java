@@ -12,6 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @Builder
 public class Completion {
+    private int courseNo;
     private String courseTitle;
     private Date startDate;
     private Date endDate;
