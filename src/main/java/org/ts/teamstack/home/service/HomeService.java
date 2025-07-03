@@ -18,4 +18,5 @@ public interface HomeService {
     int searchCourseCount(Map<String, Object> parsedParams);
     List<Alarm> searchAlarm(String userId);
     int updateAlarm(int no);
+    int searchApply(String userId, int courseNo);
 }

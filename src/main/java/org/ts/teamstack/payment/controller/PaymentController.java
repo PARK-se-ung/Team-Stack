@@ -8,6 +8,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.ts.teamstack.course.model.dto.Apply;
+import org.ts.teamstack.course.model.dto.ApplyType;
 import org.ts.teamstack.course.service.CourseService;
 import org.ts.teamstack.payment.model.dto.*;
 import org.ts.teamstack.payment.model.service.PaymentService;
@@ -178,7 +180,7 @@ public class PaymentController {
                 .paymentDate(new Timestamp(request.getPaymentDate() * 1000))
                 .courseNo(request.getCourseNo())
                 .build();
-       Map<String,Object> insertApply = new HashMap<>();
+        Map<String,Object> insertApply = new HashMap<>();
         insertApply.put("userId",request.getUserId());
         insertApply.put("courseNo",request.getCourseNo());
         insertApply.put("applyType",request.getApplyType());

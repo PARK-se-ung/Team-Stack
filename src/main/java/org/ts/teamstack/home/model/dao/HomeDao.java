@@ -22,4 +22,5 @@ public interface HomeDao {
     int searchCourseCount(SqlSession session,  Map<String, Object> parsedParams);
     List<Alarm> searchAlarm(SqlSession session, String userId);
     int updateAlarm(SqlSession session, int no);
+    int searchApply(SqlSession session, String userId, int courseNo);
 }

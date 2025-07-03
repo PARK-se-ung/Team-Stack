@@ -16,7 +16,7 @@
       <a href="">이용약관</a>
     </div>
     <div class="col-lg-3 d-flex justify-content-center">
-      <a href="">공지사항</a>
+      <a href="${pageContext.request.contextPath}/home/noticelist">공지사항</a>
     </div>
   </div>
   <hr>
