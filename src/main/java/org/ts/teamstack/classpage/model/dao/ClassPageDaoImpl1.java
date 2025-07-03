@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +173,22 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
         return session.insert("stuAssignInsert", studentAssign);
     }
 
+
+    @Override
+    public int insertAttend(SqlSession session, Attend attend) {
+        return session.insert("classes.insertAttend", attend);
+    }
+
+    @Override
+    public int isUserEnrolled(SqlSession session, Course course) {
+        return session.selectOne("isUserEnrolled", course);
+    }
+
+    @Override
+    public List<Attend> getAttendListByCourse(SqlSession session, int courseNo) {
+        return session.selectList("classes.getAttendListByCourse", courseNo);
+    }
+
     @Override
     public List<Attend> getAttend(SqlSession session, String userId, int courseNo) {
         Map<String, Object> param = new HashMap<>();
@@ -182,16 +198,35 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
     }
 
     @Override
-    public int insertAttend(SqlSession session, Attend attend) {
-        return session.insert("classes.insertAttend", attend);
-    }
-    @Override
-    public List<Attend> getAttendListByCourse(SqlSession session, int courseNo) {
-        return session.selectList("classes.getAttendListByCourse", courseNo);
+    public List<String> getUserNameByCourseId(SqlSession session, int courseNo) {
+        return session.selectList("classes.getUserNameByCourseId",courseNo);
     }
 
     @Override
-    public int isUserEnrolled(SqlSession session, Course course) {
-        return session.selectOne("isUserEnrolled", course);
+    public List<Score> getAllScores(SqlSession session, int courseNo) {
+        return session.selectList("classes.getAllScore",courseNo);
+    }
+
+    @Override
+    public Score scoreExist(SqlSession session, Score score) {
+        return session.selectOne("classes.scoreExist", score);
+    }
+
+    @Override
+    public int updateScore(SqlSession session, Score score) {
+        return session.update("classes.scoreUpdate", score);
+    }
+
+    @Override
+    public int insertScore(SqlSession session, Score score) {
+        return session.insert("classes.scoreInsert", score);
+    }
+
+    @Override
+    public List<Score> searchUserScore(SqlSession session, String userId, int courseNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+        param.put("courseNo", courseNo);
+        return session.selectList("classes.searchUserScore",param);
     }
 }

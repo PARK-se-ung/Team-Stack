@@ -3,7 +3,7 @@ package org.ts.teamstack.classpage.model.service;
 import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -79,5 +79,16 @@ public interface ClassPageService1 {
 
     List<Attend> getAttend(String userId, int attendNo);
 
+    List<String> getUserNameByCourseId(int courseNo);
+
     int isUserEnrolled(Course course);
+    List<Score> getAllScores(int courseNo);
+
+    Score scoreExist(Score score);
+
+    int updateScore(Score score);
+
+    int insertScore(Score score);
+
+    List<Score> searchUserScore(String userId, int courseNo);
 }
