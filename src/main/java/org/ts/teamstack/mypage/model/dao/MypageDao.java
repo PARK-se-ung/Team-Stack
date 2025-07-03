@@ -1,5 +1,6 @@
 package org.ts.teamstack.mypage.model.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Apply;
@@ -31,4 +32,11 @@ public interface MypageDao {
     int insertApprove(SqlSession session, Approve approve);
 
     String selectApprove(SqlSession session, String userId);
+
+    List<Course> getCoursesByStatus(SqlSession session, @Param("courseStatus") String courseStatus,
+                                    @Param("userId") String userId );
+
+    List<Course> selectTakeCourses(SqlSession session, @Param("userId") String userId);
+
+    List<Course> selectCompleteCourses(SqlSession session, @Param("userId") String userId);
 }

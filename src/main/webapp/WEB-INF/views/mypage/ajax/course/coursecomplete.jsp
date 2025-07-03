@@ -68,7 +68,7 @@
 
     .card img {
       width: 100%;
-      height: 150px;
+      height: 200px;
       object-fit: cover;
     }
 
@@ -89,53 +89,54 @@
       font-size: 12px;
       color: #555;
     }
+
+    .current-container .grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
   </style>
   </head>
-  <body>
+  <div>
 
-  <div class="top-bar">
-    <div class="search-box">
-      <input type="text" placeholder="강의명, 지식공유자 이름 검색">
-      <button class="btn btn-outline-orange">검색</button>
-    </div>
+    <div class="top-bar">
+      <div class="search-box">
+        <input type="text" placeholder="강의명 검색" id="searchKeyword" name="keyword">
+        <button class="btn btn-outline-orange" id="searchBtn">검색</button>
+      </div>
 
-    <div>
-      <select class="sort-select">
-        <option>제목순</option>
-        <option>최신순</option>
-        <option>인기순</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="view-toggle">
-    <strong><a>이미지형</a></strong> | <a>리스트형</a>
-  </div>
-
-  <div class="grid">
-    <!-- 카드 예시 1 -->
-    <div class="card">
-      <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="강의 썸네일">
-      <div class="card-body">
-        <div class="card-title">[서초1동] 수학 A - 2025년 3분기</div>
-        <div class="card-meta">2025-07-01 ~ 2025-09-23</div>
+      <div>
+        <select class="sort-select">
+          <option>제목순</option>
+          <option>최신순</option>
+        </select>
       </div>
     </div>
 
-    <!-- 카드 예시 2 -->
-    <div class="card">
-      <img src="${pageContext.request.contextPath}/resources/images/logo.png" alt="강의 썸네일">
-      <div class="card-body">
-        <div class="card-title">[방배3동] 2025년 3분기 수강생 모집</div>
-        <div class="card-meta">2025-07-02 ~ 2025-09-29</div>
-      </div>
+    <div class="grid">
+      <c:forEach var="course" items="${completeCourse}">
+        <!-- 시작일·총 주수를 data 속성으로 저장 -->
+        <div class="card"
+             data-start="${course.courseStartDate}"
+             data-weeks="${course.totalWeek}">
+          <img src="${pageContext.request.contextPath}/resources/upload/${course.thumbnail}"
+               alt="강의 썸네일">
+          <div class="card-body">
+            <div class="card-title">${course.courseTitle}</div>
+            <div class="card-meta">
+              <!-- 시작일 -->
+              <span class="card-meta-start">${course.courseStartDate}</span>
+              ~
+              <!-- JS로 채워질 종료일 자리 -->
+              <span class="card-meta-end">${course.courseEndDate}</span>
+            </div>
+          </div>
+        </div>
+      </c:forEach>
     </div>
-
-    <!-- 필요한 만큼 반복 -->
   </div>
-
-
 </div>
+<!-- 필요한 만큼 반복 -->
 
 <!-- nav 전환 로직 -->
 <script>
@@ -145,6 +146,26 @@
     $(".nav-item").removeClass("active");
     $current.addClass("active");
     tabLoad(tabId);
+  });
+
+  $(document).on('click', '#searchBtn', function(){
+    const q = $('#searchKeyword').val().trim().toLowerCase();
+
+    // 입력이 비었으면 모두 표시
+    if (!q) {
+      $('.card').show();
+      return;
+    }
+
+    $('.card').each(function(){
+      const title = $(this).find('.card-title').text().toLowerCase();
+      // 제목에 키워드가 포함되면 보이고, 아니면 숨김
+      title.indexOf(q) !== -1 ? $(this).show() : $(this).hide();
+    });
+  });
+
+  $('#searchKeyword').on('keypress', function(e){
+    if (e.which === 13) $('#searchBtn').click();
   });
 
 </script>

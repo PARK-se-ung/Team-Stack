@@ -14,6 +14,8 @@ import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
 import org.ts.teamstack.course.model.dto.Course;
+import org.ts.teamstack.course.model.dto.CourseApplyDto;
+import org.ts.teamstack.course.service.CourseService;
 import org.ts.teamstack.manager.model.dto.Approve;
 import org.ts.teamstack.mypage.service.MypageService;
 import org.ts.teamstack.payment.model.dto.Payment;
@@ -34,6 +36,7 @@ public class MypageController {
     private final PaymentService paymentService;
     private final PageInfo pageInfo;
     private final MypageService mypageService;
+    private final CourseService courseService;
 
     /* 마이페이지 메인화면 이동*/
     @RequestMapping("")
@@ -308,17 +311,48 @@ public class MypageController {
     }
 
     @RequestMapping("/courseapply")
-    public String mycourseapply(Model model) {
+    public String mycourseapply(Model model ,HttpSession session) {
+        Users loginUser = (Users) session.getAttribute("loginUser");
+
+
+        List<Course> pending = mypageService.getCoursesByStatus("STAY", loginUser.getUserId());
+        List<Course> approved = mypageService.getCoursesByStatus("APPROVE", loginUser.getUserId());
+
+        model.addAttribute("pendingList", pending);
+        model.addAttribute("approvedList", approved);
         return "mypage/ajax/course/courseapply";
     }
 
     @RequestMapping("/studentapply")
-    public String mystudentapply(Model model) { return "mypage/ajax/course/studentapply"; }
+    public String applyStudents(HttpSession session, Model m){
+        //userId를 기준으로 등록된 강좌에 신청한 학생들 가져오기
+        Users loginUser = (Users)session.getAttribute("loginUser");
+
+        List<CourseApplyDto> searchApply=courseService.searchCourseApplyStudents(loginUser.getUserId());
+        m.addAttribute("searchApply",searchApply);
+
+        return "mypage/ajax/course/studentapply";
+    }
 
     @RequestMapping("/coursetake")
-    public String mycoursetake(Model model) { return "mypage/ajax/course/coursetake"; }
+    public String mycoursetake(Model model,HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+
+        List<Course> takeCourses = mypageService.selectTakeCourses(loginUser.getUserId());
+        model.addAttribute("takeCourses", takeCourses);
+
+
+        return "mypage/ajax/course/coursetake";
+    }
 
     @RequestMapping("/coursecomplete")
-    public String mycoursecomplete(Model model) { return "mypage/ajax/course/coursecomplete"; }
+    public String mycoursecomplete(Model model,HttpSession session) {
+
+        Users loginUser = (Users) session.getAttribute("loginUser");
+        List<Course> completeCourse = mypageService.selectCompleteCourses(loginUser.getUserId());
+        model.addAttribute("completeCourse", completeCourse);
+        return "mypage/ajax/course/coursecomplete";
+    }
 
 }

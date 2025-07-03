@@ -3,8 +3,10 @@ package org.ts.teamstack.course.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/course")
 @Slf4j
@@ -37,20 +39,20 @@ public class CourseController {
     private final CourseService courseService;
 
     @PostMapping("/insert")
-    public Map<String, Object> insertCourse(
-            @RequestParam String courseStartDate,
+    public String insertCourse(
+            @ModelAttribute Course course,
+            BindingResult br,
             @RequestParam(value = "slideImage", required = false) MultipartFile[] upfiles,
-            @RequestParam(value = "thumbnail",  required = false) MultipartFile thumbnail,
-            @RequestParam(value = "courseContent",  required = false) MultipartFile content,
-            @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
-            @RequestParam Course course,
-            @AuthenticationPrincipal UserDetails user,
+            @RequestParam(value = "thumbnailFile",  required = false) MultipartFile thumbnail,
+            @RequestParam(value = "contentFile",  required = false) MultipartFile content,
+            @RequestParam(value = "planFile", required = false) MultipartFile planFile,
             HttpSession session
     ) {
         Users loginUser = (Users)session.getAttribute("loginUser");
-        if (loginUser == null) {
+        if (loginUser != null) {
             course.setUserId(loginUser.getUserId());
         }
+
 
 
         // path 생성
@@ -61,9 +63,9 @@ public class CourseController {
             if(!flag) log.error("create fail");
         }
 
-        // 강의 정보 입력
+        // 강의 상태를 "STAY"로 기본 설정 (승인 대기)
         course.setCourseStatus("STAY");
-        course.setUserId(user.getUsername());
+//        course.setUserId(user.getUsername());
 
 
         // 썸네일 rename
@@ -99,6 +101,7 @@ public class CourseController {
         }
 
         // 강의 & files INSERT 처리
+        log.info(course.toString());
 
         int result = 0;
         try{
@@ -130,7 +133,7 @@ public class CourseController {
 
         Map<String, Object> res = new HashMap<>();
         res.put("success", result > 0);
-        return res;
+        return "mypage/mypage";
     }
     @DeleteMapping("/bookmark/delete")
     @ResponseBody
@@ -141,6 +144,48 @@ public class CourseController {
         else result="fail";
         return result;
     }
+
+    @RequestMapping("searchcoursebyno")
+    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
+                                   Model model, HttpServletResponse response){
+        Set<Integer> courseNos = new LinkedHashSet<>();
+        courseNos.add(courseNo);
+        if(recentView != null && !recentView.getValue().isEmpty()){
+            for(String no : recentView.getValue().split(",")){
+                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
+            }
+        }
+
+
+//        Course course = courseService.searchCourseByNo(courseNo);
+//        model.addAttribute("course", course);
+
+
+
+        return "course/course";
+    }
+
+    @PostMapping("/applychange")
+    @ResponseBody
+    public ResponseEntity<Boolean> applyChange(@RequestBody Map<String,Object> param){
+        param.put("type","TAKE");
+        int result=courseService.applyCourseChange(param);
+        if(result>0){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    @PostMapping("/deleteApply")
+    @ResponseBody
+    public ResponseEntity<Boolean> deleteApply(@RequestBody Map<String,Object> param){
+        int result=courseService.deleteApply(param);
+        if(result>0){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().body(false);
+    }
+
 
 
 }

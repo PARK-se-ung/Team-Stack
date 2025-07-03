@@ -34,4 +34,10 @@ public interface MypageService {
     int insertApprove(Approve approve, MultipartFile multipartFile, String path);
 
     String selectApprove(String userId);
+
+    List<Course> getCoursesByStatus( String courseStatus,String userId);
+
+    List<Course> selectTakeCourses( String userId);
+
+    List<Course> selectCompleteCourses( String userId);
 }

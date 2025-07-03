@@ -15,11 +15,13 @@ function tabLoad(tabId) {
         success: function(data) {
             $(".main-content").html(data);
             if (tabId === 'open') {
+                const startDay=new Date();
+                startDay.setDate(startDay.getDate()+14);
                 flatpickr("#datePicker", {
                     mode: "range",
                     dateFormat: "Y-m-d H:i",
                     minDate: "today",
-                    defaultDate: [new Date(), (() => {
+                    defaultDate: [startDay, (() => {
                         const d = new Date();
                         d.setDate(d.getDate() + 14);
                         return d;
@@ -33,7 +35,7 @@ function tabLoad(tabId) {
                             const [start, end] = selectedDates;
                             const msPerWeek = 7 * 24 * 60 * 60 * 1000;
                             const weeks = Math.round((end - start) / msPerWeek);
-                            const recruit = new Date(start.getTime() + msPerWeek);
+                            const recruit = new Date(start.getTime() - msPerWeek);
 
                             // 포맷 함수: yyyy-MM-dd (java.sql.Date용)
                             const pad = n => n.toString().padStart(2, "0");
@@ -44,10 +46,23 @@ function tabLoad(tabId) {
                                 `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
                                 `${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
+                            let full = fmtFull(start);
+                            $("#courseStartDate").val(full.split(' ')[0]);
+
                             // hidden inputs 에 값 세팅
-                            $("#courseStartDate").val(fmtFull(start));
                             $("#totalWeek").val(weeks);
                             $("#recruitDate").val(fmtYmd(recruit));
+
+                            const hours   = start.getHours();
+                            const minutes = start.getMinutes();
+                            const hours2   = end.getHours();
+                            const minutes2 = end.getMinutes();
+                            const totalMin = hours * 60 + minutes;
+                            const totalMin2 = hours2 * 60 + minutes2;
+                            const time = totalMin2 - totalMin;
+                            $("#courseStartTime").val(totalMin);
+                            $("#courseTime").val(time);
+
                         }
                     }
                 });
@@ -70,7 +85,7 @@ function bookmarkPaging(cPage){
         url: getContextPath() + "/mypage/bookmark",
         type: 'POST',
         data:{
-          "cPage":cPage
+            "cPage":cPage
         },
         success: function(data) {
             $(".main-content").html(data);
@@ -196,11 +211,11 @@ function loading() {
 function errorContent(tabId) {
     const $form = $("<div>").addClass("loading-content");
     const $i = $("i").addClass("bi bi-exclamation-triangle")
-                     .attr({
-                         "font-size":"48px",
-                         "margin-bottom":"20px",
-                         "color":"#dc3545"
-                     })
+        .attr({
+            "font-size":"48px",
+            "margin-bottom":"20px",
+            "color":"#dc3545"
+        })
     const $msg = $("<p>").text("페이지 로드 실패");
     const $button = $("<button>").addClass("btn btn-outline-orange")
         .attr('onclick', `tabLoad(${tabId})`)
@@ -213,5 +228,6 @@ function errorContent(tabId) {
 function getContextPath() {
     return "/" + window.location.pathname.split("/")[1];
 }
+
 
 

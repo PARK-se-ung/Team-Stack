@@ -17,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class Course {
     private int courseNo;
     private String userId;
@@ -26,11 +25,9 @@ public class Course {
     private String courseAddress;
     private String courseContent;
     private Date courseStartDate;
+    private Date courseEndDate;
     private int totalWeek;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date recruitDate;
-
+    private String recruitDate;
     private String thumbnail;
     private String gradeType;
     private String subject;
