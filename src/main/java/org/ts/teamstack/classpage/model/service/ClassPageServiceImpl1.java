@@ -7,7 +7,7 @@ import org.ts.teamstack.classpage.model.dao.ClassPageDao1;
 import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.course.model.dto.Course;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,6 +151,19 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
         return classDao.insertAttend(session,attend);
     }
 
+
+    @Override
+    public List<Attend> getAttend(String userId, int attendNo) {
+        return classDao.getAttend(session,userId,attendNo);
+    }
+
+    @Override
+    public int isUserEnrolled(Course course) {
+        return classDao.isUserEnrolled(session,course);
+    }
+
+
+
     @Override
     public Map<Integer, Integer> getAttendCountByRound(int courseNo) {
         List<Attend> attendList = classDao.getAttendListByCourse(session, courseNo);
@@ -163,13 +176,35 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
         return attendCount;
     }
 
+
     @Override
-    public List<Attend> getAttend(String userId, int attendNo) {
-        return classDao.getAttend(session,userId,attendNo);
+    public List<String> getUserNameByCourseId(int courseNo) {
+        return classDao.getUserNameByCourseId(session,courseNo);
     }
 
     @Override
-    public int isUserEnrolled(Course course) {
-        return classDao.isUserEnrolled(session,course);
+    public List<Score> getAllScores(int courseNo) {
+        return classDao.getAllScores(session,courseNo);
+    }
+
+    @Override
+    public Score scoreExist(Score score) {
+        return classDao.scoreExist(session, score);
+    }
+
+    @Override
+    public int updateScore(Score score) {
+        return classDao.updateScore(session,score);
+    }
+
+    @Override
+    public int insertScore(Score score) {
+        return classDao.insertScore(session,score);
+    }
+
+    @Override
+    public List<Score> searchUserScore(String userId, int courseNo) {
+        return classDao.searchUserScore(session, userId, courseNo);
     }
 }
+

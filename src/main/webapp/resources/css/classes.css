@@ -118,13 +118,11 @@
     display: flex;
     align-items: center;
     font-weight: bold;
-    font-size: 3vh;
 }
 
 .class-box-title i {
     font-size: 2vh;
-    margin-top: 1vh;
-    margin-right: 1vw;
+
 }
 
 .class-main-item {
@@ -188,7 +186,6 @@
     border-radius: 8px;
     margin-top: 2vh;
     padding-bottom: 1vh;
-    padding-left: 2vw;
     margin-bottom: 8px;
     transition: background-color 0.3s, border-left-color 0.3s;
     align-items: center;

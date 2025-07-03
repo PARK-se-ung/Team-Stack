@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Completion {
+
+public class Score {
+    private int scoreNo;
+    private String userId;
+    private String scoreType;
+    private int score;
     private int courseNo;
-    private String courseTitle;
-    private Date startDate;
-    private Date endDate;
-    private int attendanceRate;
+
 }

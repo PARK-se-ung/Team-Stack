@@ -1,7 +1,6 @@
 package org.ts.teamstack.classpage.controller;
 
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,20 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.ts.teamstack.classpage.model.dto.Board;
-import org.ts.teamstack.classpage.model.dto.Schedule;
-import org.ts.teamstack.classpage.model.dto.StudentAssign;
+import org.ts.teamstack.classpage.model.dto.*;
 import org.ts.teamstack.classpage.model.service.ClassPageService1;
 import org.ts.teamstack.common.controller.FileUpload;
-import org.ts.teamstack.classpage.model.dto.Assign;
-import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 
 @Controller

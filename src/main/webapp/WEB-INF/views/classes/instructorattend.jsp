@@ -328,7 +328,7 @@
                     </div>
                 </div>
                 <div class="student-grid" id="studentGrid">
-                <c:forEach var="s" items="${students}">
+                    <c:forEach var="s" items="${students}">
                         <div class="student-card" data-name="${s}" data-courseno="${course.courseNo}">
                             <div class="student-info">
                                 <div class="student-name">${s}</div>

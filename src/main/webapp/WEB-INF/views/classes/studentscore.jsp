@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -244,239 +247,158 @@
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <h1>📊 내 성적표</h1>
-    <p>수강 중인 과목의 성적을 확인하세요</p>
-  </div>
-
   <div class="content">
     <div class="course-info">
-      <div class="course-title">웹 개발 기초 과정</div>
-      <div class="course-details">담당강사: 김교수 | 수강기간: 2024.03.01 ~ 2024.05.31</div>
+      <div class="course-title">${course.courseTitle}</div>
+      <div class="course-details">담당강사: 김교수 | 수강기간: ${course.courseStartDate}  ~ </div>
     </div>
 
     <div class="summary-section">
       <div class="summary-title">📈 성적 현황 요약</div>
       <div class="summary-stats">
         <div class="stat-item">
-          <div class="stat-number">85.5</div>
+          <div class="stat-number">
+            <c:set var="totalScore" value="0"/>
+            <c:set var="examCount" value="0"/>
+            <c:set var="taskCount" value="0"/>
+            <c:forEach var="s" items="${scores}">
+              <c:choose>
+                <c:when test="${s.scoreType == 'EXAM1'}">
+                  <c:set var="totalScore" value="${totalScore + (s.score * 0.25)}"/>
+                  <c:set var="examCount" value="${examCount + 1}"/>
+                </c:when>
+                <c:when test="${s.scoreType == 'EXAM2'}">
+                  <c:set var="totalScore" value="${totalScore + (s.score * 0.25)}"/>
+                  <c:set var="examCount" value="${examCount + 1}"/>
+                </c:when>
+                <c:when test="${s.scoreType == 'TASK1'}">
+                  <c:set var="totalScore" value="${totalScore + (s.score * 0.2)}"/>
+                  <c:set var="taskCount" value="${taskCount + 1}"/>
+                </c:when>
+                <c:when test="${s.scoreType == 'TASK2'}">
+                  <c:set var="totalScore" value="${totalScore + (s.score * 0.2)}"/>
+                  <c:set var="taskCount" value="${taskCount + 1}"/>
+                </c:when>
+                <c:when test="${s.scoreType == 'TASK3'}">
+                  <c:set var="totalScore" value="${totalScore + (s.score * 0.1)}"/>
+                  <c:set var="taskCount" value="${taskCount + 1}"/>
+                </c:when>
+              </c:choose>
+            </c:forEach>
+            ${totalScore}
+          </div>
           <div class="stat-label">총 평균</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">A</div>
+          <div class="stat-number">
+            <c:choose>
+              <c:when test="${totalScore >= 95}">A+</c:when>
+              <c:when test="${totalScore >= 90}">A</c:when>
+              <c:when test="${totalScore >= 85}">B+</c:when>
+              <c:when test="${totalScore >= 80}">B</c:when>
+              <c:when test="${totalScore >= 75}">C+</c:when>
+              <c:when test="${totalScore >= 70}">C</c:when>
+              <c:when test="${totalScore >= 65}">D+</c:when>
+              <c:when test="${totalScore >= 60}">D</c:when>
+              <c:otherwise>F</c:otherwise>
+            </c:choose>
+          </div>
           <div class="stat-label">최종 등급</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">7</div>
+          <div class="stat-number">${taskCount}</div>
           <div class="stat-label">총 과제</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">2</div>
+          <div class="stat-number">${examCount}</div>
           <div class="stat-label">시험</div>
         </div>
       </div>
     </div>
 
     <div class="grade-grid">
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">중간고사</div>
-          <div class="grade-type">시험</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">시험일</span>
-            <span class="grade-value">2024.04.15</span>
+      <!-- DB에서 가져온 성적 데이터 반복 -->
+      <c:forEach var="s" items="${scores}">
+        <div class="grade-card">
+          <div class="grade-header">
+            <div class="grade-title">
+              <c:choose>
+                <c:when test="${s.scoreType == 'EXAM1'}">중간평가</c:when>
+                <c:when test="${s.scoreType == 'EXAM2'}">기말평가</c:when>
+                <c:when test="${s.scoreType == 'TASK1'}">과제1</c:when>
+                <c:when test="${s.scoreType == 'TASK2'}">과제2</c:when>
+                <c:when test="${s.scoreType == 'TASK3'}">과제3</c:when>
+                <c:otherwise>${s.scoreType}</c:otherwise>
+              </c:choose>
+            </div>
+            <div class="grade-type">
+              <c:choose>
+                <c:when test="${s.scoreType == 'EXAM1' || s.scoreType == 'EXAM2'}">시험</c:when>
+                <c:when test="${s.scoreType == 'TASK1' || s.scoreType == 'TASK2' || s.scoreType == 'TASK3'}">과제</c:when>
+                <c:otherwise>기타</c:otherwise>
+              </c:choose>
+            </div>
           </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">100점</span>
+          <div class="grade-details">
+            <div class="grade-row">
+              <span class="grade-label">만점</span>
+              <span class="grade-value">100점</span>
+            </div>
+            <div class="grade-row">
+              <span class="grade-label">취득점수</span>
+              <span class="grade-value">${s.score}점</span>
+            </div>
+            <div class="grade-row">
+              <span class="grade-label">반영비율</span>
+              <span class="grade-value">
+                <c:choose>
+                  <c:when test="${s.scoreType == 'EXAM1' || s.scoreType == 'EXAM2'}">25%</c:when>
+                  <c:when test="${s.scoreType == 'TASK1' || s.scoreType == 'TASK2'}">20%</c:when>
+                  <c:when test="${s.scoreType == 'TASK3'}">10%</c:when>
+                  <c:otherwise>0%</c:otherwise>
+                </c:choose>
+              </span>
+            </div>
+            <div class="grade-row">
+              <span class="grade-label">반영점수</span>
+              <span class="grade-value">
+                <c:choose>
+                  <c:when test="${s.scoreType == 'EXAM1' || s.scoreType == 'EXAM2'}">${s.score * 0.25}점</c:when>
+                  <c:when test="${s.scoreType == 'TASK1' || s.scoreType == 'TASK2'}">${s.score * 0.2}점</c:when>
+                  <c:when test="${s.scoreType == 'TASK3'}">${s.score * 0.1}점</c:when>
+                  <c:otherwise>0점</c:otherwise>
+                </c:choose>
+              </span>
+            </div>
           </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">88점</span>
-          </div>
+          <c:choose>
+            <c:when test="${s.score >= 90}">
+              <div class="grade-score score-excellent">
+                <span class="score-icon">🏆</span>
+                <span>우수 (${s.score}점)</span>
+              </div>
+            </c:when>
+            <c:when test="${s.score >= 80}">
+              <div class="grade-score score-good">
+                <span class="score-icon">👍</span>
+                <span>양호 (${s.score}점)</span>
+              </div>
+            </c:when>
+            <c:when test="${s.score >= 70}">
+              <div class="grade-score score-average">
+                <span class="score-icon">📝</span>
+                <span>보통 (${s.score}점)</span>
+              </div>
+            </c:when>
+            <c:otherwise>
+              <div class="grade-score score-poor">
+                <span class="score-icon">📉</span>
+                <span>미흡 (${s.score}점)</span>
+              </div>
+            </c:otherwise>
+          </c:choose>
         </div>
-        <div class="grade-score score-excellent">
-          <span class="score-icon">🏆</span>
-          <span>우수 (88점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">기말고사</div>
-          <div class="grade-type">시험</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">시험일</span>
-            <span class="grade-value">2024.05.20</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">100점</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">92점</span>
-          </div>
-        </div>
-        <div class="grade-score score-excellent">
-          <span class="score-icon">🏆</span>
-          <span>우수 (92점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">HTML 기초 과제</div>
-          <div class="grade-type">과제</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">제출일</span>
-            <span class="grade-value">2024.03.10</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">20점</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">18점</span>
-          </div>
-        </div>
-        <div class="grade-score score-excellent">
-          <span class="score-icon">✨</span>
-          <span>우수 (18점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">CSS 스타일링 과제</div>
-          <div class="grade-type">과제</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">제출일</span>
-            <span class="grade-value">2024.03.24</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">20점</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">16점</span>
-          </div>
-        </div>
-        <div class="grade-score score-good">
-          <span class="score-icon">👍</span>
-          <span>양호 (16점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">JavaScript 기초 과제</div>
-          <div class="grade-type">과제</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">제출일</span>
-            <span class="grade-value">2024.04.07</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">20점</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">15점</span>
-          </div>
-        </div>
-        <div class="grade-score score-average">
-          <span class="score-icon">📝</span>
-          <span>보통 (15점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">반응형 웹 과제</div>
-          <div class="grade-type">과제</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">제출일</span>
-            <span class="grade-value">2024.04.28</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">20점</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">19점</span>
-          </div>
-        </div>
-        <div class="grade-score score-excellent">
-          <span class="score-icon">🌟</span>
-          <span>우수 (19점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">웹사이트 프로젝트</div>
-          <div class="grade-type">프로젝트</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">제출일</span>
-            <span class="grade-value">2024.05.15</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">만점</span>
-            <span class="grade-value">30점</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">취득점수</span>
-            <span class="grade-value">26점</span>
-          </div>
-        </div>
-        <div class="grade-score score-excellent">
-          <span class="score-icon">🚀</span>
-          <span>우수 (26점)</span>
-        </div>
-      </div>
-
-      <div class="grade-card">
-        <div class="grade-header">
-          <div class="grade-title">출석 점수</div>
-          <div class="grade-type">출석</div>
-        </div>
-        <div class="grade-details">
-          <div class="grade-row">
-            <span class="grade-label">총 수업</span>
-            <span class="grade-value">12회</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">출석</span>
-            <span class="grade-value">10회</span>
-          </div>
-          <div class="grade-row">
-            <span class="grade-label">출석률</span>
-            <span class="grade-value">83%</span>
-          </div>
-        </div>
-        <div class="grade-score score-good">
-          <span class="score-icon">📅</span>
-          <span>양호 (출석률 83%)</span>
-        </div>
-      </div>
+      </c:forEach>
     </div>
   </div>
 </div>
