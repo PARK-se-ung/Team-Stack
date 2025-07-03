@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ts.teamstack.payment.model.dto.RefundStatus;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -39,4 +40,5 @@ import java.util.List;
         private int bookmarkNo;
         private Integer applyNo;
         private ApplyType applyType;
+        private RefundStatus refundStatus;
 }

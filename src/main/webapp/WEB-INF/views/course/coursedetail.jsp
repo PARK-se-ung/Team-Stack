@@ -1,6 +1,19 @@
+<%@ page import="org.ts.teamstack.course.model.dto.Course" %>
+<%@ page import="java.sql.Date" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="/WEB-INF/views/common/header.jsp"%>
+<%
+    Date recruitDate = ((Course) request.getAttribute("course")).getRecruitDate();
+    Date courseStartDate = ((Course) request.getAttribute("course")).getCourseStartDate();
+    Date current = new Date(System.currentTimeMillis());
+    boolean isReserve = current.before(recruitDate);
+    boolean isApply = recruitDate.before(current) && current.before(courseStartDate);
+    boolean isDone = courseStartDate.before(current);
+    request.setAttribute("isReserve", isReserve);
+    request.setAttribute("isApply", isApply);
+    request.setAttribute("isDone", isDone);
+%>
 <section class="main-content" style="margin: 3%">
     <!-- attach slide -->
     <div class="slide-img">
@@ -135,15 +148,34 @@
                 <hr>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        ${course.userId}
+                        강사: ${course.userId}
                     </div>
-                    <div>
+                    <div class="d-flex justify-content-center align-items-center">
                         <button class="me-3 btn btn-outline-primary bookmark" data-no="${course.courseNo}">
                             <i class="bi ${bookmark == null?'bi-bookmark':'bi-bookmark-fill'}"></i>
                         </button>
-                        <button class="btn btn-outline-orange">
-                            신청
-                        </button>
+                        <c:if var="applyTest" test="${apply == null}">
+                            <c:if test="${isReserve}">
+                                <button class="btn btn-outline-orange">
+                                    예약
+                                </button>
+                            </c:if>
+                            <c:if test="${isApply}">
+                                <button class="btn btn-outline-orange">
+                                    신청
+                                </button>
+                            </c:if>
+                            <c:if test="${isDone}">
+                                <button class="btn btn-outline-secondary" disabled>
+                                    모집 종료
+                                </button>
+                            </c:if>
+                        </c:if>
+                        <c:if test="${not applyTest}">
+                            <button class="btn btn-outline-danger">
+                                신청 취소
+                            </button>
+                        </c:if>
                     </div>
                 </div>
             </div>
