@@ -8,16 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.ts.teamstack.user.model.dto.Users;
 import org.ts.teamstack.user.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
@@ -105,7 +106,63 @@ public class UserController {
         return "redirect:/";
     }*/
 
+    /* 개인 정보 수정 */
+    @PostMapping("/userUpdate")
+    public ModelAndView updateUsers(ModelAndView mv, HttpServletRequest request) {
 
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Users loginUser = (Users) auth.getPrincipal();
+
+        int result = service.updateUsers(loginUser);
+        if (result > 0) {
+            request.getSession().setAttribute("loginUser", loginUser);
+            mv.addObject("msg","수정완료");
+            mv.addObject("loc","/mypage");
+        } else {
+            mv.addObject("msg","수정실패");
+            mv.addObject("loc","/mypage");
+        }
+        mv.setViewName("common/msg");
+        return mv;
+
+    }
+    @PostMapping("/updatePassword")
+    @ResponseBody
+    public Map<String, Object> updatePassword(@RequestBody Map<String, String> request,
+                                              HttpServletRequest httpRequest) {
+        Map<String, Object> response = new HashMap<>();
+
+
+        try {
+            String newPassword = request.get("newPassword");
+
+            // 현재 로그인한 사용자 정보 가져오기
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Users loginUser = (Users) auth.getPrincipal();
+            Map<String, Object> user = new HashMap<>();
+            user.put("userId",loginUser.getUserId());
+            user.put("password",newPassword);
+
+            // Service에서 비밀번호 변경 처리 (암호화 포함)
+            int result = service.updatePassword(user);
+
+            if (result>0) {
+                // 비밀번호 변경 성공 시 세션 무효화 (로그아웃)
+                httpRequest.getSession().invalidate();
+
+                response.put("success", true);
+                response.put("logout", true);
+            } else {
+                response.put("success", false);
+            }
+
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "서버 오류가 발생했습니다: " + e.getMessage());
+        }
+
+        return response;
+    }
 
 
 }
