@@ -156,12 +156,28 @@
                         </button>
                         <c:if var="applyTest" test="${apply == null}">
                             <c:if test="${isReserve}">
-                                <button class="btn btn-outline-orange">
+                                <button class="btn btn-outline-orange btn-apply"
+                                        data-no="${course.courseNo}"
+                                        data-title="${course.courseTitle}"
+                                        data-price="${course.coursePrice}"
+                                        data-type="RESERVE",
+                                        data-id="${sessionScope.loginUser.userId}",
+                                        data-mail="${sessionScope.loginUser.userEmail}"
+                                        data-name="${sessionScope.loginUser.name}"
+                                        data-tel="${sessionScope.loginUser.userPhone}">
                                     예약
                                 </button>
                             </c:if>
                             <c:if test="${isApply}">
-                                <button class="btn btn-outline-orange">
+                                <button class="btn btn-outline-orange btn-apply"
+                                        data-no="${course.courseNo}"
+                                        data-title="${course.courseTitle}"
+                                        data-price="${course.coursePrice}"
+                                        data-type="APPLY",
+                                        data-id="${sessionScope.loginUser.userId}",
+                                        data-mail="${sessionScope.loginUser.userEmail}"
+                                        data-name="${sessionScope.loginUser.name}"
+                                        data-tel="${sessionScope.loginUser.userPhone}">
                                     신청
                                 </button>
                             </c:if>
@@ -172,9 +188,16 @@
                             </c:if>
                         </c:if>
                         <c:if test="${not applyTest}">
-                            <button class="btn btn-outline-danger">
-                                신청 취소
-                            </button>
+                            <c:if test="${isReserve}">
+                                <button class="btn btn-outline-danger btn-refund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
+                                    예약 취소
+                                </button>
+                            </c:if>
+                            <c:if test="${not isReserve}">
+                                <button class="btn btn-outline-danger btn-applyRefund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
+                                    신청 취소
+                                </button>
+                            </c:if>
                         </c:if>
                     </div>
                 </div>
@@ -182,6 +205,7 @@
         </div>
     </div>
 </section>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/pdf/build/pdf.mjs" type="module"></script>
 <script src="${pageContext.request.contextPath}/resources/js/home.js"></script>
 <script type="module">

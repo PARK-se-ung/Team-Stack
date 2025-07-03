@@ -105,3 +105,124 @@ $(document).on('click', '.bookmark', function() {
 function getContextPath() {
     return "/" + window.location.pathname.split("/")[1];
 }
+
+$('.btn-apply').on('click',async function(e){
+    IMP.init("imp02858447");
+    const courseNo = $(e.target).data('no');
+    const courseTitle = $(e.target).data('title');
+    const coursePrice = $(e.target).data('price');
+    const applyType = $(e.target).data('type');
+    const mail = $(e.target).data("mail");
+    const name = $(e.target).data("name");
+    const tel = $(e.target).data("tel");
+    const id = $(e.target).data("id");
+
+    const merchantUidResponse = await fetch( getContextPath() + '/payment/generatePaymentPk?courseNo='+courseNo);
+
+    const merchantUid = await merchantUidResponse.text();
+
+    IMP.request_pay(
+        {
+            channelKey: "channel-key-1ea045b8-ac8b-4afe-8b5f-f247bda2e199",
+            pg:"uplus",
+            pay_method: "card",
+            merchant_uid: merchantUid,
+            name: courseTitle,
+            amount: coursePrice,
+            buyer_email: mail,
+            buyer_name: name,
+            buyer_tel: tel
+        },
+        async function (rsp) {
+            if (rsp.success) {
+                const response=await fetch(getContextPath() + '/payment/insertPayment',
+                    {
+                        method:"POST",
+                        headers:{
+                            'Content-type':'application/json'
+                        },
+                        body:JSON.stringify({
+                            paymentId: rsp.merchant_uid,
+                            userId: id,
+                            paymentPrice: rsp.paid_amount,
+                            portoneId: rsp.imp_uid,
+                            paymentDate:rsp.paid_at,
+                            courseNo: courseNo, // 실제 강의 번호 사용
+                            applyType:applyType
+                        })
+                    });
+                const result=await response.text();
+
+                if (result === "success") {
+                    alert('결제가 완료되었습니다.');
+                    location.assign(getContextPath() + "/home/searchcoursebyno?courseNo=" + courseNo);
+                } else {
+                    alert('결제에 실패하였습니다.');
+                    location.assign(getContextPath() + "/home/searchcoursebyno?courseNo=" + courseNo);
+                }
+                execute=false;
+            }else {
+                var msg = rsp.error_msg;
+                alert(msg);
+                execute=false;
+            }
+        });
+});
+
+$(document).on('click','.btn-applyRefund', async function(e){
+     if(!confirm('환불 요청 하시겠습니까?')) return;
+        const paymentId = $(e.target).data('payment-id');
+        console.log(paymentId);
+        $.ajax({
+            url: getContextPath() + "/payment/requestrefund",
+            type: "POST",
+            data: {
+                paymentId: paymentId
+            },
+            dataType: "text",
+            success: function(result) {
+                if(result === "success") {
+                    alert("환불 요청이 접수되었습니다.");
+                    tabLoad('requestrefund');
+                } else {
+                    alert("환불 요청에 실패했습니다.");
+                }
+            },
+            error: function() {
+                alert("서버 오류로 환불 요청에 실패했습니다.");
+            }
+        });
+});
+
+$(document).on('click', '.btn-refund', async function(e){
+    if(!confirm('예약 취소 하시겠습니까?')) return;
+    const courseNo = $(e.target).data('no');
+    const userId = $(e.target).data('id');
+    const impUidResponse = await fetch(getContextPath() + '/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
+    const impUid = await impUidResponse.text();
+    $.ajax({
+        url: getContextPath() + "/payment/cancelPayment2",
+        type:"POST",
+        contentType:"application/json",
+        data:JSON.stringify({
+            "imp_uid": impUid,
+            "reason": "사용자 요청 환불",
+            "userId":userId,
+            "courseNo":courseNo
+        }),
+        dataType:"text",
+        success: function(result) {
+            if(result === "success") {
+                alert("환불이 정상적으로 처리되었습니다.");
+                location.assign(getContextPath() + "/home/searchcoursebyno?courseNo=" + courseNo);
+            } else {
+                alert("환불 처리에 실패했습니다.");
+                location.assign(getContextPath() + "/home/searchcoursebyno?courseNo=" + courseNo);
+            }
+        },
+        error: function() {
+            alert("서버 오류로 환불 요청에 실패했습니다.");
+            location.assign(getContextPath() + "/home/searchcoursebyno?courseNo=" + courseNo);
+        }
+    });
+});

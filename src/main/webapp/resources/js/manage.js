@@ -407,7 +407,6 @@ class Deque {
         this._tail = 0;
     }
 
-
     get length() {
         return this._tail - this._head;
     }
