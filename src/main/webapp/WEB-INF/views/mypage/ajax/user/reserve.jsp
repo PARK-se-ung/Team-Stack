@@ -67,15 +67,15 @@
 
             <c:choose>
 
-            <c:when test="${empty rf.refundStatus}">
-            <c:if test="${rf.applyType == 'RESERVE'}">
-              <button class="btn-reserveRefund"
-                      data-course-no="${rf.courseNo}"
-                      data-payment-id="${rf.paymentId}">
-                예약취소
-              </button>
-            </c:if>
-            </c:when>
+              <c:when test="${empty rf.refundStatus}">
+                <c:if test="${rf.applyType == 'RESERVE'}">
+                  <button class="btn-reserveRefund"
+                          data-course-no="${rf.courseNo}"
+                          data-payment-id="${rf.paymentId}">
+                    예약취소
+                  </button>
+                </c:if>
+              </c:when>
               <c:otherwise>
                 <c:choose>
                   <c:when test="${rf.refundStatus == 'S'}">
