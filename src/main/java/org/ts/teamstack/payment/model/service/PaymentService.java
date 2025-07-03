@@ -24,6 +24,9 @@ public interface PaymentService {
 
     int insertRefundRequest(String paymentId);
 
+    int insertRefundRequest2(String paymentId,Map<String,Object> deleteApply);
+
+
     int searchRefundCount(String userId);
 
     List<Refund> searchAllRefund(String userId, PageInfo pageInfo);

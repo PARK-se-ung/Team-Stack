@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.ts.teamstack.course.model.dto.ApplyType;
 
 import java.sql.Timestamp;
 
@@ -25,4 +26,5 @@ public class Payment {
     private String instructorName;   // 강사명
     private String userName; //유저명
     private RefundStatus refundStatus; //환불 상태
+    private ApplyType applyType;
 }

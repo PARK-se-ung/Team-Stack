@@ -28,6 +28,7 @@ public class PaymentController {
     private final PaymentService service;
     private final CourseService courseService;
 
+    //paymentId가 있어서 굳이 imp_uid로 검색하지않아도되는 애
     @RequestMapping("/requestrefund")
     @ResponseBody
     public String requestrefund(String paymentId){
@@ -39,6 +40,7 @@ public class PaymentController {
         }
     }
 
+    // paymentId정보가 없어서 impUid로 서치를 해와야하는애
     @RequestMapping("/requestrefund2")
     @ResponseBody
     public String requestrefund2(String imp_uid){
@@ -81,6 +83,7 @@ public class PaymentController {
         return ImpUid;
     }
 
+    //요청없이 바로 취소해버리는 매핑
     @RequestMapping("/cancelPayment")
     @ResponseBody
     public String cancelPayment(@RequestBody Map<String, String> request){
@@ -98,6 +101,35 @@ public class PaymentController {
             paymentCancel(impUid, token, reason);
             String paymentId = service.getPaymentId(impUid);
             int result = service.updateRefundStatus(paymentId,deleteApply);
+
+            if(result > 0) {
+                return "success";
+            } else {
+                return "fail";
+            }
+        } catch (Exception e) {
+            log.error("환불 요청 실패", e);
+            return "fail";
+        }
+    }
+    //요청없이 바로 취소해버리는 매핑
+    @RequestMapping("/cancelPayment2")
+    @ResponseBody
+    public String cancelPayment2(@RequestBody Map<String, String> request){
+        String impUid = request.get("imp_uid");
+        String reason = request.get("reason");
+        String userId = request.get("userId");
+        String courseNo = request.get("courseNo");
+
+        Map<String,Object> deleteApply = new HashMap<>();
+        deleteApply.put("userId",userId);
+        deleteApply.put("courseNo",courseNo);
+
+        try {
+            String token = getIamportAccessToken();
+            paymentCancel(impUid, token, reason);
+            String paymentId = service.getPaymentId(impUid);
+            int result = service.insertRefundRequest2(paymentId,deleteApply);
 
             if(result > 0) {
                 return "success";

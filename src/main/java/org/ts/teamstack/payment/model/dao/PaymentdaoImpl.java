@@ -72,6 +72,12 @@ public class PaymentdaoImpl implements Paymentdao {
         return sqlSession.insert("payment.insertRefundRequest",paymentId);
     }
 
+    //예약 환불 approve상태로 refuns insert
+    @Override
+    public int insertRefundRequest2(SqlSession sqlSession, String paymentId) {
+        return sqlSession.insert("payment.insertRefundRequest2",paymentId);
+    }
+
     @Override
     public List<Refund> searchAllRefund(SqlSession sqlSession, String userId, PageInfo pageInfo) {
         return sqlSession.selectList("payment.searchAllRefund",userId,pageInfo.getRowBounds());

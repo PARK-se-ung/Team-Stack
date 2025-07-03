@@ -64,9 +64,37 @@
           <td><fmt:formatDate value="${r.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${r.coursePrice}" type="number"/>원</td>
           <td>
-            <button class="btn-refund" data-apply-no="${r.applyNo}" data-course-no="${r.courseNo}">환불신청</button>
+
+            <c:choose>
+
+            <c:when test="${empty rf.refundStatus}">
+            <c:if test="${rf.applyType == 'RESERVE'}">
+              <button class="btn-reserveRefund"
+                      data-course-no="${rf.courseNo}"
+                      data-payment-id="${rf.paymentId}">
+                예약취소
+              </button>
+            </c:if>
+            </c:when>
+              <c:otherwise>
+                <c:choose>
+                  <c:when test="${rf.refundStatus == 'S'}">
+                    <span style="color:#888;">취소 승인 대기</span>
+                  </c:when>
+                  <c:when test="${rf.refundStatus == 'A'}">
+                    <span style="color:green;">취소 승인</span>
+                  </c:when>
+                  <c:when test="${rf.refundStatus == 'D'}">
+                    <span style="color:red;">취소 반려</span>
+                  </c:when>
+                  <c:otherwise>
+                    <span style="color:#888;">알 수 없음</span>
+                  </c:otherwise>
+                </c:choose>
+              </c:otherwise>
+            </c:choose>
+
           </td>
-            <%-- <td><fmt:formatDate value="${a.applyDate}" pattern="yyyy-MM-dd"/></td> --%>
         </tr>
       </c:forEach>
     </c:if>
@@ -95,37 +123,6 @@
     tabLoad(tabId);
   });
 
-  <!-- 환불 으어어억 기능 -->
-  $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){
-    const courseNo = $(e.target).data('course-no');
-    const userId = "${sessionScope.loginUser.userId}";
-    const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
-    const impUid = await impUidResponse.text();
-    $.ajax({
-      url:"${pageContext.request.contextPath}/payment/cancelPayment",
-      type:"POST",
-      contentType:"application/json",
-      data:JSON.stringify({
-        "imp_uid": impUid,
-        "reason": "사용자 요청 환불",
-        "userId":userId,
-        "courseNo":courseNo
-      }),
-      dataType:"text",
-      success: function(result) {
-        if(result === "success") {
-          alert("환불이 정상적으로 처리되었습니다.");
-          tabLoad('bookmark'); // 페이지 새로고침
-        } else {
-          alert("환불 처리에 실패했습니다.");
-          tabLoad('bookmark');
-        }
-      },
-      error: function() {
-        alert("서버 오류로 환불 요청에 실패했습니다.");
-        tabLoad('bookmark');
-      }
-    });
-  });
+
 
 </script>
