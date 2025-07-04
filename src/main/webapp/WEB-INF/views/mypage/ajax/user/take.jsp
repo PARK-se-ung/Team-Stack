@@ -104,7 +104,6 @@
   $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
     if(!confirm('신청 취소 하시겠습니까?')) return;
     const paymentId = $(e.target).data('payment-id');
-    console.log(paymentId);
     $.ajax({
       url: "${pageContext.request.contextPath}/payment/requestrefund",
       type: "POST",
