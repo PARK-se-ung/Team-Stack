@@ -157,9 +157,9 @@ public class HomeController {
         }
 
         /* apply search */
-        if(loginUser != null){
+        if (loginUser != null) {
             Apply apply = service.searchApply(loginUser.getUserId(), courseNo);
-            if(apply != null){
+            if (apply != null) {
                 model.addAttribute("apply", apply);
             }
         }

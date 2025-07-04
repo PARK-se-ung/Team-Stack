@@ -64,7 +64,7 @@ public class PaymentController {
 
         String impUid = (String)request.get("imp_uid");
         String paymentId = service.getPaymentId(impUid);
-
+        request.put("paymentId",paymentId);
         int result = service.denyRefundStatus(request);
         if(result>0){
             return "success";
@@ -72,6 +72,8 @@ public class PaymentController {
             return "fail";
         }
     }
+
+
 
     @RequestMapping("/getImpUid")
     @ResponseBody

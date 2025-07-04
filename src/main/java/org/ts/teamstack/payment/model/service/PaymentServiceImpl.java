@@ -109,7 +109,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public int denyRefundStatus( Map<String, Object> request) {
 
-        request.put("type","APPLY");
+        request.put("type","TAKE");
         int result = dao.denyRefundStatus(sqlSession, (String)request.get("paymentId"));
 
         if (result > 0) {
@@ -117,6 +117,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
             return result;
     }
+
 
     @Override
     @Transactional

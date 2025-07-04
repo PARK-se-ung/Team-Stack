@@ -63,16 +63,17 @@
                     <td><fmt:formatNumber value="${a.coursePrice}" type="number"/>원</td>
                     <td>
                         <c:choose>
-                            <c:when test="${not empty a.applyType}">
-                            <button class="btn-applyRefund"
-                                    data-course-no="${a.courseNo}"
-                                    data-apply-no="${a.applyNo}"
+                            <c:when test="${a.applyType ne 'REFUND'}">
+
+                                <button class="btn-applyRefund"
+                                        data-course-no="${a.courseNo}"
                                 >신청취소
-                            </button>
-                        </c:when>
-                        <c:otherwise>
-                            <span>취소 대기중</span>
-                        </c:otherwise>
+                                </button>
+
+                            </c:when>
+                            <c:otherwise>
+                                <span>취소 대기중</span>
+                            </c:otherwise>
                         </c:choose>
                     </td>
                 </tr>
@@ -104,15 +105,15 @@
     //apply, take 신청 취소 기능
     $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
         if(!confirm('신청 취소 하시겠습니까?')) return;
-        // const paymentId = $(e.target).data('payment-id');
-        const applyNo=$(e.target).data('apply-no');
-        console.log(paymentId);
+        // const applyNo=$(e.target).data('apply-no');
+        const courseNo = $(e.target).data('course-no');
+        const userId = "${loginUser.userId}"
         $.ajax({
-            url: "${pageContext.request.contextPath}/payment/requestrefund",
+            url: "${pageContext.request.contextPath}/payment/requestrefund2",
             type: "POST",
             data: {
-                paymentId: paymentId,
-                applyNo:applyNo
+                userId:userId,
+                courseNo:courseNo
             },
             dataType: "text",
             success: function(result) {

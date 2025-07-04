@@ -116,7 +116,7 @@
 
     <!-- 북마크 취소 기능 -->
     $(document).ready(function() {
-      $(document).on('click', '.btn-bookmark-remove', function (e) {
+      $(document).off('click','.btn-bookmark-remove').on('click', '.btn-bookmark-remove', function (e) {
         // $('.btn-bookmark-remove').on('click',function(e){
         const bookmarkNo = $(e.target).data('bookmark-no');
         if (!confirm("북마크를 취소하시겠씁니까?")) return;

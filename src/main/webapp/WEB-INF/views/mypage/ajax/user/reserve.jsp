@@ -64,15 +64,12 @@
           <td><fmt:formatDate value="${r.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${r.coursePrice}" type="number"/>원</td>
           <td>
-
             <c:choose>
-              <c:when test="${empty r.refundStatus}">
-                <c:if test="${r.applyType == 'RESERVE'}">
+                <c:when test="${r.applyType == 'RESERVE'}">
                   <button class="btn-reserveRefund"
                           data-course-no="${r.courseNo}"
                     >예약취소
                   </button>
-                </c:if>
               </c:when>
             </c:choose>
 
