@@ -179,19 +179,19 @@
     <c:if test="${not empty bookmarks}">
       <c:forEach var="b" items="${bookmarks}">
         <%-- 모집 시작일 Date 객체로 변환 --%>
-        <fmt:parseDate value="${b.recruitDate}" pattern="yyyy-MM-dd" var="recruitDateObj"/>
-        <%-- 모집 종료일 = 모집 시작일 + 7일(밀리초) --%>
-        <c:set var="millisIn7Days" value="${7 * 24 * 60 * 60 * 1000}" />
-        <c:set var="recruitEndDateMillis" value="${recruitDateObj.time + millisIn7Days}" />
-        <%-- 오늘 날짜 --%>
-        <c:set var="now" value="<%= new java.util.Date() %>" />
-        <c:set var="nowMillis" value="${now.time}" />
+<%--        <fmt:parseDate value="${b.recruitDate}" pattern="yyyy-MM-dd" var="recruitDateObj"/>--%>
+<%--        &lt;%&ndash; 모집 종료일 = 모집 시작일 + 7일(밀리초) &ndash;%&gt;--%>
+<%--        <c:set var="millisIn7Days" value="${7 * 24 * 60 * 60 * 1000}" />--%>
+<%--        <c:set var="recruitEndDateMillis" value="${recruitDateObj.time + millisIn7Days}" />--%>
+<%--        &lt;%&ndash; 오늘 날짜 &ndash;%&gt;--%>
+<%--        <c:set var="now" value="<%= new java.util.Date() %>" />--%>
+<%--        <c:set var="nowMillis" value="${now.time}" />--%>
 
         <tr>
           <td>
             <button class="btn-bookmark-remove" data-bookmark-no="${b.bookmarkNo}">★</button>
           </td>
-          <td>${b.courseTitle}</td>
+          <td><a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${b.courseNo}">${b.courseTitle}</a></td>
           <td>${b.instructorName}</td>
           <td>
             <c:choose>

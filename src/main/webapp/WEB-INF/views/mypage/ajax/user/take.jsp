@@ -39,28 +39,42 @@
       <th>주차</th>
       <th>강의 시작일</th>
       <th>금액</th>
+      <th>환불 신청</th>
     </tr>
     </thead>
     <tbody>
     <c:if test="${not empty take}">
-      <c:forEach var="a" items="${take}">
+      <c:forEach var="t" items="${take}">
         <tr>
-          <td><a href="">${a.courseTitle}</a></td>
-          <td>${a.instructorName}</td>
+          <td><a href="${pageContext.request.contextPath}/class/dashmain?courseNo=${t.courseNo}">${t.courseTitle}</a></td>
+          <td>${t.instructorName}</td>
           <td>
             <c:choose>
-              <c:when test="${a.gradeType == 'E'}">초등</c:when>
-              <c:when test="${a.gradeType == 'M'}">중등</c:when>
-              <c:when test="${a.gradeType == 'H'}">고등</c:when>
+              <c:when test="${t.gradeType == 'E'}">초등</c:when>
+              <c:when test="${t.gradeType == 'M'}">중등</c:when>
+              <c:when test="${t.gradeType == 'H'}">고등</c:when>
               <c:otherwise>기타</c:otherwise>
             </c:choose>
           </td>
-          <td>${a.subject}</td>
-          <td>${a.region}</td>
-          <td>${a.totalWeek}</td>
-          <td><fmt:formatDate value="${a.courseStartDate}" pattern="yyyy-MM-dd"/></td>
-          <td><fmt:formatNumber value="${a.coursePrice}" type="number"/>원</td>
-
+          <td>${t.subject}</td>
+          <td>${t.region}</td>
+          <td>${t.totalWeek}</td>
+          <td><fmt:formatDate value="${t.courseStartDate}" pattern="yyyy-MM-dd"/></td>
+          <td><fmt:formatNumber value="${t.coursePrice}" type="number"/>원</td>
+          <td>
+            <c:choose>
+              <c:when test="${not empty t.applyType}">
+                <button class="btn-applyRefund"
+                        data-course-no="${t.courseNo}"
+                        data-payment-id="${t.paymentId}">
+                  신청취소
+                </button>
+              </c:when>
+              <c:otherwise>
+                <span>취소 대기중</span>
+              </c:otherwise>
+            </c:choose>
+          </td>
         </tr>
       </c:forEach>
     </c:if>
@@ -85,6 +99,32 @@
     $(".nav-item").removeClass("active");
     $current.addClass("active");
     tabLoad(tabId);
+  });
+
+  //apply, take 신청 취소 기능
+  $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
+    if(!confirm('신청 취소 하시겠습니까?')) return;
+    const paymentId = $(e.target).data('payment-id');
+    console.log(paymentId);
+    $.ajax({
+      url: "${pageContext.request.contextPath}/payment/requestrefund",
+      type: "POST",
+      data: {
+        paymentId: paymentId
+      },
+      dataType: "text",
+      success: function(result) {
+        if(result === "success") {
+          alert("환불 요청이 접수되었습니다.");
+          tabLoad('requestrefund');
+        } else {
+          alert("환불 요청에 실패했습니다.");
+        }
+      },
+      error: function() {
+        alert("서버 오류로 환불 요청에 실패했습니다.");
+      }
+    });
   });
 
 </script>

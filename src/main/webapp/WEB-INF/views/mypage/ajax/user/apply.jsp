@@ -46,7 +46,7 @@
         <c:if test="${not empty apply}">
             <c:forEach var="a" items="${apply}">
                 <tr>
-                    <td><a href="">${a.courseTitle}</a></td>
+                    <td><a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${a.courseNo}">${a.courseTitle}</a></td>
                     <td>${a.instructorName}</td>
                     <td>
                         <c:choose>
@@ -62,7 +62,18 @@
                     <td><fmt:formatDate value="${a.courseStartDate}" pattern="yyyy-MM-dd"/></td>
                     <td><fmt:formatNumber value="${a.coursePrice}" type="number"/>원</td>
                     <td>
-                        <button class="btn-refund" data-apply-no="${a.applyNo}" data-course-no="${a.courseNo}">환불신청</button>
+                        <c:choose>
+                            <c:when test="${not empty a.applyType}">
+                            <button class="btn-applyRefund"
+                                    data-course-no="${a.courseNo}"
+                                    data-payment-id="${a.paymentId}">
+                                신청취소
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <span>취소 대기중</span>
+                        </c:otherwise>
+                        </c:choose>
                     </td>
                 </tr>
             </c:forEach>
@@ -90,35 +101,28 @@
         tabLoad(tabId);
     });
 
-    <!-- 환불 으어어억 기능 -->
-    $(document).off('click','.btn-refund').on('click', '.btn-refund', async function(e){
-        const courseNo = $(e.target).data('course-no');
-        const userId = "${sessionScope.loginUser.userId}";
-        const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
-        const impUid = await impUidResponse.text();
+    //apply, take 신청 취소 기능
+    $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
+        if(!confirm('신청 취소 하시겠습니까?')) return;
+        const paymentId = $(e.target).data('payment-id');
+        console.log(paymentId);
         $.ajax({
-            url:"${pageContext.request.contextPath}/payment/cancelPayment",
-            type:"POST",
-            contentType:"application/json",
-            data:JSON.stringify({
-                "imp_uid": impUid,
-                "reason": "사용자 요청 환불",
-                "userId":userId,
-                "courseNo":courseNo
-            }),
-            dataType:"text",
+            url: "${pageContext.request.contextPath}/payment/requestrefund",
+            type: "POST",
+            data: {
+                paymentId: paymentId
+            },
+            dataType: "text",
             success: function(result) {
                 if(result === "success") {
-                    alert("환불이 정상적으로 처리되었습니다.");
-                    tabLoad('bookmark'); // 페이지 새로고침
+                    alert("환불 요청이 접수되었습니다.");
+                    tabLoad('requestrefund');
                 } else {
-                    alert("환불 처리에 실패했습니다.");
-                    tabLoad('bookmark');
+                    alert("환불 요청에 실패했습니다.");
                 }
             },
             error: function() {
                 alert("서버 오류로 환불 요청에 실패했습니다.");
-                tabLoad('bookmark');
             }
         });
     });

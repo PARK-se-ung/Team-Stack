@@ -48,7 +48,7 @@
     <c:if test="${not empty reserve}">
       <c:forEach var="r" items="${reserve}">
         <tr>
-          <td>${r.courseTitle}</td>
+          <td><a href="${pageContext.request.contextPath}/home/searchcoursebyno?courseNo=${b.courseNo}">${r.courseTitle}</a></td>
           <td>${r.instructorName}</td>
           <td>
             <c:choose>
@@ -67,15 +67,15 @@
 
             <c:choose>
 
-            <c:when test="${empty rf.refundStatus}">
-            <c:if test="${rf.applyType == 'RESERVE'}">
-              <button class="btn-reserveRefund"
-                      data-course-no="${rf.courseNo}"
-                      data-payment-id="${rf.paymentId}">
-                예약취소
-              </button>
-            </c:if>
-            </c:when>
+              <c:when test="${empty rf.refundStatus}">
+                <c:if test="${rf.applyType == 'RESERVE'}">
+                  <button class="btn-reserveRefund"
+                          data-course-no="${rf.courseNo}"
+                          data-payment-id="${rf.paymentId}">
+                    예약취소
+                  </button>
+                </c:if>
+              </c:when>
               <c:otherwise>
                 <c:choose>
                   <c:when test="${rf.refundStatus == 'S'}">
