@@ -60,12 +60,12 @@ public class PaymentController {
 
     @RequestMapping("/denyRefund")
     @ResponseBody
-    public String denyRefund(@RequestBody Map<String, String> request){
+    public String denyRefund(@RequestBody Map<String, Object> request){
 
-        String impUid = request.get("imp_uid");
+        String impUid = (String)request.get("imp_uid");
         String paymentId = service.getPaymentId(impUid);
 
-        int result = service.denyRefundStatus(paymentId);
+        int result = service.denyRefundStatus(request);
         if(result>0){
             return "success";
         }else {
