@@ -27,7 +27,7 @@ public class Course {
     private Date courseStartDate;
     private Date courseEndDate;
     private int totalWeek;
-    private String recruitDate;
+    private Date recruitDate;
     private String thumbnail;
     private String gradeType;
     private String subject;

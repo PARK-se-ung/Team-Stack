@@ -187,6 +187,7 @@
           }else{
             alert("거절실패 다시 시도하세요 :( ");
           }
+          tabLoad('studentapply');
         })
       }
     })
