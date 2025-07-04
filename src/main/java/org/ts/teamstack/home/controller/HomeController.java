@@ -12,6 +12,8 @@ import org.ts.teamstack.home.service.HomeService;
 import org.ts.teamstack.manager.model.dto.Alarm;
 import org.ts.teamstack.manager.model.dto.Notice;
 import org.ts.teamstack.manager.service.ManagerService;
+import org.ts.teamstack.payment.model.dto.Payment;
+import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
@@ -28,6 +30,7 @@ public class HomeController {
     private final HomeService service;
     private final PageInfo pageInfo;
     private final ManagerService managerService;
+    private final PaymentService paymentService;
 
     @RequestMapping("/")
     public String index(@CookieValue(name = "teamstackRecentView",required = false) Cookie cookie,
@@ -159,6 +162,12 @@ public class HomeController {
             if(apply != null){
                 model.addAttribute("apply", apply);
             }
+        }
+
+        /* payment search */
+        if(loginUser != null){
+            String paymentId = service.getPaymentId(loginUser.getUserId(), courseNo);
+            model.addAttribute("paymentId", paymentId);
         }
 
         return "course/coursedetail";

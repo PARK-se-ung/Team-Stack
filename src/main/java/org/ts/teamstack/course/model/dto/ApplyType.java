@@ -5,4 +5,5 @@ public enum ApplyType {
     APPLY,   // 신청
     TAKE,    // 수강중
     COMPLETE,  // 수강완료
+    REFUND // 환불 대기중
 }
