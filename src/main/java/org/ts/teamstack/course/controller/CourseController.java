@@ -15,6 +15,7 @@ import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
+import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
@@ -37,6 +38,7 @@ import java.util.*;
 public class CourseController {
 
     private final CourseService courseService;
+    private final PaymentService service;
 
     @PostMapping("/insert")
     public String insertCourse(
@@ -176,15 +178,42 @@ public class CourseController {
         return ResponseEntity.badRequest().body(false);
     }
 
-    @PostMapping("/deleteApply")
+    @RequestMapping("/getpayment")
     @ResponseBody
-    public ResponseEntity<Boolean> deleteApply(@RequestBody Map<String,Object> param){
-        int result=courseService.deleteApply(param);
-        if(result>0){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.badRequest().body(false);
+    public String getPayment(@RequestParam int courseNo, @RequestParam String userId){
+
+        return service.getImpUid(Map.of("courseNo",courseNo,"userId",userId));
     }
+
+//    @PostMapping("/deleteApply")
+//    @ResponseBody
+//    public ResponseEntity<Boolean> deleteApply(@RequestBody Map<String,Object> param){
+//        String impUid = service.getImpUid(Map.of("courseNo",param.get("courseNo"),"userId",param.get("userId")));
+//        String reason = "예약취소";
+//
+//        try {
+//            String token = getIamportAccessToken();
+//            paymentCancel(impUid, token, reason);
+//            String paymentId = service.getPaymentId(impUid);
+//            int result = service.insertRefundRequest2(paymentId,deleteApply);
+//
+//            if(result > 0) {
+//                return "success";
+//            } else {
+//                return "fail";
+//            }
+//        } catch (Exception e) {
+//            log.error("환불 요청 실패", e);
+//            return "fail";
+//        }
+//
+//        int result=courseService.deleteApply(param);
+//
+//        if(result>0){
+//            return ResponseEntity.noContent().build();
+//        }
+//        return ResponseEntity.badRequest().body(false);
+//    }
 
 
 

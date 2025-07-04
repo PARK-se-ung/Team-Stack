@@ -160,24 +160,36 @@
     }
   }
 
-  async function deleteApply(e){
+  function deleteApply(e){
     const $ul=$(e.target).parents("ul");
     const userId=$ul.find("li")[0].innerText;
     const courseNo=$ul.parents("tr").find("td")[0].innerText;
 
-    const response=await fetch("${pageContext.request.contextPath}/course/deleteApply",{
-      method:"post",
-      headers:{
-        "Content-Type":"application/json;charset=UTF-8",
+    $.ajax({
+      url: getContextPath() + "/course/getpayment",
+      method: "POST",
+      data: {
+        courseNo:courseNo,
+        userId:userId
       },
-      body:JSON.stringify({courseNo:courseNo,userId:userId})
-    });
-    if(response.ok){
-      $(e.target).parents("ul").remove();
-      alert("거절이 완료되었습니다.");
-    }else{
-      alert("거절실패 다시 시도하세요 :( ");
-    }
+      success: function (data) {
+        const impUid = data;
+        fetch("${pageContext.request.contextPath}/payment/cancelPayment2",{
+          method:"post",
+          headers:{
+            "Content-Type":"application/json;charset=UTF-8",
+          },
+          body:JSON.stringify({courseNo:courseNo,userId:userId, imp_uid: impUid, reason:'예약취소'})
+        }).then(response => {
+          if(response.ok){
+            $(e.target).parents("ul").remove();
+            alert("거절이 완료되었습니다.");
+          }else{
+            alert("거절실패 다시 시도하세요 :( ");
+          }
+        })
+      }
+    })
   }
 
 
