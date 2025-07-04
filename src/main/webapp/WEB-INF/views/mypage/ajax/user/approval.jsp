@@ -80,7 +80,13 @@
 
     .file-input-wrapper input[type=file] {
         position: absolute;
-        left: -9999px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
     }
 
     .file-name-display {
@@ -235,7 +241,6 @@
                 </p>
             </div>
 
-            <!-- 파일 업로드 섹션 -->
             <div class="upload-section <c:if test='${approveStatus != "D" && not empty approveStatus}'>disabled-form</c:if>">
                 <form id="approveForm" enctype="multipart/form-data" method="post">
                     <label class="form-label">
@@ -243,12 +248,12 @@
                         제출 서류 첨부
                     </label>
 
-                    <div class="file-input-wrapper">
+                    <label class="file-input-wrapper" for="approveFile">
                         <i class="fas fa-cloud-upload-alt me-2"></i>
                         PDF 파일 선택
                         <input type="file" id="approveFile" name="approveFile" accept=".pdf" required
                                <c:if test="${approveStatus != 'D' && not empty approveStatus}">disabled</c:if>>
-                    </div>
+                    </label>
 
                     <div id="fileNameDisplay" class="file-name-display" style="display: none;">
                         <i class="fas fa-file-pdf me-2"></i>
@@ -316,17 +321,28 @@
             $("#fileName").text(fileName);
             $("#fileNameDisplay").show();
             $("#delBtn").show();
+        } else {
+            $("#fileNameDisplay").hide();
+            $("#delBtn").hide();
         }
     });
 
+    // 삭제 버튼 클릭 시
     $("#delBtn").on("click", function() {
         $("#approveFile").val('');
         $("#fileNameDisplay").hide();
         $(this).hide();
     });
 
+    // 폼 제출 처리
     $("#approveForm").off('submit').on('submit', async function (e) {
         e.preventDefault();
+
+        const fileInput = $("#approveFile")[0];
+        if (!fileInput.files.length) {
+            alert("파일을 선택해주세요.");
+            return;
+        }
 
         const formData = new FormData(this);
 
