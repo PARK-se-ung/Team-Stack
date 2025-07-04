@@ -587,7 +587,7 @@
     const coursePlan = async () => {
         pdfjsLib.GlobalWorkerOptions.workerSrc = "${path}/resources/js/pdf/build/pdf.worker.mjs";
 
-        const loadingTask = pdfjsLib.getDocument('${path}/resources/pdf/${planfile.renamePlanName}');
+        const loadingTask = pdfjsLib.getDocument('${path}/resources/upload/course/${planfile.renamePlanName}');
 
         loadingTask.promise.then(data => {
             pdfDoc = data;
