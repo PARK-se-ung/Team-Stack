@@ -188,16 +188,28 @@
                             </c:if>
                         </c:if>
                         <c:if test="${not applyTest}">
-                            <c:if test="${isReserve}">
-                                <button class="btn btn-outline-danger btn-refund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
-                                    예약 취소
-                                </button>
-                            </c:if>
-                            <c:if test="${not isReserve}">
-                                <button class="btn btn-outline-danger btn-applyRefund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
-                                    신청 취소
-                                </button>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${apply.applyStatus == ('COMPLETE')}">
+                                    <button class="btn btn-outline-secondary" disabled>
+                                        수강 종료
+                                    </button>
+                                </c:when>
+                                <c:when test="${apply.applyStatus == ('REFUND')}">
+                                    <button class="btn btn-outline-secondary" disabled>
+                                        환불 승인 대기중
+                                    </button>
+                                </c:when>
+                                <c:when test="${apply.applyStatus == ('RESERVE')}">
+                                    <button class="btn btn-outline-danger btn-refund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
+                                        예약 취소
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button class="btn btn-outline-danger btn-applyRefund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
+                                        신청 취소
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
                         </c:if>
                     </div>
                 </div>

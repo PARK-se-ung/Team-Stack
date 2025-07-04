@@ -106,15 +106,23 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public int denyRefundStatus(String paymentId) {
-        return dao.denyRefundStatus(sqlSession,paymentId);
+    @Transactional
+    public int denyRefundStatus( Map<String, Object> request) {
+
+        request.put("type","APPLY");
+        int result = dao.denyRefundStatus(sqlSession, (String)request.get("paymentId"));
+
+        if (result > 0) {
+            result = dao.updateApply(sqlSession, request);
+        }
+            return result;
     }
 
     @Override
     @Transactional
     public int insertRefundAndUpdateApply(int courseNo, String userId) {
 
-        Map<String,Object> map = Map.of("courseNo",courseNo,"userId",userId);
+        Map<String,Object> map = Map.of("courseNo",courseNo,"userId",userId,"type","REFUND");
 
         String impUid = dao.getImpUid(sqlSession,map);
 
