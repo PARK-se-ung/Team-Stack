@@ -10,6 +10,8 @@ import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.home.model.dao.HomeDao;
 import org.ts.teamstack.manager.model.dto.Alarm;
+import org.ts.teamstack.payment.model.dao.Paymentdao;
+import org.ts.teamstack.payment.model.dto.Payment;
 
 import java.util.*;
 
@@ -19,6 +21,7 @@ public class HomeServiceImpl implements HomeService {
 
     private final HomeDao dao;
     private final SqlSession session;
+    private final Paymentdao pdao;
 
     @Override
     public List<Alarm> searchAlarm(String userId) {
@@ -86,5 +89,10 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public Apply searchApply(String userId, int courseNo) {
         return dao.searchApply(session, userId, courseNo);
+    }
+
+    public String getPaymentId(String userId, int courseNo) {
+        Map<String,Object> map = Map.of("userId",userId,"courseNo",courseNo);
+        return pdao.getPaymentId(session, pdao.getImpUid(session,map));
     }
 }
