@@ -101,6 +101,6 @@ public class PaymentdaoImpl implements Paymentdao {
 
     @Override
     public int updateApply(SqlSession sqlSession, Map<String, Object> map) {
-        return sqlSession.update("apply.updateApply",map);
+        return sqlSession.update("course.applyCourseChange",map);
     }
 }
