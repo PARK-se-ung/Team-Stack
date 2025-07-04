@@ -63,7 +63,7 @@
           <td><fmt:formatNumber value="${t.coursePrice}" type="number"/>원</td>
           <td>
             <c:choose>
-              <c:when test="${not empty t.applyType}">
+              <c:when test="${t.applyType ne 'REFUND'}">
                 <button class="btn-applyRefund"
                         data-course-no="${t.courseNo}"
                   >신청취소
@@ -103,12 +103,15 @@
   //apply, take 신청 취소 기능
   $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
     if(!confirm('신청 취소 하시겠습니까?')) return;
-    const paymentId = $(e.target).data('payment-id');
+    // const paymentId = $(e.target).data('payment-id');
+    const courseNo = $(e.target).data('course-no');
+    const userId = "${loginUser.userId}"
     $.ajax({
-      url: "${pageContext.request.contextPath}/payment/requestrefund",
+      url: "${pageContext.request.contextPath}/payment/requestrefund2",
       type: "POST",
       data: {
-        paymentId: paymentId
+        userId:userId,
+        courseNo:courseNo
       },
       dataType: "text",
       success: function(result) {

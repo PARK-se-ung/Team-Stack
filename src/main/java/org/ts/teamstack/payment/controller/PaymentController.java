@@ -73,6 +73,8 @@ public class PaymentController {
         }
     }
 
+
+
     @RequestMapping("/getImpUid")
     @ResponseBody
     public String getImpUid(@RequestParam String userId, @RequestParam int courseNo){
