@@ -20,6 +20,9 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     private final ClassPageDao1 classDao;
 
     @Override
+    public List<Board> getClassesNotice(String userId) { return  classDao.getClassesNotice(session, userId);}
+
+    @Override
     public List<Course> getAllCourses(String userId) {
         return classDao.getAllCourses(session, userId);
     }

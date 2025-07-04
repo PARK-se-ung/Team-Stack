@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface ClassPageService1 {
 
+    List<Board> getClassesNotice(String userId);
+
     List<Course> getAllCourses(String userId);
 
     List<Course> getOngoingCourses(String userId);

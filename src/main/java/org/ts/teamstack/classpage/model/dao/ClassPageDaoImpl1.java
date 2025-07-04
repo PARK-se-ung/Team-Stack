@@ -14,6 +14,11 @@ import java.util.Map;
 public class ClassPageDaoImpl1 implements ClassPageDao1{
 
     @Override
+    public List<Board> getClassesNotice(SqlSession session, String userId) {
+        return session.selectList("getClassesNotice", userId);
+    }
+
+    @Override
     public List<Course> getOngoingCourses(SqlSession session, String userId) {
         return session.selectList("getOngoingCourses", userId);
     }

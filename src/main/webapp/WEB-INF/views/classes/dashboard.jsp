@@ -711,20 +711,254 @@
 
 </div>
 
-<!-- 알림 영역 -->
+<!-- 추가할 CSS 스타일 -->
+<style>
+    /* 알림 아이템 스타일 */
+    .notification-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .notification-item {
+        background: white;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .notification-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-color: rgba(255, 107, 53, 0.2);
+    }
+
+    .notification-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+        border-radius: 0 2px 2px 0;
+    }
+
+    .notification-content-wrapper {
+        margin-left: 8px;
+    }
+
+    .notification-course-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #2d3748;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+    }
+
+    .notification-board-title {
+        font-size: 13px;
+        color: #64748b;
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .notification-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        color: #94a3b8;
+    }
+
+    .notification-date {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .notification-type {
+        background: linear-gradient(135deg, #ff944d 0%, #ff7b1f 100%);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    /* 새 알림 표시 */
+    .notification-item.new {
+        background: linear-gradient(135deg, rgba(255, 107, 53, 0.02) 0%, rgba(255, 142, 83, 0.02) 100%);
+        border-color: rgba(255, 107, 53, 0.1);
+    }
+
+    .notification-item.new::before {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+
+    /* 빈 상태 스타일 */
+    .notification-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: #64748b;
+    }
+
+    .empty-notification-icon {
+        font-size: 48px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+        opacity: 0.7;
+    }
+
+    .empty-notification-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #475569;
+    }
+
+    .empty-notification-description {
+        font-size: 14px;
+        opacity: 0.8;
+        line-height: 1.4;
+    }
+
+    /* 알림 개수 배지 */
+    .notification-count {
+        background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+    }
+
+    .notification-title {
+        flex: 1;
+    }
+</style>
+
+<!-- 개선된 알림 영역 -->
 <div class="class-side-content" id="dashcontent">
     <div class="notification-header">
         <div class="notification-icon">
             <i class="bi bi-bell"></i>
         </div>
         <h3 class="notification-title">알림</h3>
+        <c:if test="${not empty classalarm}">
+            <div class="notification-count">
+                <c:set var="count" value="0" />
+                <c:forEach var="a" items="${classalarm}">
+                    <c:set var="count" value="${count + 1}" />
+                </c:forEach>
+                    ${count}
+            </div>
+        </c:if>
     </div>
 
-    <div class="notification-content">
-        <i class="bi bi-info-circle" style="font-size: 24px; margin-bottom: 8px;"></i>
-        <p style="margin: 0; font-size: 14px;">현재 알림이 없습니다</p>
-    </div>
+    <c:choose>
+        <c:when test="${not empty classalarm}">
+            <div class="notification-list">
+                <c:forEach var="a" items="${classalarm}" varStatus="status">
+                    <div class="notification-item ${status.index < 2 ? 'new' : ''}" data-courseNo="${a.courseNo}">
+                        <div class="notification-content-wrapper">
+                            <div class="notification-course-title">${a.courseTitle}</div>
+                            <div class="notification-board-title">${a.boardTitle}</div>
+                            <div class="notification-meta">
+                                <div class="notification-date">
+                                    <i class="bi bi-clock"></i>
+                                    <span>
+                                        <c:choose>
+                                            <c:when test="${a.boardDate eq '오늘'}">방금 전</c:when>
+                                            <c:when test="${a.boardDate eq '어제'}">어제</c:when>
+                                            <c:otherwise>${a.boardDate}</c:otherwise>
+                                        </c:choose>
+                                    </span>
+                                </div>
+                                <div class="notification-type">공지</div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="notification-empty">
+                <div class="empty-notification-icon">
+                    <i class="bi bi-bell-slash"></i>
+                </div>
+                <h4 class="empty-notification-title">새로운 알림이 없습니다</h4>
+                <p class="empty-notification-description">새로운 강의나 공지사항이 있으면<br>여기에 표시됩니다</p>
+            </div>
+        </c:otherwise>
+    </c:choose>
 </div>
+
+<!-- 알림 클릭 이벤트 스크립트 -->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 알림 클릭 이벤트 함수
+        function addNotificationEvents() {
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    // 새 알림 표시 제거
+                    this.classList.remove('new');
+
+                    // 클릭 효과
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+
+                    const courseNo = this.getAttribute('data-courseNo')
+                    const courseTitle = this.querySelector('.notification-course-title').textContent;
+                    console.log('알림 클릭됨:', courseTitle);
+
+                    window.location.href = `${path}/class/dashmain?courseNo=`+courseNo;
+                });
+            });
+        }
+
+        addNotificationEvents();
+
+        const originalGetActiveList = window.getActiveList;
+        window.getActiveList = async function() {
+            if (typeof loading === 'function') loading("dashcontent");
+
+            try {
+                const response = await fetch("${path}/dashactive");
+                const data = await response.text();
+                document.getElementById('dashcontent').innerHTML = data;
+
+                // 새로 로드된 알림에 이벤트 추가
+                addNotificationEvents();
+            } catch (error) {
+                console.error('알림 로드 실패:', error);
+            }
+        };
+    });
+</script>
 
 <script>
     const getActiveList=async()=>{
