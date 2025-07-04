@@ -2,6 +2,7 @@ package org.ts.teamstack.home.model.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
 
@@ -22,5 +23,5 @@ public interface HomeDao {
     int searchCourseCount(SqlSession session,  Map<String, Object> parsedParams);
     List<Alarm> searchAlarm(SqlSession session, String userId);
     int updateAlarm(SqlSession session, int no);
-    int searchApply(SqlSession session, String userId, int courseNo);
+    Apply searchApply(SqlSession session, String userId, int courseNo);
 }

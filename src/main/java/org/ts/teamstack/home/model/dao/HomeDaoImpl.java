@@ -4,6 +4,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
 
@@ -78,7 +79,7 @@ public class HomeDaoImpl implements HomeDao {
     }
 
     @Override
-    public int searchApply(SqlSession session, String userId, int courseNo) {
+    public Apply searchApply(SqlSession session, String userId, int courseNo) {
         return session.selectOne("home.searchApply", Map.of("userId",  userId, "courseNo", courseNo));
     }
 

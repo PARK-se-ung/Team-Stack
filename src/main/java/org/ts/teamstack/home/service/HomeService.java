@@ -1,6 +1,7 @@
 package org.ts.teamstack.home.service;
 
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Alarm;
 
@@ -18,5 +19,5 @@ public interface HomeService {
     int searchCourseCount(Map<String, Object> parsedParams);
     List<Alarm> searchAlarm(String userId);
     int updateAlarm(int no);
-    int searchApply(String userId, int courseNo);
+    Apply searchApply(String userId, int courseNo);
 }

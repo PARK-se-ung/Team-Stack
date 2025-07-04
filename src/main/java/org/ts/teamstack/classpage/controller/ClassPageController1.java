@@ -33,6 +33,7 @@ public class ClassPageController1 {
             return null;
         }
         String userId = loginUser.getUserId();
+        model.addAttribute("classalarm", service.getClassesNotice(userId));
         model.addAttribute("ongoing", service.getOngoingCourses(userId));
         model.addAttribute("complete", service.getCompletedCourses(userId));
         model.addAttribute("allcourse", service.getAllCourses(userId));
