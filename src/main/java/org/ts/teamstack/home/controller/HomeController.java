@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.ts.teamstack.common.controller.PageBarFactory;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.home.service.HomeService;
 import org.ts.teamstack.manager.model.dto.Alarm;
@@ -152,11 +153,11 @@ public class HomeController {
             }
         }
 
-        /* apply test */
+        /* apply search */
         if(loginUser != null){
-            int flag = service.searchApply(loginUser.getUserId(), courseNo);
-            if(flag > 0){
-                model.addAttribute("apply", flag);
+            Apply apply = service.searchApply(loginUser.getUserId(), courseNo);
+            if(apply != null){
+                model.addAttribute("apply", apply);
             }
         }
 

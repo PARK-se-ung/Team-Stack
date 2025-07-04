@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 import org.ts.teamstack.common.model.dto.PageInfo;
+import org.ts.teamstack.course.model.dto.Apply;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.home.model.dao.HomeDao;
@@ -83,7 +84,7 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public int searchApply(String userId, int courseNo) {
+    public Apply searchApply(String userId, int courseNo) {
         return dao.searchApply(session, userId, courseNo);
     }
 }
