@@ -3,8 +3,10 @@ package org.ts.teamstack.course.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import org.ts.teamstack.common.controller.FileUpload;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.course.model.dto.CourseAttach;
 import org.ts.teamstack.course.service.CourseService;
+import org.ts.teamstack.payment.model.service.PaymentService;
 import org.ts.teamstack.user.model.dto.Users;
 
 import javax.servlet.http.Cookie;
@@ -28,29 +31,30 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/course")
 @Slf4j
 public class CourseController {
 
     private final CourseService courseService;
+    private final PaymentService service;
 
     @PostMapping("/insert")
-    public Map<String, Object> insertCourse(
-            @RequestParam String courseStartDate,
+    public String insertCourse(
+            @ModelAttribute Course course,
+            BindingResult br,
             @RequestParam(value = "slideImage", required = false) MultipartFile[] upfiles,
-            @RequestParam(value = "thumbnail",  required = false) MultipartFile thumbnail,
-            @RequestParam(value = "courseContent",  required = false) MultipartFile content,
-            @RequestParam(value = "originalPlanName", required = false) MultipartFile planFile,
-            @RequestParam Course course,
-            @AuthenticationPrincipal UserDetails user,
+            @RequestParam(value = "thumbnailFile",  required = false) MultipartFile thumbnail,
+            @RequestParam(value = "contentFile",  required = false) MultipartFile content,
+            @RequestParam(value = "planFile", required = false) MultipartFile planFile,
             HttpSession session
     ) {
         Users loginUser = (Users)session.getAttribute("loginUser");
-        if (loginUser == null) {
+        if (loginUser != null) {
             course.setUserId(loginUser.getUserId());
         }
+
 
 
         // path 생성
@@ -61,9 +65,9 @@ public class CourseController {
             if(!flag) log.error("create fail");
         }
 
-        // 강의 정보 입력
+        // 강의 상태를 "STAY"로 기본 설정 (승인 대기)
         course.setCourseStatus("STAY");
-        course.setUserId(user.getUsername());
+//        course.setUserId(user.getUsername());
 
 
         // 썸네일 rename
@@ -99,6 +103,7 @@ public class CourseController {
         }
 
         // 강의 & files INSERT 처리
+        log.info(course.toString());
 
         int result = 0;
         try{
@@ -130,7 +135,7 @@ public class CourseController {
 
         Map<String, Object> res = new HashMap<>();
         res.put("success", result > 0);
-        return res;
+        return "mypage/mypage";
     }
     @DeleteMapping("/bookmark/delete")
     @ResponseBody
@@ -141,6 +146,75 @@ public class CourseController {
         else result="fail";
         return result;
     }
+
+    @RequestMapping("searchcoursebyno")
+    public String searchCourseByNo(@RequestParam int courseNo, @CookieValue(name="teamstackRecentView", required = false) Cookie recentView,
+                                   Model model, HttpServletResponse response){
+        Set<Integer> courseNos = new LinkedHashSet<>();
+        courseNos.add(courseNo);
+        if(recentView != null && !recentView.getValue().isEmpty()){
+            for(String no : recentView.getValue().split(",")){
+                if(courseNos.size() < 8) courseNos.add(Integer.parseInt(no));
+            }
+        }
+
+
+//        Course course = courseService.searchCourseByNo(courseNo);
+//        model.addAttribute("course", course);
+
+
+
+        return "course/course";
+    }
+
+    @PostMapping("/applychange")
+    @ResponseBody
+    public ResponseEntity<Boolean> applyChange(@RequestBody Map<String,Object> param){
+        param.put("type","TAKE");
+        int result=courseService.applyCourseChange(param);
+        if(result>0){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().body(false);
+    }
+
+    @RequestMapping("/getpayment")
+    @ResponseBody
+    public String getPayment(@RequestParam int courseNo, @RequestParam String userId){
+
+        return service.getImpUid(Map.of("courseNo",courseNo,"userId",userId));
+    }
+
+//    @PostMapping("/deleteApply")
+//    @ResponseBody
+//    public ResponseEntity<Boolean> deleteApply(@RequestBody Map<String,Object> param){
+//        String impUid = service.getImpUid(Map.of("courseNo",param.get("courseNo"),"userId",param.get("userId")));
+//        String reason = "예약취소";
+//
+//        try {
+//            String token = getIamportAccessToken();
+//            paymentCancel(impUid, token, reason);
+//            String paymentId = service.getPaymentId(impUid);
+//            int result = service.insertRefundRequest2(paymentId,deleteApply);
+//
+//            if(result > 0) {
+//                return "success";
+//            } else {
+//                return "fail";
+//            }
+//        } catch (Exception e) {
+//            log.error("환불 요청 실패", e);
+//            return "fail";
+//        }
+//
+//        int result=courseService.deleteApply(param);
+//
+//        if(result>0){
+//            return ResponseEntity.noContent().build();
+//        }
+//        return ResponseEntity.badRequest().body(false);
+//    }
+
 
 
 }

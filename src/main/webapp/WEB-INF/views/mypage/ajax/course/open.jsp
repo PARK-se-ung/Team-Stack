@@ -44,6 +44,12 @@
     overflow: hidden;
   }
 
+  .detail-upload img {
+    max-width: 100%;
+    max-height: 100%;
+    display: none;
+  }
+
   .image-upload img {
     max-width: 100%;
     max-height: 100%;
@@ -245,6 +251,11 @@
     <input type="hidden" id="courseStartDate" name="courseStartDate"/>
     <input type="hidden" id="totalWeek"       name="totalWeek"/>
     <input type="hidden" id="recruitDate"     name="recruitDate"/>
+    <input type="hidden" id="courseStartTime" name="courseStartTime"/>
+    <input type="hidden" id="courseTime" name="courseTime"/>
+
+    <label>정원</label>
+    <input type="number" id="personnel" name="personnel" min="1" max="100"/>
 
     <label>장소</label>
     <div class="location">
@@ -278,6 +289,7 @@
     <input type="file" name="planFile" id="planFile" accept=".pdf" style="display: none;">
     <span id="fileName" style="color:white; margin-left: 10px;"></span>
   </div>
+
 
   <button type="button" class="submit-btn btn btn-outline-orange" data-bs-toggle="modal" data-bs-target="#confirmModal">강의 개설 신청</button>
 </form>
@@ -377,7 +389,7 @@
     newBox.innerHTML = `
       <img class="preview" alt="미리보기">
       <span class="placeholder">슬라이드 이미지</span>
-      <input type="file" name="silideImage" accept="image/*" required onchange="previewImage2(event)">
+      <input type="file" name="slideImage" accept="image/*" required onchange="previewImage2(event)">
     `;
 
     container.insertBefore(newBox, this);
@@ -426,32 +438,24 @@
   });
 
 
+  // document.getElementById('modalConfirmBtn').addEventListener('click', function() {
+  //   const form = document.getElementById('courseForm');
+  //   const [start, end] = document.getElementById('datePicker').value
+  //           .split('~').map(s => s.trim());
+  //
+  //   // hidden 필드 채우기
+  //   document.getElementById('courseStartDate').value = start;
+  //   document.getElementById('recruitDate').value     = end;
+  //   document.getElementById('totalWeek').value       = Math.ceil((new Date(end) - new Date(start))/(1000*60*60*24*7));
+  //
+  //   // 유효성 검사 통과하면 제출
+  //   if (form.reportValidity()) {
+  //     form.submit();
+  //   } else {
+  //     bootstrap.Modal.getInstance(document.getElementById('confirmModal')).hide();
+  //   }
+  // });
 
-  <%--document.getElementById('modalConfirmBtn').addEventListener('click', function () {--%>
-  <%--  // flatpickr 인스턴스를 전역에 저장했다면--%>
-  <%--  // updateHiddenDates(null, null, window._flatpickrInstance);--%>
-  <%--  //--%>
-  <%--  // 아니면 단순히 input 값을 재파싱해도 됩니다:--%>
-  <%--  const raw = $("#datePicker").val().split(" to ");--%>
-  <%--  if (raw.length === 2) {--%>
-  <%--    const [s, e] = raw;--%>
-  <%--    const start = new Date(s), end = new Date(e);--%>
-  <%--    const msPerWeek = 7 * 24 * 60 * 60 * 1000;--%>
-  <%--    const weeks = Math.round((end - start) / msPerWeek);--%>
-  <%--    const recruit = new Date(start.getTime() + msPerWeek);--%>
-
-  <%--    const pad = n => n.toString().padStart(2, "0");--%>
-  <%--    const fmtYmd = d =>--%>
-  <%--            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;--%>
-  <%--    const fmtFull = d =>--%>
-  <%--            `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +--%>
-  <%--            `${pad(d.getHours())}:${pad(d.getMinutes())}`;--%>
-
-  <%--    $("#courseStartDate").val(fmtFull(start));--%>
-  <%--    $("#totalWeek").val(weeks);--%>
-  <%--    $("#recruitDate").val(fmtYmd(recruit));--%>
-  <%--  }--%>
-  <%--});--%>
 
 
 

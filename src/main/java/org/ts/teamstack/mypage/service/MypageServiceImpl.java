@@ -94,4 +94,19 @@ public class MypageServiceImpl implements MypageService {
     public String selectApprove(String userId) {
         return mypageDao.selectApprove(session,userId);
     }
+
+    @Override
+    public List<Course> getCoursesByStatus(String courseStatus, String userId) {
+        return mypageDao.getCoursesByStatus(session,courseStatus,userId);
+    }
+
+    @Override
+    public List<Course> selectTakeCourses(String userId) {
+        return mypageDao.selectTakeCourses(session,userId);
+    }
+
+    @Override
+    public List<Course> selectCompleteCourses(String userId) {
+        return mypageDao.selectCompleteCourses(session,userId);
+    }
 }

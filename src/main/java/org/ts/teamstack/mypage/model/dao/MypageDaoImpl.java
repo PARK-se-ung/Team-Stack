@@ -9,6 +9,7 @@ import org.ts.teamstack.course.model.dto.Bookmark;
 import org.ts.teamstack.course.model.dto.Course;
 import org.ts.teamstack.manager.model.dto.Approve;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -75,5 +76,30 @@ public class MypageDaoImpl implements MypageDao {
     @Override
     public String selectApprove(SqlSession session, String userId) {
         return session.selectOne("manager.selectApprove",userId);
+    }
+
+    @Override
+    public List<Course> getCoursesByStatus(SqlSession session, String courseStatus, String userId ) {
+        Map<String,Object> param = new HashMap<>();
+        param.put("courseStatus", courseStatus);
+        param.put("userId",       userId);
+
+        return session.selectList("course.getCoursesByStatus", param);
+    }
+
+    @Override
+    public List<Course> selectTakeCourses(SqlSession session, String userId) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+
+        return session.selectList("course.selectTakeCourses", param);
+    }
+
+    @Override
+    public List<Course> selectCompleteCourses(SqlSession session, String userId) {
+        Map<String,Object> param = new HashMap<>();
+        param.put("userId", userId);
+        return session.selectList(
+                "course.selectCompleteCourses",param);
     }
 }
