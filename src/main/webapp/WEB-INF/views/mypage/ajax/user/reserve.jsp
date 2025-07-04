@@ -66,32 +66,14 @@
           <td>
 
             <c:choose>
-
-              <c:when test="${empty rf.refundStatus}">
-                <c:if test="${rf.applyType == 'RESERVE'}">
+              <c:when test="${empty r.refundStatus}">
+                <c:if test="${r.applyType == 'RESERVE'}">
                   <button class="btn-reserveRefund"
-                          data-course-no="${rf.courseNo}"
-                          data-payment-id="${rf.paymentId}">
-                    예약취소
+                          data-course-no="${r.courseNo}"
+                    >예약취소
                   </button>
                 </c:if>
               </c:when>
-              <c:otherwise>
-                <c:choose>
-                  <c:when test="${rf.refundStatus == 'S'}">
-                    <span style="color:#888;">취소 승인 대기</span>
-                  </c:when>
-                  <c:when test="${rf.refundStatus == 'A'}">
-                    <span style="color:green;">취소 승인</span>
-                  </c:when>
-                  <c:when test="${rf.refundStatus == 'D'}">
-                    <span style="color:red;">취소 반려</span>
-                  </c:when>
-                  <c:otherwise>
-                    <span style="color:#888;">알 수 없음</span>
-                  </c:otherwise>
-                </c:choose>
-              </c:otherwise>
             </c:choose>
 
           </td>
@@ -123,6 +105,39 @@
     tabLoad(tabId);
   });
 
-
+  //예약 바로 취소 기능
+  $(document).off('click','.btn-reserveRefund').on('click', '.btn-reserveRefund', async function(e){
+    if(!confirm('예약 취소 하시겠습니까?')) return;
+    const courseNo = $(e.target).data('course-no');
+    const userId = "${loginUser.userId}";
+    console.log(userId);
+    const impUidResponse = await fetch('${pageContext.request.contextPath}/payment/getImpUid?courseNo='+courseNo+'&userId='+userId);
+    const impUid = await impUidResponse.text();
+    $.ajax({
+      url:"${pageContext.request.contextPath}/payment/cancelPayment2",
+      type:"POST",
+      contentType:"application/json",
+      data:JSON.stringify({
+        "imp_uid": impUid,
+        "reason": "사용자 요청 환불",
+        "userId":userId,
+        "courseNo":courseNo
+      }),
+      dataType:"text",
+      success: function(result) {
+        if(result === "success") {
+          alert("환불이 정상적으로 처리되었습니다.");
+          tabLoad('reserve'); // 페이지 새로고침
+        } else {
+          alert("환불 처리에 실패했습니다.");
+          tabLoad('reserve');
+        }
+      },
+      error: function() {
+        alert("서버 오류로 환불 요청에 실패했습니다.");
+        tabLoad('reserve');
+      }
+    });
+  });
 
 </script>

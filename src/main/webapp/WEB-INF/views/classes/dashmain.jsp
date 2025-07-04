@@ -437,6 +437,20 @@
                 transform: translateY(0);
             }
         }
+
+        .message-bubble {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 16px;
+            /* ... */
+        }
+
+        .message-bubble.own-message {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8e53 100%);
+            color: white;
+            margin-left: auto;
+            /* ... */
+        }
     </style>
 </head>
 <body id="class-body">
@@ -766,7 +780,7 @@
     function initChattingSocket(courseNo, currentUserId) {
         console.log("<%= currentUserId%>");
 
-        const socket = new WebSocket('ws://localhost:8080/chat?courseNo=' + courseNo);
+        const socket = new WebSocket('ws://localhost:9090/chat?courseNo=' + courseNo);
 
         const sendMessage = function () {
             console.log("✅ [클릭됨] sendMessage 실행됨");
@@ -808,17 +822,21 @@
 
             if (chat.userId === currentUserId) {
                 $div.innerHTML =
-                    '<div style="text-align: right;">' +
-                    '<strong class="text-primary">나</strong>' +
-                    '<span class="text-muted" style="font-size: 0.85em;">(' + chat.chatTime + ')</span><br>' +
-                    '<span>' + chat.chatMsg + '</span>' +
+                    '<div class="message-bubble own-message">' +
+                    '<div class="message-header">' +
+                    '<span class="message-author">나</span>' +
+                    '<span class="message-time">(' + chat.chatTime + ')</span>' +
+                    '</div>' +
+                    '<div class="message-content">' + chat.chatMsg + '</div>' +
                     '</div>';
             } else {
                 $div.innerHTML =
-                    '<div>' +
-                    '<strong class="text-success">' + chat.userId + '</strong>' +
-                    '<span class="text-muted" style="font-size: 0.85em;">(' + chat.chatTime + ')</span><br>' +
-                    '<span>' + chat.chatMsg + '</span>' +
+                    '<div class="message-bubble">' +
+                    '<div class="message-header">' +
+                    '<span class="message-author">' + chat.userId + '</span>' +
+                    '<span class="message-time">(' + chat.chatTime + ')</span>' +
+                    '</div>' +
+                    '<div class="message-content">' + chat.chatMsg + '</div>' +
                     '</div>';
             }
 

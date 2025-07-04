@@ -40,4 +40,6 @@ public interface Paymentdao {
     int updateRefundStatus(SqlSession sqlSession, String paymentId);
 
     int denyRefundStatus(SqlSession sqlSession, String paymentId);
+
+    int updateApply(SqlSession sqlSession, Map<String, Object> map);
 }

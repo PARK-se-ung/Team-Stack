@@ -19,4 +19,5 @@ public class Board {
     private int courseNo;
     private String boardWriter;
     private Date boardDate;
+    private String courseTitle;
 }

@@ -97,4 +97,10 @@ public class PaymentdaoImpl implements Paymentdao {
     public int denyRefundStatus(SqlSession sqlSession, String paymentId) {
         return sqlSession.update("payment.denyRefundStatus",paymentId);
     }
+
+
+    @Override
+    public int updateApply(SqlSession sqlSession, Map<String, Object> map) {
+        return sqlSession.update("apply.updateApply",map);
+    }
 }

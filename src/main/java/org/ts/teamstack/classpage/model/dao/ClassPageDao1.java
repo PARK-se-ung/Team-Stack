@@ -10,6 +10,7 @@ import java.util.Map;
 
 public interface ClassPageDao1 {
 
+    List<Board> getClassesNotice(SqlSession session, String userId);
     //진행중인 강의목록
     List<Course> getOngoingCourses(SqlSession session, String userId);
     //진행완료된 강의목록

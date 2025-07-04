@@ -34,4 +34,6 @@ public interface PaymentService {
     int updateRefundStatus(String paymentId, Map<String, Object> deleteApply);
 
     int denyRefundStatus(String paymentId);
+
+    int insertRefundAndUpdateApply(int courseNo, String userId);
 }
