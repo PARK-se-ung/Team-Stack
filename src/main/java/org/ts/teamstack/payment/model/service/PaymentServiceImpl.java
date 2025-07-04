@@ -110,7 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
     public int denyRefundStatus( Map<String, Object> request) {
 
         request.put("type","APPLY");
-        int result = dao.denyRefundStatus(sqlSession, request.get("paymentId"));
+        int result = dao.denyRefundStatus(sqlSession, (String)request.get("paymentId"));
 
         if (result > 0) {
             result = dao.updateApply(sqlSession, request);
