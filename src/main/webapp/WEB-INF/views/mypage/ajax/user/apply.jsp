@@ -66,8 +66,8 @@
                             <c:when test="${not empty a.applyType}">
                             <button class="btn-applyRefund"
                                     data-course-no="${a.courseNo}"
-                                    data-payment-id="${a.paymentId}">
-                                신청취소
+                                    data-apply-no="${a.applyNo}"
+                                >신청취소
                             </button>
                         </c:when>
                         <c:otherwise>
@@ -104,19 +104,21 @@
     //apply, take 신청 취소 기능
     $(document).off('click', '.btn-applyRefund').on('click', '.btn-applyRefund', async function(e) {
         if(!confirm('신청 취소 하시겠습니까?')) return;
-        const paymentId = $(e.target).data('payment-id');
+        // const paymentId = $(e.target).data('payment-id');
+        const applyNo=$(e.target).data('apply-no');
         console.log(paymentId);
         $.ajax({
             url: "${pageContext.request.contextPath}/payment/requestrefund",
             type: "POST",
             data: {
-                paymentId: paymentId
+                paymentId: paymentId,
+                applyNo:applyNo
             },
             dataType: "text",
             success: function(result) {
                 if(result === "success") {
                     alert("환불 요청이 접수되었습니다.");
-                    tabLoad('requestrefund');
+                    tabLoad('apply');
                 } else {
                     alert("환불 요청에 실패했습니다.");
                 }

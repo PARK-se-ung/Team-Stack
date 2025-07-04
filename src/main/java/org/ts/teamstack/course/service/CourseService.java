@@ -11,7 +11,7 @@ import java.util.Map;
 public interface CourseService {
     int insertCourse(Course course);
     int deleteBookmark(int bookmarkNo);
-//    Course searchCourseByNo(int courseNo);
+    Course searchCourseByNo(int courseNo);
     int getCoursePrice(int courseNo);
     List<CourseApplyDto> searchCourseApplyStudents(String userId);
     int applyCourseChange(Map<String,Object> param);

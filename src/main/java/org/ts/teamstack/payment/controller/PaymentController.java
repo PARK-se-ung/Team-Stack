@@ -45,11 +45,11 @@ public class PaymentController {
     // paymentId정보가 없어서 impUid로 서치를 해와야하는애
     @RequestMapping("/requestrefund2")
     @ResponseBody
-    public String requestrefund2(String imp_uid){
+    public String requestrefund2(int courseNo, String userId){
 
-        String paymentId = service.getPaymentId(imp_uid);
+//        String paymentId = service.getPaymentId(imp_uid);
 
-        int result = service.insertRefundRequest(paymentId);
+        int result = service.insertRefundAndUpdateApply(courseNo, userId);
 
         if(result>0){
             return "success";

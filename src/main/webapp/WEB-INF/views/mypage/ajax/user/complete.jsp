@@ -39,14 +39,13 @@
       <th>주차</th>
       <th>강의 시작일</th>
       <th>금액</th>
-      <th>수료증</th>
     </tr>
     </thead>
     <tbody>
     <c:if test="${not empty complete}">
       <c:forEach var="c" items="${complete}">
         <tr>
-          <td><a href="">${c.courseTitle}</a></td>
+          <td><a href="${pageContext.request.contextPath}/class/dashmain?courseNo=${c.courseNo}">${c.courseTitle}</a></td>
           <td>${c.instructorName}</td>
           <td>
             <c:choose>
@@ -61,7 +60,6 @@
           <td>${c.totalWeek}</td>
           <td><fmt:formatDate value="${c.courseStartDate}" pattern="yyyy-MM-dd"/></td>
           <td><fmt:formatNumber value="${c.coursePrice}" type="number"/>원</td>
-          <td><button class="btn-download">다운로드</button>
         </tr>
       </c:forEach>
     </c:if>

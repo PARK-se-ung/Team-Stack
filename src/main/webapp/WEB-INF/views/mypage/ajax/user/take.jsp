@@ -66,8 +66,7 @@
               <c:when test="${not empty t.applyType}">
                 <button class="btn-applyRefund"
                         data-course-no="${t.courseNo}"
-                        data-payment-id="${t.paymentId}">
-                  신청취소
+                  >신청취소
                 </button>
               </c:when>
               <c:otherwise>
@@ -116,7 +115,7 @@
       success: function(result) {
         if(result === "success") {
           alert("환불 요청이 접수되었습니다.");
-          tabLoad('requestrefund');
+          tabLoad('take');
         } else {
           alert("환불 요청에 실패했습니다.");
         }

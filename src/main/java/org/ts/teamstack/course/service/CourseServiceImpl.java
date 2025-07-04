@@ -41,10 +41,10 @@ public class CourseServiceImpl implements CourseService {
         return courseDao.deleteBookmark(sqlSession,bookmarkNo);
     }
 
-//    @Override
-//    public Course searchCourseByNo(int courseNo) {
-//        return courseDao.searchCourseByNo(sqlSession, courseNo);
-//    }
+    @Override
+    public Course searchCourseByNo(int courseNo) {
+        return courseDao.searchCourseByNo(sqlSession, courseNo);
+    }
 
     @Override
     public int getCoursePrice(int courseNo) {

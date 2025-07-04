@@ -36,6 +36,6 @@ public class ApplyCourse {
 
     private String instructorName;
     private int applyNo;
-
+    private ApplyType applyType;
 
 }
