@@ -169,6 +169,21 @@ function applyPaging(cPage){
     })
 }
 
+/* 신청한 강의 내역 페이징 처리 */
+function refundPaging(cPage){
+    $.ajax({
+        url: getContextPath() + "/mypage/refund",
+        type: 'POST',
+        data:{
+            "cPage":cPage
+        },
+        success: function(data) {
+            $(".main-content").html(data);
+        },
+        error: errorContent("refund")
+    })
+}
+
 
 /* 수강중인 강의 내역 페이징 처리 */
 function takePaging(cPage){
@@ -198,6 +213,8 @@ function completePaging(cPage){
         error: errorContent("complete")
     })
 }
+
+
 
 /* 로딩 스피너 생성 함수 */
 function loading() {
