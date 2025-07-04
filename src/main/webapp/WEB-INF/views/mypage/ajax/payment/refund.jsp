@@ -101,7 +101,7 @@
         const courseNo = $(e.target).data('course-no');
         const impUid = $(e.target).data('imp-uid');
         const userId = $(e.target).data('user-id');
-
+    //예약 바로 취소
     $.ajax({
         url: "${pageContext.request.contextPath}/payment/cancelPayment",
         type: "POST",
