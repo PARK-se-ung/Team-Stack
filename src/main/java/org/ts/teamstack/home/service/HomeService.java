@@ -20,4 +20,5 @@ public interface HomeService {
     List<Alarm> searchAlarm(String userId);
     int updateAlarm(int no);
     Apply searchApply(String userId, int courseNo);
+    String getPaymentId(String userId, int courseNo);
 }

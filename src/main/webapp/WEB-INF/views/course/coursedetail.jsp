@@ -189,23 +189,23 @@
                         </c:if>
                         <c:if test="${not applyTest}">
                             <c:choose>
-                                <c:when test="${apply.applyStatus == ('COMPLETE')}">
+                                <c:when test="${apply.applyType == ('COMPLETE')}">
                                     <button class="btn btn-outline-secondary" disabled>
                                         수강 종료
                                     </button>
                                 </c:when>
-                                <c:when test="${apply.applyStatus == ('REFUND')}">
+                                <c:when test="${apply.applyType == ('REFUND')}">
                                     <button class="btn btn-outline-secondary" disabled>
                                         환불 승인 대기중
                                     </button>
                                 </c:when>
-                                <c:when test="${apply.applyStatus == ('RESERVE')}">
+                                <c:when test="${apply.applyType == ('RESERVE')}">
                                     <button class="btn btn-outline-danger btn-refund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
                                         예약 취소
                                     </button>
                                 </c:when>
                                 <c:otherwise>
-                                    <button class="btn btn-outline-danger btn-applyRefund" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
+                                    <button class="btn btn-outline-danger btn-applyRefund" data-id="${paymentId}" data-no="${course.courseNo}" data-id="${sessionScope.loginUser.userId}">
                                         신청 취소
                                     </button>
                                 </c:otherwise>

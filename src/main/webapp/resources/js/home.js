@@ -171,19 +171,23 @@ $('.btn-apply').on('click',async function(e){
 
 $(document).on('click','.btn-applyRefund', async function(e){
      if(!confirm('환불 요청 하시겠습니까?')) return;
-        const paymentId = $(e.target).data('payment-id');
+        const paymentId = $(e.target).data('id');
+        const courseNo = $(e.target).data('no');
+        const userId = $(e.target).data('id');
         console.log(paymentId);
         $.ajax({
-            url: getContextPath() + "/payment/requestrefund",
+            url: getContextPath() + "/payment/requestrefund2",
             type: "POST",
             data: {
-                paymentId: paymentId
+                userId:userId,
+                courseNo:courseNo,
+                paymentId:paymentId
             },
             dataType: "text",
             success: function(result) {
                 if(result === "success") {
                     alert("환불 요청이 접수되었습니다.");
-                    tabLoad('requestrefund');
+                    location.assign(getContextPath() + "/home/searchcoursebyno?courseNo=" + courseNo);
                 } else {
                     alert("환불 요청에 실패했습니다.");
                 }
