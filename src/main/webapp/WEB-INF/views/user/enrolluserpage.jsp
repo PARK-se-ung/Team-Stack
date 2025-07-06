@@ -252,7 +252,7 @@
 
             <div class="form-group">
                 <label for="name">이름</label>
-                <form:input path="name" type="text" id="name" placeholder="안전한 비밀번호를 입력해주세요" required="required"/>
+                <form:input path="name" type="text" id="name" placeholder="이름을 입력해주세요" required="required"/>
             </div>
 
             <div class="form-group email-auth-group">
