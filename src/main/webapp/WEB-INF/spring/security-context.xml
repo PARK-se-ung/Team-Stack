@@ -26,6 +26,7 @@
         <!--session id와 csrf 값을 모두 확인해서 인증을 한다.-->
         <security:csrf disabled="true"/>
         <security:intercept-url pattern="/manage/inquirepage" access="permitAll"/>
+        <security:intercept-url pattern="/manage/insertinquire" access="permitAll"/>
         <security:intercept-url pattern="/manage/**" access="hasAuthority('Admin')"/>
         <security:intercept-url pattern="/**" access="permitAll()" />
     </security:http>

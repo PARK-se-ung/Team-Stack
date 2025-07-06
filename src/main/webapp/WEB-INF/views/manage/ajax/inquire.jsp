@@ -39,6 +39,7 @@
             <td>
               <c:if var="statusFlag" test="${inquire.inquireStatus.equals('N')}">
                 <button class="btn btn-outline-orange" onclick="alarmModal(${inquire.inquireNo})">문의 처리</button>
+                <input type="hidden" id="inquire-userId" value="${inquire.userId}">
               </c:if>
               <c:if test="${not statusFlag}">
                 처리 완료
