@@ -96,4 +96,8 @@ public interface ClassPageDao1 {
     int insertScore(SqlSession session, Score score);
 
     List<Score> searchUserScore (SqlSession session, String userId, int courseNo);
+
+    int isAttendExist (SqlSession session, Attend attend);
+
+    int updateAttend(SqlSession session, Attend attend);
 }

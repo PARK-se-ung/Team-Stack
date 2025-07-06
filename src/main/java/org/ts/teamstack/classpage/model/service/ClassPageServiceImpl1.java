@@ -209,5 +209,15 @@ public class ClassPageServiceImpl1 implements ClassPageService1 {
     public List<Score> searchUserScore(String userId, int courseNo) {
         return classDao.searchUserScore(session, userId, courseNo);
     }
+
+    @Override
+    public boolean isAttendExists(Attend attend) {
+        return classDao.isAttendExist(session,attend) > 0;
+    }
+
+    @Override
+    public int updateAttend(Attend attend) {
+        return classDao.updateAttend(session, attend);
+    }
 }
 
