@@ -119,7 +119,7 @@
       $(document).off('click','.btn-bookmark-remove').on('click', '.btn-bookmark-remove', function (e) {
         // $('.btn-bookmark-remove').on('click',function(e){
         const bookmarkNo = $(e.target).data('bookmark-no');
-        if (!confirm("북마크를 취소하시겠씁니까?")) return;
+        if (!confirm("북마크를 취소하시겠습니까?")) return;
         //취소면 return
         $.ajax({
           url: getContextPath() + "/course/bookmark/delete?bookmarkNo=" + String(bookmarkNo),
@@ -130,7 +130,7 @@
 
           },
           error: function () {
-            alert("북마크 취소가 안됩니당 :(");
+            alert("북마크 취소에 실패했습니다");
             tabLoad('bookmark');
           }
         });
@@ -293,7 +293,7 @@
 
     <c:if test="${empty bookmarks}">
       <tr>
-        <td colspan="10" style="text-align: center;">북마크한게 없네용!ㅋㅋ</td>
+        <td colspan="10" style="text-align: center;">북마크한 강의가 없습니다</td>
       </tr>
     </c:if>
     </tbody>

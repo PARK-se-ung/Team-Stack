@@ -76,6 +76,11 @@
                 </tr>
             </c:forEach>
         </c:if>
+        <c:if test="${empty refund}">
+            <tr>
+                <td colspan="5" style="text-align: center;">환불 신청이 없습니다!</td>
+            </tr>
+        </c:if>
         <!-- 생략된 나머지 항목들도 같은 형식으로 추가 -->
         </tbody>
     </table>

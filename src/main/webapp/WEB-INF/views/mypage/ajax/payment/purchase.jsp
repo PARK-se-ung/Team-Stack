@@ -50,7 +50,7 @@
         </c:if>
         <c:if test="${empty purchase}">
             <tr>
-                <td colspan="5" style="text-align: center;">환불 신청 가능한 강의가 없습니다!</td>
+                <td colspan="5" style="text-align: center;">구매한 강의가 없습니다!</td>
             </tr>
         </c:if>
         </tbody>
