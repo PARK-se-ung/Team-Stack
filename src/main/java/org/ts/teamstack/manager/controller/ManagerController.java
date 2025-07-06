@@ -90,13 +90,13 @@ public class ManagerController {
     }
 
     /* 강의 계획서 다운로드 */
-    @GetMapping("/download")
+    @RequestMapping("/download")
     public void download(Model model,
                          @RequestParam(value = "oriname") String origin,
                          @RequestParam(value = "rename") String rename,
                          HttpServletRequest request,
                          HttpServletResponse response) throws Exception {
-        String path = request.getSession().getServletContext().getRealPath("/resources/uploads");
+        String path = request.getSession().getServletContext().getRealPath("/resources/upload/course");
         fileDownloadService.downloadPdfFile(origin, rename, path, request, response);
     }
 

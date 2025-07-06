@@ -127,6 +127,8 @@ public class CourseController {
                     }
                 }
                 // plan 저장
+                FileUpload.saveFile(planFile, path, course.getRenamePlanName());
+
 
             } catch (IOException e) {
                 e.printStackTrace();

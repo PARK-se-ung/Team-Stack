@@ -1,5 +1,6 @@
 package org.ts.teamstack.common.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 
 @Service
+@Slf4j
 public class FileDownloadService {
 
     public void downloadPdfFile(String oriname,
@@ -19,6 +21,11 @@ public class FileDownloadService {
                              HttpServletRequest request,
                              HttpServletResponse response) throws IOException {
 
+        System.out.println(rename);
+
+        System.out.println(saveDir);
+        System.out.println(oriname);
+
         /* 파일명 검증 */
         if (!isValidFileName(rename) || !isAllowedPdfExtension(rename) || !isSafeFileName(oriname)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "허용되지 않는 파일명 또는 확장자입니다.");
@@ -26,10 +33,11 @@ public class FileDownloadService {
         }
 
         /* 파일 경로 확인 */
-        String path = request.getServletContext().getRealPath(saveDir);
+        String path = saveDir;
         File file = new File(path, rename);
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "파일을 찾을 수 없습니다.");
+            log.info("경로 못찾음");
             return;
         }
 

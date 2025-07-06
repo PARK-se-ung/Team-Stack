@@ -144,7 +144,7 @@ public class MypageController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users loginUser = (Users) auth.getPrincipal();
 
-        String path = session.getServletContext().getRealPath("/recourse/upload/course");
+        String path = session.getServletContext().getRealPath("/resources/upload/course");
 
         File dir = new File(path);
 
