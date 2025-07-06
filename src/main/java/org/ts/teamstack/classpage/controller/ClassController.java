@@ -99,7 +99,14 @@ public class ClassController {
     public String insertattend(@RequestBody List<Attend> attends) {
 
         for (Attend attend : attends) {
-            int insertResult = service.insertAttend(attend);
+            boolean exist = service.isAttendExists(attend);
+
+            if(exist){
+                int result = service.updateAttend(attend);
+            } else {
+                int insertResult = service.insertAttend(attend);
+            }
+
         }
         return "success";
     }

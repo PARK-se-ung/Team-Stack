@@ -93,4 +93,8 @@ public interface ClassPageService1 {
     int insertScore(Score score);
 
     List<Score> searchUserScore(String userId, int courseNo);
+
+    boolean isAttendExists(Attend attend);
+
+    int updateAttend (Attend attend);
 }

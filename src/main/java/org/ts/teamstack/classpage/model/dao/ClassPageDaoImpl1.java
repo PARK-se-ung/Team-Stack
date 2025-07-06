@@ -234,4 +234,14 @@ public class ClassPageDaoImpl1 implements ClassPageDao1{
         param.put("courseNo", courseNo);
         return session.selectList("classes.searchUserScore",param);
     }
+
+    @Override
+    public int isAttendExist(SqlSession session, Attend attend) {
+        return session.selectOne("isAttendExist", attend);
+    }
+
+    @Override
+    public int updateAttend(SqlSession session, Attend attend) {
+        return session.update("isAttendUpdate", attend);
+    }
 }
