@@ -189,6 +189,7 @@ public class ManagerController {
         }
         Timestamp timestamp = new Timestamp(parsedDate.getTime());
         Alarm alarm = Alarm.builder()
+                            .userId(params.get("userId"))
                             .alarmDate(timestamp)
                             .alarmContent(content)
                             .build();

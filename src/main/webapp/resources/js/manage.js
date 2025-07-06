@@ -240,6 +240,7 @@ function insertAlarm(tabId) {
     }
     const content = $("#alarm-content").val();
     const no = $("#inquire-no").val();
+    const userId = $("#inquire-userId").val();
     console.log(no);
     $.ajax({
             url: getContextPath() + "/manage/insertalarm",
@@ -249,7 +250,8 @@ function insertAlarm(tabId) {
                 "time": time,
                 "content": content,
                 "tabId": tabId,
-                "no": no
+                "no": no,
+                "userId": userId
             },
             success: function(data) {
                 if(tabId === 'alarm'){
