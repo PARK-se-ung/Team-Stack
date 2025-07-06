@@ -19,7 +19,7 @@ function connectionChatting(userId){
         const input = document.getElementById("chat-input");
         const message = input.value.trim();
 
-        if (message !== "" && socket.readyState == WebSocket.OPEN) {
+        if (message !== "" && socket.readyState === WebSocket.OPEN) {
             // JSON 형태로 사용자 정보와 메시지를 함께 전송
             const messageData = {
                 userId: userId,
