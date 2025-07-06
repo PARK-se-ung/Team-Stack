@@ -38,7 +38,7 @@ public class ManagerServiceImpl implements ManagerService{
     @Transactional
     public int updateApply(Map<String, Object> map) {
         int result = dao.updateApprove(session, map);
-        System.out.println(result);
+//        System.out.println(result);
         if(result > 0) {
             if(map.get("status").equals("A")) {
                 int flag = dao.updateUser(session, (String) map.get("userId"));

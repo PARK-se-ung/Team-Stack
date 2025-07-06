@@ -21,7 +21,7 @@ public class MailService {
    public void createRandomAuthNumber(){
        int random = (int)(Math.random()*1000000);
        authNum = random;
-       System.out.printf("%06d\n",authNum);
+//       System.out.printf("%06d\n",authNum);
    }
 
    public String joinEmail(String email){
@@ -34,7 +34,7 @@ public class MailService {
                "<br><br>" + "인증 번호는 " +String.format("%06d",authNum) + "입니다." +
                "<br>" + "인증번호를 인증번호 확인란에 입력해주세요";
        mailSend(form,receiver,title,content);
-       System.out.println("이거 리턴하는 거야" + String.format("%06d",authNum));
+//       System.out.println("이거 리턴하는 거야" + String.format("%06d",authNum));
        return String.format("%06d",authNum);
    }
    public void mailSend(String form,String receiver,String title,String content){

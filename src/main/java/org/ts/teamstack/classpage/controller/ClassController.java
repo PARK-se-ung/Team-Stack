@@ -36,12 +36,12 @@ public class ClassController {
 
         // 세션에 저장된 사용자 정보 (로그인 이후 저장된 경우만 해당)
         Object loginUser = session.getAttribute("loginUser");
-        System.out.println("[세션 사용자] loginUser: " + loginUser);
+//        System.out.println("[세션 사용자] loginUser: " + loginUser);
 
         // 채팅 내역 가져오기
         try {
             List<Chat> chattingHistory = service.getChattingHistory(courseNo);
-            System.out.println("[채팅 내역 개수] " + chattingHistory.size());
+//            System.out.println("[채팅 내역 개수] " + chattingHistory.size());
             model.addAttribute("chattingHistory", chattingHistory);
         } catch (Exception e) {
             e.printStackTrace();
