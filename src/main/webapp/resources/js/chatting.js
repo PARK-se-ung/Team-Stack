@@ -12,7 +12,7 @@ function parameterParser(){
 }
 function connectionChatting(userId){
     let paramObj=parameterParser();
-    const socket = new WebSocket("ws://localhost:9090/teamstack/chat?courseNo="+paramObj['courseNo']);
+    const socket = new WebSocket("wss://13.124.190.205/teamstack/chat?courseNo="+paramObj['courseNo']);
     const sendMessage =  function () {
         console.log("✅ [클릭됨] sendMessage 실행됨"); // ⬅ 이거 무조건 넣자
 
