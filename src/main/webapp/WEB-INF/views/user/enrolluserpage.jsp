@@ -252,7 +252,7 @@
 
             <div class="form-group">
                 <label for="name">이름</label>
-                <form:input path="name" type="text" id="name" placeholder="이름을 입력해주세요" required="required"/>
+                <form:input path="name" type="text" id="name" placeholder="안전한 비밀번호를 입력해주세요" required="required"/>
             </div>
 
             <div class="form-group email-auth-group">
@@ -299,12 +299,7 @@
 
 
 
-    // 아이디 길이 검증 (포커스를 벗어나면 나타나는 blur)
-    userIdInput.addEventListener('blur', () => {
-        if (userIdInput.value.length < 6) {
-            alert("아이디는 6자 이상이어야 합니다.");
-        }
-    });
+
 
     // 비밀번호 복잡도 정규식
     function passwordPattern(pwd) {
@@ -314,11 +309,7 @@
         // 정규식. test를 하게 되면 매개변수로 들어온 값이 패턴에 맞는 지 확인
     }
 
-    userPwdInput.addEventListener('blur', () => {
-        if (!passwordPattern(userPwdInput.value)) {
-            alert("비밀번호는 특수문자, 대문자, 숫자를 포함한 9자 이상이어야 합니다.");
-        }
-    });
+
 
     // 비밀번호 일치 확인
     passwordCheckInput.addEventListener('input', () => {
