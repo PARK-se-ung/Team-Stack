@@ -12,14 +12,14 @@ function parameterParser(){
 }
 function connectionChatting(userId){
     let paramObj=parameterParser();
-    const socket = new WebSocket("wss://13.124.190.205/teamstack/chat?courseNo="+paramObj['courseNo']);
+    const socket = new WebSocket("ws://13.124.190.205/teamstack/chat?courseNo="+paramObj['courseNo']);
     const sendMessage =  function () {
-        console.log("✅ [클릭됨] sendMessage 실행됨"); // ⬅ 이거 무조건 넣자
+        console.log("✅ [클릭됨] sendMessage 실행됨");
 
         const input = document.getElementById("chat-input");
         const message = input.value.trim();
 
-        if (message !== "" && socket.readyState === WebSocket.OPEN) {
+        if (message !== "" && socket.readyState == WebSocket.OPEN) {
             // JSON 형태로 사용자 정보와 메시지를 함께 전송
             const messageData = {
                 userId: userId,

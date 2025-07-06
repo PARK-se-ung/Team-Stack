@@ -340,11 +340,11 @@
       </div>
       <div class="course-stats">
         <div class="stat-box">
-          <div class="stat-number">15</div>
+          <div class="stat-number" id="total-students" >${students.size()}</div>
           <div class="stat-label">총 수강생</div>
         </div>
         <div class="stat-box">
-          <div class="stat-number">82.5</div>
+          <div class="stat-number" id="average-score">0</div>
           <div class="stat-label">반 평균</div>
         </div>
       </div>
@@ -353,19 +353,19 @@
     <div class="summary-cards">
       <div class="summary-card">
         <h3>A 등급</h3>
-        <div class="number">5명</div>
+        <div class="number" id="grade-count-a">0명</div>
       </div>
       <div class="summary-card">
         <h3>B 등급</h3>
-        <div class="number">7명</div>
+        <div class="number" id="grade-count-b">0명</div>
       </div>
       <div class="summary-card">
         <h3>C 등급</h3>
-        <div class="number">2명</div>
+        <div class="number" id="grade-count-c">0명</div>
       </div>
       <div class="summary-card">
         <h3>D 등급</h3>
-        <div class="number">1명</div>
+        <div class="number" id="grade-count-d">0명</div>
       </div>
     </div>
 
@@ -386,13 +386,12 @@
         <input type="text" id="searchStudent" placeholder="학생 이름 입력">
       </div>
       <button class="btn btn-primary" onclick="calculateGrades()">📊 성적 계산</button>
-      <button class="btn btn-secondary" onclick="exportGrades()">📤 엑셀 내보내기</button>
     </div>
 
     <div class="grade-table-container">
       <div class="table-header">
         <div class="table-title">💯 학생 성적표</div>
-        <div>총 15명</div>
+        <div>총 ${students.size()}명</div>
       </div>
 
       <table class="grade-table">
@@ -493,78 +492,133 @@
 <script>
     function calculateGrades() {
     const rows = document.querySelectorAll(".grade-table tbody tr");
+
+    let validCount = 0;
+    let totalSum = 0;
+
+    const gradeCounts = {
+    A: 0,
+    B: 0,
+    C: 0,
+    D: 0,
+    F: 0
+  };
+
     rows.forEach(row => {
     const inputs = row.querySelectorAll(".grade-input");
     let total = 0;
+
     inputs.forEach(input => {
     const type = input.dataset.type;
     const value = parseFloat(input.value) || 0;
+
+    if (!isNaN(value)) {
+    validCount++;
+    totalSum += value;
+  }
+
     switch (type) {
-    case "EXAM1": case "EXAM2": total += value * 0.3; break;
-    case "TASK1": case "TASK2": total += value * 0.1; break;
-    case "TASK3": total += value * 0.15; break;
+    case "EXAM1":
+    case "EXAM2":
+    total += value * 0.3;
+    break;
+    case "TASK1":
+    case "TASK2":
+    total += value * 0.15;
+    break;
+    case "TASK3":
+    total += value * 0.1;
+    break;
   }
   });
+
     const totalCell = row.querySelector(".grade-total");
     const gradeCell = row.querySelector(".grade-letter");
     totalCell.textContent = total.toFixed(1);
-    let grade = "F", gradeClass = "";
-    if (total >= 90) grade = "A", gradeClass = "grade-a";
-    else if (total >= 80) grade = "B", gradeClass = "grade-b";
-    else if (total >= 70) grade = "C", gradeClass = "grade-c";
-    else if (total >= 60) grade = "D", gradeClass = "grade-d";
+
+    let grade = "F";
+    let gradeClass = "";
+
+    if (total >= 90) {
+    grade = "A";
+    gradeClass = "grade-a";
+  } else if (total >= 80) {
+    grade = "B";
+    gradeClass = "grade-b";
+  } else if (total >= 70) {
+    grade = "C";
+    gradeClass = "grade-c";
+  } else if (total >= 60) {
+    grade = "D";
+    gradeClass = "grade-d";
+  }
+
+    gradeCounts[grade]++;
     gradeCell.textContent = grade;
-    gradeCell.className = `grade-letter ${gradeClass}`;
+    gradeCell.className = "grade-letter " + gradeClass;
   });
+
+    // 평균 점수 및 총 유효 성적 수
+    const average = validCount > 0 ? (totalSum / validCount).toFixed(1) : "0.0";
+    document.getElementById("average-score").textContent = average;
+    document.getElementById("total-students").textContent = validCount;
+
+    // 등급별 인원수를 화면에 반영
+    document.getElementById("grade-count-a").textContent = gradeCounts.A + "명";
+    document.getElementById("grade-count-b").textContent = gradeCounts.B + "명";
+    document.getElementById("grade-count-c").textContent = gradeCounts.C + "명";
+    document.getElementById("grade-count-d").textContent = gradeCounts.D + "명";
+    // F 등급이 보이도록 하고 싶으면 여기에 id="grade-count-f" 추가하고 아래도 넣기
+    // document.getElementById("grade-count-f").textContent = gradeCounts.F + "명";
   }
 
     function saveGrades() {
-      const rows = document.querySelectorAll(".grade-table tbody tr");
-      const scoreList = [];
+    const rows = document.querySelectorAll(".grade-table tbody tr");
+    const scoreList = [];
 
-      rows.forEach(row => {
-        const userId = row.querySelector(".student-name").textContent.trim();
-        const courseNo = document.getElementById("courseNo").value;
+    rows.forEach(row => {
+    const userId = row.querySelector(".student-name").textContent.trim();
+    const courseNo = document.getElementById("courseNo").value;
 
-        const inputs = row.querySelectorAll(".grade-input");
-        inputs.forEach(input => {
-          const scoreType = input.dataset.type;
-          const score = parseFloat(input.value) || 0;
+    const inputs = row.querySelectorAll(".grade-input");
+    inputs.forEach(input => {
+    const scoreType = input.dataset.type;
+    const score = parseFloat(input.value) || 0;
 
-          scoreList.push({
-            userId: userId,
-            courseNo: parseInt(courseNo),
-            scoreType: scoreType,
-            score: score
-          });
-        });
-      });
+    scoreList.push({
+    userId: userId,
+    courseNo: parseInt(courseNo),
+    scoreType: scoreType,
+    score: score
+  });
+  });
+  });
 
-      fetch("${pageContext.request.contextPath}/class/saveGrades.do", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(scoreList)
-      })
-              .then(response => {
-                if (!response.ok) throw new Error("서버 오류");
-                return response.text();
-              })
-              .then(data => {
-              })
-              .catch(error => {
-                console.error("저장 실패:", error);
-                alert("성적 저장 중 오류가 발생했습니다.");
-              });
-    }
-
+    fetch("${pageContext.request.contextPath}/class/saveGrades.do", {
+    method: "POST",
+    headers: {
+    "Content-Type": "application/json"
+  },
+    body: JSON.stringify(scoreList)
+  })
+    .then(response => {
+    if (!response.ok) throw new Error("서버 오류");
+    return response.text();
+  })
+    .then(data => {
+    alert("성적이 성공적으로 저장되었습니다.");
+  })
+    .catch(error => {
+    console.error("저장 실패:", error);
+    alert("성적 저장 중 오류가 발생했습니다.");
+  });
+  }
 
     function exportGrades() {
     alert("엑셀 파일로 내보내기 기능을 구현해주세요!");
   }
 
-    document.getElementById("searchStudent").addEventListener("input", function(e) {
+    document.getElementById("searchStudent").addEventListener("input", function (e) {
     const keyword = e.target.value.toLowerCase();
     document.querySelectorAll(".grade-table tbody tr").forEach(row => {
     const name = row.querySelector(".student-name").textContent.toLowerCase();
@@ -572,13 +626,13 @@
   });
   });
 
-    // 실시간 성적 계산 반영
-
-    document.addEventListener("input", function(e) {
+    // 실시간 성적 반영
+    document.addEventListener("input", function (e) {
     if (e.target.classList.contains("grade-input")) {
     calculateGrades();
   }
   });
 </script>
+
 </body>
 </html>
