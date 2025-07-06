@@ -778,7 +778,7 @@
     function initChattingSocket(courseNo, currentUserId) {
         console.log("<%= currentUserId%>");
 
-        const socket = new WebSocket('ws://13.124.190.205/chat?courseNo=' + courseNo);
+        const socket = new WebSocket('wss://13.124.190.205/chat?courseNo=' + courseNo);
 
         const sendMessage = function () {
             console.log("✅ [클릭됨] sendMessage 실행됨");
