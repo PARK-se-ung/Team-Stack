@@ -59,7 +59,7 @@ public class ManagerController {
     public int updateauthorappr(Model model,
                                    @RequestParam Map<String,Object> params){
         params.put("apprNo", Integer.parseInt((String) params.get("apprNo")));
-        System.out.println(params);
+//        System.out.println(params);
         try{
            return service.updateApply(params);
         } catch (Exception e){
@@ -108,8 +108,8 @@ public class ManagerController {
         pageInfo.setCurPage(cPage);
         pageInfo.setTotalData(service.searchNoticeCount());
         List<Notice> notices = service.searchNotice(pageInfo);
-        System.out.println(notices);
-        System.out.println(pageInfo);
+//        System.out.println(notices);
+//        System.out.println(pageInfo);
         StringBuffer pageBar = PageBarFactory.ajaxPageBuilder(pageInfo, "loadNotice");
         model.addAttribute("notices", notices);
         model.addAttribute("pageBar", pageBar);

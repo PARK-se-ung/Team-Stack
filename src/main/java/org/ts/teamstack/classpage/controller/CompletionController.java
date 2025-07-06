@@ -126,12 +126,12 @@ public class CompletionController {
             }
 
             // 방법 3: 시스템 기본 폰트 사용 (fallback)
-            System.out.println("나눔고딕 폰트를 찾을 수 없어 기본 폰트를 사용합니다.");
+//            System.out.println("나눔고딕 폰트를 찾을 수 없어 기본 폰트를 사용합니다.");
             // 한글 지원을 위해 Identity-H 인코딩 사용
             return PdfFontFactory.createFont("Helvetica", "Identity-H", PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
 
         } catch (Exception e) {
-            System.err.println("폰트 로드 중 오류 발생: " + e.getMessage());
+//            System.err.println("폰트 로드 중 오류 발생: " + e.getMessage());
             try {
                 // 최후의 수단으로 기본 폰트 사용
                 return PdfFontFactory.createFont("Helvetica");

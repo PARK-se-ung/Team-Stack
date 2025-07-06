@@ -58,13 +58,13 @@ public class ChattingServer extends TextWebSocketHandler {
         // 매개변수에 있는 session 메시지를 입력한 나의 Session
         Map<String, Object> sendUserMsg = objectMapper.readValue(message.getPayload(), Map.class);
         // JSON 형태로 넘겨주기 때문에 이것을 Parsing 해준다.
-        System.out.println(sendUserMsg);
+//        System.out.println(sendUserMsg);
         String userId = (String) sendUserMsg.get("userId");
-        System.out.println(userId);
+//        System.out.println(userId);
         String chatMsg = (String) sendUserMsg.get("chatMsg");
-        System.out.println(chatMsg);
+//        System.out.println(chatMsg);
         int courseNo = (Integer) sendUserMsg.get("courseNo");
-        System.out.println(courseNo);
+//        System.out.println(courseNo);
         Timestamp chatTime = new Timestamp(System.currentTimeMillis());
 
         // 파싱한 값 들을 가지고와서 저장

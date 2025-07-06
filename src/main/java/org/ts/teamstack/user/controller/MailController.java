@@ -45,9 +45,9 @@ public class MailController {
     public Map<String, Object> verifyAuthCode(@RequestBody Map<String, String> param, HttpSession session) {
         Map<String, Object> verifyResult = new HashMap<>();
         String inputCode = param.get("inputCode");
-        System.out.println("inputCode: " + inputCode);
+//        System.out.println("inputCode: " + inputCode);
         String authCode = (String)session.getAttribute("authCode");
-        System.out.println("authCode: " + authCode);
+//        System.out.println("authCode: " + authCode);
 
       if(authCode!=null && authCode.equals(inputCode)) {
            verifyResult.put("checkAuthCode", true);

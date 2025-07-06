@@ -155,10 +155,10 @@ public class MypageController {
 
         if(!multipartFile.isEmpty()){
             String fileOriName = multipartFile.getOriginalFilename();
-            System.out.println(fileOriName);
+//            System.out.println(fileOriName);
 
             String rename = FileUpload.renameFile(multipartFile);
-            System.out.println(rename);
+//            System.out.println(rename);
             Approve approve = Approve.builder().userId(loginUser.getUserId()).approveOrigin(fileOriName).approveRename(rename).build();
 
             try {
