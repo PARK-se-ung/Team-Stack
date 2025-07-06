@@ -108,14 +108,20 @@ public class UserController {
 
     /* 개인 정보 수정 */
     @PostMapping("/userUpdate")
-    public ModelAndView updateUsers(ModelAndView mv, HttpServletRequest request) {
+    public ModelAndView updateUsers(ModelAndView mv, HttpServletRequest request,@ModelAttribute Users users) {
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Users loginUser = (Users) auth.getPrincipal();
+        int result = service.updateUsers(users);
 
-        int result = service.updateUsers(loginUser);
         if (result > 0) {
-            request.getSession().setAttribute("loginUser", loginUser);
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Users currentUser = (Users) auth.getPrincipal();
+            currentUser.setName(users.getName());
+            currentUser.setUserEmail(users.getUserEmail());
+            currentUser.setUserPhone(users.getUserPhone());
+            currentUser.setUserAddress(users.getUserAddress());
+
+            request.getSession().setAttribute("loginUser", currentUser);
             mv.addObject("msg","수정완료");
             mv.addObject("loc","/mypage");
         } else {

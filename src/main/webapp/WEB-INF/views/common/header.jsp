@@ -62,7 +62,7 @@
                         </ul>
                     </div>
                     <!-- Alarm Modal -->
-                    <div class="modal fade" id="alarmModal" tabindex="-1">
+                    <div class="modal fade" id="alarmModalHeader" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -105,12 +105,12 @@
         const content = $(this).data('content');
 
         $('#alarmModalBody').text(content);
-        $('#alarmModal').modal('show');
+        $('#alarmModalHeader').modal('show');
 
         toRemoveAlarmId = alarmId;
     }
 
-    $('#alarmModal').on('hidden.bs.modal', function () {
+    $('#alarmModalHeader').on('hidden.bs.modal', function () {
         if (toRemoveAlarmId !== null) {
             $.ajax({
                 url:'${pageContext.request.contextPath}/home/updateAlarm',

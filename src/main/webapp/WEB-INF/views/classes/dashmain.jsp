@@ -18,27 +18,33 @@
 %>
 <script>
     window.calendarEvents = [
-        <c:forEach var="c" items="${caldate}" varStatus="st">
-        {
-            start: '<fmt:formatDate value="${c.scheduleDate}" pattern="yyyy-MM-dd"/>',
-            title: '${c.scheduleWeek}주차 강의'
-        }<c:if test="${!st.last}">,</c:if>
-        </c:forEach>,
-        <c:forEach var="ca" items="${calassign}" varStatus="st">
-        {
-            start: '<fmt:formatDate value="${ca.scheduleDate}" pattern="yyyy-MM-dd"/>',
-            end:   '<fmt:formatDate value="${ca.scheduleEnddate}" pattern="yyyy-MM-dd"/>',
-            title: '${ca.scheduleWeek}주차 과제',
-            color: '#28a745'
-        }<c:if test="${!st.last}">,</c:if>
-        </c:forEach>,
-        <c:forEach var="cn" items="${calnotice}" varStatus="st">
-        {
-            start: '<fmt:formatDate value="${cn.boardDate}" pattern="yyyy-MM-dd"/>',
-            title: '${cn.boardTitle}',
-            color: '#dc3545'
-        }<c:if test="${!st.last}">,</c:if>
-        </c:forEach>
+        <c:if test="${not empty caldate}">
+            <c:forEach var="c" items="${caldate}" varStatus="st">
+            {
+                start: '<fmt:formatDate value="${c.scheduleDate}" pattern="yyyy-MM-dd"/>',
+                title: '${c.scheduleWeek}주차 강의'
+            }<c:if test="${!st.last}">,</c:if>
+            </c:forEach>
+        </c:if>
+        <c:if test="${not empty calassign}">,
+            <c:forEach var="ca" items="${calassign}" varStatus="st">
+            {
+                start: '<fmt:formatDate value="${ca.scheduleDate}" pattern="yyyy-MM-dd"/>',
+                end:   '<fmt:formatDate value="${ca.scheduleEnddate}" pattern="yyyy-MM-dd"/>',
+                title: '${ca.scheduleWeek}주차 과제',
+                color: '#28a745'
+            }<c:if test="${!st.last}">,</c:if>
+            </c:forEach>
+        </c:if>
+        <c:if test="${not empty calnotice}">,
+            <c:forEach var="cn" items="${calnotice}" varStatus="st">
+            {
+                start: '<fmt:formatDate value="${cn.boardDate}" pattern="yyyy-MM-dd"/>',
+                title: '${cn.boardTitle}',
+                color: '#dc3545'
+            }<c:if test="${!st.last}">,</c:if>
+            </c:forEach>
+        </c:if>
     ];
 </script>
 <c:if test="${not empty msg}">
@@ -466,8 +472,7 @@
         <i class="bi bi-house-door me-2"></i>
         대시보드
     </a>
-
-    <!-- 하위 메뉴: 항상 표시 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <div id="dashboard-submenu" class="sidebar-submenu">
         <div class="sort-tab active" onclick="setActiveTab(this); loadTab('home')">
             <i class="bi bi-house me-2"></i>
@@ -547,7 +552,7 @@
 </div>
 
 <!-- SortableJS 사용 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
 
 <!-- 본문 영역: 메뉴 없음! 내용만 출력 -->
 <div class="class-main-content">
@@ -579,11 +584,7 @@
 
 <script src="${path}/resources/js/pdf/build/pdf.mjs" type="module"></script>
 <script type="module">
-    let pdfDoc = null;
-    let currentPage = 1;
-    let totalPage = 0;
-    let renderInProgress = false; // 렌더 중 여부 확인
-
+    let pdfDoc = null; let currentPage = 1; let totalPage = 0;  let renderInProgress = false;
     const coursePlan = async () => {
         pdfjsLib.GlobalWorkerOptions.workerSrc = "${path}/resources/js/pdf/build/pdf.worker.mjs";
 
@@ -593,10 +594,7 @@
             pdfDoc = data;
             totalPage = pdfDoc.numPages;
             currentPage = 1;
-
             renderPage(currentPage);
-
-            // 버튼 이벤트 등록: 서브 JSP 가 들어온 후에 등록!
             document.getElementById("prevpage").addEventListener('click', () => {
                 if (pdfDoc === null || currentPage <= 1 || renderInProgress) return;
                 currentPage--;
