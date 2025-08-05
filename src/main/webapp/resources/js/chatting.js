@@ -1,6 +1,7 @@
 
 function parameterParser(){
     const param=location.search;
+
     const paramObj=param.substring(param.indexOf("?")+1)
                         .split("&")
                         .reduce((prev,next)=>{
@@ -12,7 +13,9 @@ function parameterParser(){
 }
 function connectionChatting(userId){
     let paramObj=parameterParser();
-    const socket = new WebSocket("wss://13.124.190.205/teamstack/chat?courseNo="+paramObj['courseNo']);
+    // 쿼리스트링을 파싱해서 반환해줍니다. -> courseNo를 하기위해서
+
+    const socket = new WebSocket("wss://localhostteamstack/chat?courseNo="+paramObj['courseNo']);
     const sendMessage =  function () {
         console.log("✅ [클릭됨] sendMessage 실행됨");
 

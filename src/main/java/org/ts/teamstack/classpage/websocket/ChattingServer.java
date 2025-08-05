@@ -47,9 +47,9 @@ public class ChattingServer extends TextWebSocketHandler {
 
         if (courseNo != null) {
             chatRoomSessions.putIfAbsent(courseNo, new ArrayList<>());
-            // courseNo가 없으면 새로운 방을 만든다.
+            // 해당하는 번호의 채팅방이 없으면 만들기
             chatRoomSessions.get(courseNo).add(session);
-            log.info("[접속] 강의 {} - 세션 ID: {}", courseNo, session.getId());
+            // 해당하는 번호채팅방에 사용자가 집어넣기
         }
     }
 
@@ -58,16 +58,10 @@ public class ChattingServer extends TextWebSocketHandler {
         // 매개변수에 있는 session 메시지를 입력한 나의 Session
         Map<String, Object> sendUserMsg = objectMapper.readValue(message.getPayload(), Map.class);
         // JSON 형태로 넘겨주기 때문에 이것을 Parsing 해준다.
-//        System.out.println(sendUserMsg);
         String userId = (String) sendUserMsg.get("userId");
-//        System.out.println(userId);
         String chatMsg = (String) sendUserMsg.get("chatMsg");
-//        System.out.println(chatMsg);
         int courseNo = (Integer) sendUserMsg.get("courseNo");
-//        System.out.println(courseNo);
         Timestamp chatTime = new Timestamp(System.currentTimeMillis());
-
-        // 파싱한 값 들을 가지고와서 저장
         Chat chat = new Chat().builder()
                 .userId(userId)
                 .chatMsg(chatMsg)
@@ -78,10 +72,11 @@ public class ChattingServer extends TextWebSocketHandler {
         int saveResult = service.setChattingHistory(chat);
 
         List<WebSocketSession> sessions = chatRoomSessions.get(courseNo);
+        // 강의 번호에 해당하는 모든 세션(참여자 리스트) 가져옴
         if(sessions != null){
             for (WebSocketSession msg : sessions) {
                 if(msg.isOpen()){
-                    // 이걸 해주지 않으면 exception 발생
+                    // TCP 소켓을 통해 전달 닫혀있다면 IllegalStateException 발생
                     String jsonMsg = objectMapper.writeValueAsString(chat);
                     msg.sendMessage(new TextMessage(jsonMsg));
                 }
@@ -97,15 +92,11 @@ public class ChattingServer extends TextWebSocketHandler {
             List<WebSocketSession> sessions = chatRoomSessions.get(courseNo);
             if(sessions != null){
                 sessions.remove(session);
-                // 이건 나의 세션을 없애는 로직
-                log.info("[연결 종료] 강의 {} - 세션 ID: {}", courseNo, session.getId());
-
+                // 이건 나의 세션을 없애는 로직 -
             }
             if(sessions.isEmpty()){
                 chatRoomSessions.remove(courseNo);
-                // 이건 방 전체의 세션을 없애는 것
-                log.info("[강의방 삭제] 강의 {}: 남은 인원 없음 → 방 삭제", courseNo);
-
+                // 이건 방 전체의 세션을 없애는 것 메모리 누수 방지 + 리소스 정리
             }
         }
     }
